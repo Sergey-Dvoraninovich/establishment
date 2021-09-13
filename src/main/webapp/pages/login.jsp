@@ -8,7 +8,7 @@
 
 <html>
 <head>
-    <title><fmt:message key="login.login" /></title>
+    <title><fmt:message key="login.login"/></title>
 </head>
 <body>
     <jsp:include page="shared/header.jsp" />

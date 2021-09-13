@@ -8,7 +8,7 @@
 
 <html>
 <head>
-    <title><fmt:message key="admin.ingredients.add_ingredient.title"/> </title>
+    <title><fmt:message key="admin.ingredients.add_ingredient.title"/></title>
 </head>
 <body>
 <jsp:include page="../../shared/header.jsp" />

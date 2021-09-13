@@ -16,7 +16,7 @@ public class DishValidator {
     private static final Logger logger = LogManager.getLogger(DishValidator.class);
     private static DishValidator instance;
 
-    private static final String NAME_REGEXP = "^[A-za-z]+$";
+    private static final String NAME_REGEXP = "^[A-za-z\\s]{2,50}$";
     private static final String PRICE_REGEXP = "^[0-9]*[.,]?[0-9]{0,2}$";
     private static final String AMOUNT_GRAMS_REGEXP = "^[0-9]+$";
     private static final String CALORIES_AMOUNT_REGEXP = "^[0-9]+$";

@@ -8,10 +8,14 @@
 <c:set var="add"><fmt:message key="add" /></c:set>
 <c:set var="remove"><fmt:message key="remove" /></c:set>
 <c:set var="id"><%= request.getParameter("id") %></c:set>
+<c:set var="name">${sessionScope.dish.name}</c:set>
+<c:set var="price">${sessionScope.dish.price}</c:set>
+<c:set var="amount_grams">${sessionScope.dish.amountGrams}</c:set>
+<c:set var="calories_amount">${sessionScope.dish.calories}</c:set>
 
 <html>
 <head>
-    <title><fmt:message key="admin.dishes.add_dish_title"/> </title>
+    <title><fmt:message key="admin.dishes.edit_dish_title"/> ${sessionScope.dish.name}</title>
 </head>
 <body>
 <jsp:include page="../../shared/header.jsp" />
@@ -21,7 +25,8 @@
     <input type="hidden" id="id" name="id" value="${id}"/>
     <div class="form-row">
         <label for="name"><fmt:message key="admin.dishes.dish_name" /></label>
-        <input type="text" name="name" id="name" value="${name}" placeholder="${sessionScope.dish.name}"/>
+        <input type="text" name="name" id="name" value="${name}"
+               pattern="^[A-za-z\\s]{2,50}$" placeholder="${sessionScope.dish.name}"/>
         <c:if test="${sessionScope.invalid_dish_name}">
             <div class="local-error">
                 <p><fmt:message key="admin.dishes.invalid_dish_name"/></p>

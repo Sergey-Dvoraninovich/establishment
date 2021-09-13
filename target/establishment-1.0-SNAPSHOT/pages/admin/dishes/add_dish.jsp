@@ -17,7 +17,7 @@
   <h3><fmt:message key="admin.dishes.add_dish_title"/></h3>
   <div class="form-row">
     <label for="name"><fmt:message key="admin.dishes.dish_name" /></label>
-    <input type="text" name="name" id="name" value="${name}"/>
+    <input type="text" name="name" id="name" value="${name}" pattern="^[A-za-z\\s]{2,50}$"/>
     <c:if test="${sessionScope.invalid_dish_name}">
       <div class="local-error">
         <p><fmt:message key="admin.dishes.invalid_dish_name"/></p>
@@ -131,7 +131,7 @@
   input[type="submit"]:hover {
     background-color: #804451;
   }
-  .alert {
+  .local-error {
     font-size: 15px;
     color: red;
   }
