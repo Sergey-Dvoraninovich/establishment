@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -66,44 +67,78 @@ public class DishValidator {
         return result;
     }
 
-    public List<String> validateUserData(String name, String priceLine,
-                                         String amountGramsLine, String caloriesAmountLine){
+    public HashMap<String, Boolean> validateDishData(String name, String priceLine,
+                                                     String amountGramsLine, String caloriesAmountLine) {
 
-        List<String> validationMessages = new ArrayList<>();
+        HashMap<String, Boolean> validationMessages = new HashMap<>();
         boolean currentResult;
 
         currentResult = Pattern.matches(NAME_REGEXP, name);
-        if (!currentResult) {
-            validationMessages.add(INVALID_DISH_NAME);
-        }
+        validationMessages.put(INVALID_DISH_NAME, !currentResult);
 
         currentResult = Pattern.matches(PRICE_REGEXP, priceLine);
+        validationMessages.put(INVALID_DISH_PRICE, !currentResult);
         if (currentResult) {
             BigDecimal price = new BigDecimal(priceLine);
             currentResult = price.compareTo(MIN_PRICE) == 1;
         }
-        if (!currentResult) {
-            validationMessages.add(INVALID_DISH_PRICE);
-        }
+        validationMessages.put(INVALID_DISH_PRICE, !currentResult);
 
         currentResult = Pattern.matches(AMOUNT_GRAMS_REGEXP, amountGramsLine);
         if (currentResult) {
             Integer amountGrams = new Integer(amountGramsLine);
             currentResult = amountGrams > MIN_AMOUNT_GRAMS;
         }
-        if (!currentResult) {
-            validationMessages.add(INVALID_DISH_AMOUNT_GRAMS);
-        }
+        validationMessages.put(INVALID_DISH_AMOUNT_GRAMS, !currentResult);
 
         currentResult = Pattern.matches(CALORIES_AMOUNT_REGEXP, caloriesAmountLine);
         if (currentResult) {
             Integer caloriesAmount = new Integer(caloriesAmountLine);
             currentResult = caloriesAmount > MIN_CALORIES_AMOUNT;
         }
-        if (!currentResult) {
-            validationMessages.add(INVALID_DISH_CALORIES_AMOUNT);
-        }
+        validationMessages.put(INVALID_DISH_CALORIES_AMOUNT, !currentResult);
 
         return validationMessages;
     }
+
+//    public List<String> validateOrderData(String name, String priceLine,
+//                                         String amountGramsLine, String caloriesAmountLine){
+//
+//        List<String> validationMessages = new ArrayList<>();
+//        boolean currentResult;
+//
+//        currentResult = Pattern.matches(NAME_REGEXP, name);
+//        if (!currentResult) {
+//            validationMessages.add(INVALID_DISH_NAME);
+//        }
+//
+//        currentResult = Pattern.matches(PRICE_REGEXP, priceLine);
+//        if (currentResult) {
+//            BigDecimal price = new BigDecimal(priceLine);
+//            currentResult = price.compareTo(MIN_PRICE) == 1;
+//        }
+//        if (!currentResult) {
+//            validationMessages.add(INVALID_DISH_PRICE);
+//        }
+//
+//        currentResult = Pattern.matches(AMOUNT_GRAMS_REGEXP, amountGramsLine);
+//        if (currentResult) {
+//            Integer amountGrams = new Integer(amountGramsLine);
+//            currentResult = amountGrams > MIN_AMOUNT_GRAMS;
+//        }
+//        if (!currentResult) {
+//            validationMessages.add(INVALID_DISH_AMOUNT_GRAMS);
+//        }
+//
+//        currentResult = Pattern.matches(CALORIES_AMOUNT_REGEXP, caloriesAmountLine);
+//        if (currentResult) {
+//            Integer caloriesAmount = new Integer(caloriesAmountLine);
+//            currentResult = caloriesAmount > MIN_CALORIES_AMOUNT;
+//        }
+//        if (!currentResult) {
+//            validationMessages.add(INVALID_DISH_CALORIES_AMOUNT);
+//        }
+//
+//        return validationMessages;
+//    }
 }

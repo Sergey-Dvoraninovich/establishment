@@ -22,9 +22,6 @@
       <p><fmt:message key="admin.dishes.dish_name"/> : ${sessionScope.dish.name}</p>
       <p><fmt:message key="admin.dishes.dish_price"/> : ${sessionScope.dish.price}</p>
       <p><fmt:message key="admin.dishes.dish_amount_grams"/> : ${sessionScope.dish.amountGrams}</p>
-      <c:if test="${sessionScope.dish.averageMark}">
-        <p><fmt:message key="admin.dishes.dish_amount_grams"/> : ${sessionScope.dish.averageMark}</p>
-      </c:if>
     </div>
     <div class="ingredients">
       <p><fmt:message key="admin.ingredients.title"/>:</p>

@@ -65,6 +65,12 @@ public class UserValidator {
         return result;
     }
 
+    public boolean validateCode(String code){
+        boolean result;
+        result =Pattern.matches(CODE_REGEXP, code);
+        return result;
+    }
+
     public HashMap<String, Boolean> validateUserData(String login, String password, String mail,
                                     String phoneNum, String cardNum){
 

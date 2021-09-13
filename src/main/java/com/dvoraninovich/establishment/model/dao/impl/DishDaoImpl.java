@@ -19,22 +19,22 @@ public class DishDaoImpl implements DishDao {
     private static final DatabaseConnectionPool connectionPool = DatabaseConnectionPool.getInstance();
 
     private static final String SELECT_ALL_DISHES
-            = "SELECT id, price, calories, amount_grams, average_mark, name, is_available, photo "
+            = "SELECT id, price, calories, amount_grams, name, is_available, photo "
             + "FROM dishes;";
     private static final String FIND_ALL_AVAILABLE_DISHES
-            = "SELECT id, price, calories, amount_grams, average_mark, name, is_available, photo "
+            = "SELECT id, price, calories, amount_grams, name, is_available, photo "
             + "FROM dishes "
             + "WHERE is_available = true;";
     private static final String FIND_DISH_BY_ID
-            = "SELECT id, price, calories, amount_grams, average_mark, name, is_available, photo "
+            = "SELECT id, price, calories, amount_grams, name, is_available, photo "
             + "FROM dishes "
             + "WHERE id = ?; ";
     private static final String INSERT_DISH
-            = "INSERT INTO dishes(price, calories, amount_grams, average_mark, name, is_available, photo) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?);";
+            = "INSERT INTO dishes(price, calories, amount_grams, name, is_available, photo) "
+            + "VALUES (?, ?, ?, ?, ?, ?);";
     private static final String UPDATE_DISH
             = "UPDATE dishes "
-            + "SET price = ?, calories = ?, amount_grams = ?, average_mark = ?, name = ?, is_available = ?, photo = ? "
+            + "SET price = ?, calories = ?, amount_grams = ?, name = ?, is_available = ?, photo = ? "
             + "WHERE id = ?;";
     private static final String DISABLE_DISH
             = "UPDATE dishes " +
@@ -124,10 +124,9 @@ public class DishDaoImpl implements DishDao {
             statement.setBigDecimal(1, dish.getPrice());
             statement.setInt(2, dish.getCalories());
             statement.setInt(3, dish.getAmountGrams());
-            statement.setBigDecimal(4, dish.getAverageMark());
-            statement.setString(5, dish.getName());
-            statement.setBoolean(6, dish.getIsAvailable());
-            statement.setString(7, dish.getPhoto());
+            statement.setString(4, dish.getName());
+            statement.setBoolean(5, dish.getIsAvailable());
+            statement.setString(6, dish.getPhoto());
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
@@ -147,11 +146,10 @@ public class DishDaoImpl implements DishDao {
                 statement.setBigDecimal(1, dish.getPrice());
                 statement.setInt(2, dish.getCalories());
                 statement.setInt(3, dish.getAmountGrams());
-                statement.setBigDecimal(4, dish.getAverageMark());
-                statement.setString(5, dish.getName());
-                statement.setBoolean(6, dish.getIsAvailable());
-                statement.setString(7, dish.getPhoto());
-                statement.setLong(8, dish.getId());
+                statement.setString(4, dish.getName());
+                statement.setBoolean(5, dish.getIsAvailable());
+                statement.setString(6, dish.getPhoto());
+                statement.setLong(7, dish.getId());
                 Integer rowsNum = statement.executeUpdate();
                 successfulOperation = rowsNum != 0;
             } catch (DatabaseException | SQLException e) {
@@ -253,7 +251,6 @@ public class DishDaoImpl implements DishDao {
         BigDecimal price = resultSet.getBigDecimal(DISH_PRICE);
         int calories = resultSet.getInt(DISH_CALORIES);
         int amountGrams = resultSet.getInt(DISH_AMOUNT_GRAMS);
-        BigDecimal averageMark = resultSet.getBigDecimal(DISH_AVERAGE_MARK);
         String name = resultSet.getString(DISH_NAME);
         boolean isAvailable = resultSet.getBoolean(IS_DISH_AVAILABLE);
         String photo = resultSet.getString(DISH_PHOTO);
@@ -263,7 +260,6 @@ public class DishDaoImpl implements DishDao {
         .setPrice(price)
         .setCalories(calories)
         .setAmountGrams(amountGrams)
-        .setAverageMark(averageMark)
         .setName(name)
         .setIsAvailable(isAvailable)
         .setPhoto(photo)

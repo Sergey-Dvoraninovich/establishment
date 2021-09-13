@@ -14,7 +14,7 @@ public class IngredientValidator {
     private static final Logger logger = LogManager.getLogger(IngredientValidator.class);
     private static IngredientValidator instance;
 
-    private static final String NAME_REGEXP = "^[A-za-z_]{2,20}$";
+    private static final String NAME_REGEXP = "^[A-za-z\\s]{2,20}$";
 
     private IngredientValidator() {
     }

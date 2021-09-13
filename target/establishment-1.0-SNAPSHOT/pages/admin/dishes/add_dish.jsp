@@ -16,10 +16,6 @@
 <form action="${var}" method="post" class="ui-form">
   <h3><fmt:message key="admin.dishes.add_dish_title"/></h3>
   <div class="form-row">
-    <label for="photo"><fmt:message key="photo" /></label>
-    <input type="text" name="photo" id="photo" value="${photo}"/>
-  </div>
-  <div class="form-row">
     <label for="name"><fmt:message key="admin.dishes.dish_name" /></label>
     <input type="text" name="name" id="name" value="${name}"/>
     <c:if test="${sessionScope.invalid_dish_name}">
@@ -66,92 +62,122 @@
 </form>
 </body>
 <style type="text/css">
-  * {
-    box-sizing: border-box;
-  }
   body {
-    background: #e6f4fd;
-    font-family: 'Roboto', sans-serif;
-  }
-  .ui-form {
-    max-width: 350px;
-    padding: 80px 30px 30px;
-    margin: 50px auto 30px;
-    background: white;
-  }
-  .ui-form h3 {
-    position: relative;
-    z-index: 5;
-    margin: 0 0 60px;
-    text-align: center;
-    color: dimgrey;
-    font-size: 30px;
-    font-weight: normal;
-  }
-  .form-row {
-    position: relative;
-    margin-bottom: 40px;
-  }
-  .form-row input {
-    display: block;
-    width: 100%;
-    padding: 0 10px;
-    line-height: 40px;
-    font-family: 'Roboto', sans-serif;
-    background: none;
-    border-width: 0;
-    border-bottom: 2px solid #9d959d;
-    transition: all 0.2s ease;
-  }
-  .form-row label {
-    position: absolute;
-    left: 13px;
-    color: #9d959d;
-    font-size: 17px;
-    font-weight: 300;
-    transform: translateY(-20px);
-    transition: all 0.2s ease;
-  }
-  .form-row input:focus {
-    outline: 0;
-    border-color: #F77A52;
-  }
-  .form-row input:focus+label, .form-row input:valid+label {
-    transform: translateY(-60px);
-    margin-left: -14px;
-    font-size: 14px;
-    font-weight: 400;
-    outline: 0;
-    border-color: #F77A52;
-    color: #F77A52;
-  }
-  .ui-form input[type="submit"] {
-    width: 100%;
-    padding: 0;
-    line-height: 42px;
-    background: dimgrey;
-    border-width: 0;
-    color: white;
-    font-size: 20px;
-  }
-  .ui-form p {
-    margin: 0;
-    padding-top: 5px;
-  }
-  .local-button {
-    width: 290px;
-    margin-right: auto;
-    margin-left: auto;
-    padding: 0;
-    line-height: 42px;
-    background: dimgrey;
-    border-width: 0;
-    text-align: center;
-  }
-  .local-button>a {
-    color: white;
-    font-size: 20px;
+    color: #000000;
     text-decoration: none;
+    font: 15px 'Roboto', Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 55px;
+  }
+  h3 {
+    font-size: 25px;
+  }
+  form {
+    width: 250px;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+    -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+  }
+  form:hover {
+    -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+  }
+  input[type=text]{
+    width:100%;
+    border:2px solid #aaa;
+    border-radius:5px;
+    margin:8px 0;
+    outline:none;
+    padding:8px;
+    box-sizing:border-box;
+    transition:.3s;
+  }
+  input[type=text]:focus{
+    border-color:#a15566;
+    box-shadow:0 0 8px 0 #a15566;
+  }
+  input[type=number]{
+    width:100%;
+    border:2px solid #aaa;
+    border-radius:5px;
+    margin:8px 0;
+    outline:none;
+    padding:8px;
+    box-sizing:border-box;
+    transition:.3s;
+  }
+  input[type=number]:focus{
+    border-color:#a15566;
+    box-shadow:0 0 8px 0 #a15566;
+  }
+  input[type="submit"]{
+    font-size: 20px;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    margin-top: 15px;
+    padding: 5px;
+    text-align: center;
+    width: 100%;
+    background-color: #a15566;
+  }
+  input[type="submit"]:hover {
+    background-color: #804451;
+  }
+  .alert {
+    font-size: 15px;
+    color: red;
+  }
+  .block-item {
+    width: 250px;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+    -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+  }
+  .block-item:hover {
+    -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+  }
+  .block-item-header {
+    text-align: left;
+  }
+  .block-item-header>a {
+    font-size: 15px;
+  }
+  .block-item-text {
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+  .block-item-text>a{
+    color: #4d4d4d;
+    font-size: 15px;
+  }
+  .block-item-action {
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    margin-top: 15px;
+    padding: 5px;
+    text-align: center;
+    width: 100%;
+    background-color: #a15566;
+  }
+  .block-item-action:hover {
+    background-color: #804451;
+  }
+  .block-item-action>a{
+    font-size: 20px;
   }
 </style>
 </html>

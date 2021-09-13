@@ -18,10 +18,10 @@
     <h4><fmt:message key="verify_code.check_email"/></h4>
     <div class="form-row">
         <label for="code"><fmt:message key="verify_code.code" /></label>
-        <input type="text" name="code" id="code" value="${code}"/>
-        <c:if test="${sessionScope.incorrect_user_code}">
+        <input type="text" name="code" id="code" value="${code}" pattern="^[a-zA-Z0-9]{16}$"/>
+        <c:if test="${sessionScope.invalid_user_code}">
             <div class="local-error">
-                <p><fmt:message key="verify_code.incorrect_user_code"/></p>
+                <p><fmt:message key="verify_code.invalid_user_code"/></p>
             </div>
         </c:if>
     </div>
@@ -29,6 +29,11 @@
         <input type="submit" value="${submit}"/>
     </div>
 
+    <c:if test="${sessionScope.incorrect_user_code}">
+        <div class="local-error">
+            <p><fmt:message key="verify_code.incorrect_user_code"/></p>
+        </div>
+    </c:if>
     <c:if test="${sessionScope.user_is_not_authenticated}">
         <div class="local-error">
             <p><fmt:message key="verify_code.user_is_not_authenticated"/></p>

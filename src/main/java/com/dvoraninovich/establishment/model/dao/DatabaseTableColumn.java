@@ -6,14 +6,22 @@ public final class DatabaseTableColumn {
     public static final int INGREDIENT_NAME = 2;
 
     //TODO update data to string
-    public static final int DISH_ID = 1;
-    public static final int DISH_PRICE = 2;
-    public static final int DISH_CALORIES = 3;
-    public static final int DISH_AMOUNT_GRAMS = 4;
-    public static final int DISH_AVERAGE_MARK = 5;
-    public static final int DISH_NAME = 6;
-    public static final int IS_DISH_AVAILABLE = 7;
-    public static final int DISH_PHOTO = 8;
+//    public static final int DISH_ID = 1;
+//    public static final int DISH_PRICE = 2;
+//    public static final int DISH_CALORIES = 3;
+//    public static final int DISH_AMOUNT_GRAMS = 4;
+//    public static final int DISH_AVERAGE_MARK = 5;
+//    public static final int DISH_NAME = 6;
+//    public static final int IS_DISH_AVAILABLE = 7;
+//    public static final int DISH_PHOTO = 8;
+
+    public static final String DISH_ID = "id";
+    public static final String DISH_PRICE = "price";
+    public static final String DISH_CALORIES = "calories";
+    public static final String DISH_AMOUNT_GRAMS = "amount_grams";
+    public static final String DISH_NAME = "name";
+    public static final String IS_DISH_AVAILABLE = "is_available";
+    public static final String DISH_PHOTO = "photo";
 
     //TODO update data to string
     public static final int DISH_LIST_ITEM_ID = 1;
@@ -21,13 +29,6 @@ public final class DatabaseTableColumn {
     public static final int DISH_LIST_ITEM_ID_DISH = 3;
     public static final int DISH_LIST_ITEM_DISH_AMOUNT = 4;
     public static final int DISH_LIST_ITEM_DISH_FINAL_PRICE = 5;
-
-    public static final String DISH_FEEDBACK_ID = "id";
-    public static final String DISH_FEEDBACK_USER_ID = "id_user";
-    public static final String DISH_FEEDBACK_DISH_ID = "id_dish";
-    public static final String DISH_FEEDBACK_TEXT = "text";
-    public static final String DISH_FEEDBACK_TIME = "time";
-    public static final String DISH_FEEDBACK_MARK = "mark";
 
     //TODO update data to string
     public static final int ORDER_ID = 1;

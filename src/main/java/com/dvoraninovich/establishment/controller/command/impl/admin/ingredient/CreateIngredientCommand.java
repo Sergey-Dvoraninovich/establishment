@@ -18,8 +18,7 @@ import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.NAME;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.FORWARD;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.ADD_INGREDIENT_ERROR;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.EXCEPTION;
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
 public class CreateIngredientCommand implements Command {
     private IngredientService service = IngredientServiceImpl.getInstance();
@@ -29,6 +28,10 @@ public class CreateIngredientCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
+
+        session.setAttribute(ADD_INGREDIENT_ERROR, false);
+        session.setAttribute(INVALID_INGREDIENT_NAME, false);
+        session.setAttribute(INGREDIENT_VALIDATION_ERROR, false);
 
         String name = request.getParameter(NAME);
 

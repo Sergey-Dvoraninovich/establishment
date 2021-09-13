@@ -16,17 +16,25 @@
 <body>
 <jsp:include page="../../shared/header.jsp" />
 <div class="workspace">
+    <div class="workspace-flex-container">
     <c:forEach var="dish" items="${sessionScope.dishes}">
-        <div class="dish-info">
-            <p>${dish.name}</p>
-            <p>
-                <a><fmt:message key="admin.dishes.dish_price"/></a>
-                <a>${dish.price}</a>
-            </p>
-            <p>
-                <a><fmt:message key="admin.dishes.rating"/></a>
-                <a>${dish.averageMark}</a>
-            </p>
+        <div class="flex-block">
+            <div>
+                <a>${dish.name}</a>
+            </div>
+            <div id="icon" class="block-item">
+                <img class="dish-picture"
+                     src="../../images/default_dish.png">
+            </div>
+            <div class="block-item">
+                <a>${dish.calories} <fmt:message key="admin.dishes.calories"/></a>
+            </div>
+            <div class="block-item">
+                <a>${dish.amountGrams} <fmt:message key="admin.dishes.grams"/></a>
+            </div>
+            <div class="block-item">
+                <a>${dish.price} <fmt:message key="admin.dishes.BYN"/></a>
+            </div>
             <c:if test="${dish.isAvailable}">
                 <c:url value="/ApiController?command=disable_dish" var="disable_dish_command"/>
                 <form action="${disable_dish_command}" method="post">
@@ -57,18 +65,50 @@
         <c:url value="/ApiController?command=go_to_create_dish" var="dishes_page"/>
         <a href="${dishes_page}"><fmt:message key="admin.dishes.create_dish"/></a>
     </div>
+    </div>
 </div>
 </body>
 <style>
-    .workspace {
-        margin-top: 35px;
-        padding-top: 15px;
+    a {
+        font-size: 15px;
+        text-decoration: none;
     }
-    .dish-info{
-        margin: 15px;
-        padding: 9px;
+    .workspace-flex-container {
+        margin-top: 35px;
+        display: flex;
+        flex-flow: row wrap;
+        align-content: space-around;
+    }
+    .flex-block {
+        flex-flow: row nowrap;
+        align-content: space-around;
         color: white;
-        background-color: dimgrey;
+        font-size: 15px;
+        margin: 15px;
+        padding: 9px 25px;
+        width: min-content;
+        border-radius: 5px;
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+    }
+    .flex-block:hover {
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    }
+    .dish-picture {
+        height: 70px;
+        width: 100px;
+    }
+    #add-button {
+        background-color: #a15566;
+    }
+    #add-button>a {
+        color: #ffffff;
+    }
+    #add-button:hover {
+        background-color: #804451;
     }
 </style>
 </html>

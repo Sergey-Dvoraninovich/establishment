@@ -8,7 +8,6 @@ public class Dish {
     private BigDecimal price;
     private int calories;
     private int amountGrams;
-    private BigDecimal averageMark;
     private String name;
     private Boolean isAvailable;
     private String photo;
@@ -20,26 +19,6 @@ public class Dish {
     public static Dish.DishBuilder builder() {
         return new Dish().new DishBuilder();
     }
-
-    //TODO remove constructor
-    /*
-    public Dish(long id, BigDecimal price,
-            int calories,
-            int amountGrams,
-            BigDecimal averageMark,
-            String name,
-            Boolean isAvailable,
-            String photo){
-        this.id = id;
-        this.price = price;
-        this.calories = calories;
-        this.amountGrams = amountGrams;
-        this.averageMark = averageMark;
-        this.name = name;
-        this.isAvailable = isAvailable;
-        this.photo = photo;
-    }
-    */
 
     public long getId() {
         return id;
@@ -73,14 +52,6 @@ public class Dish {
         this.amountGrams = amountGrams;
     }
 
-    public BigDecimal getAverageMark() {
-        return averageMark;
-    }
-
-    public void setAverageMark(BigDecimal averageMark) {
-        this.averageMark = averageMark;
-    }
-
     public String getName() {return name;}
 
     public void setName(String ingredients) {this.name = ingredients;}
@@ -112,7 +83,6 @@ public class Dish {
                 && Objects.equals(price, dish.price)
                 && Objects.equals(calories, dish.calories)
                 && Objects.equals(amountGrams, dish.amountGrams)
-                && Objects.equals(averageMark, dish.averageMark)
                 && Objects.equals(name, dish.name)
                 && Objects.equals(isAvailable, dish.isAvailable)
                 && Objects.equals(photo, dish.photo);
@@ -126,7 +96,6 @@ public class Dish {
         result = result * 31 + (price != null ? price.hashCode() : 0);
         result = result * 31 + calories;
         result = result * 31 + amountGrams;
-        result = result * 31 + (averageMark != null ? averageMark.hashCode() : 0);
         result = result * 31 + (name != null ? name.hashCode() : 0);
         result = result * 31 + (isAvailable != null ? isAvailable.hashCode() : 0);
         result = result * 31 + (photo != null ? photo.hashCode() : 0);
@@ -141,7 +110,6 @@ public class Dish {
         result.append(", price = '").append(price);
         result.append(", calories = '").append(calories);
         result.append(", amountGrams = '").append(amountGrams);
-        result.append(", averageMark = '").append(averageMark);
         result.append(", name = '").append(name);
         result.append(", isAvailable = '").append(isAvailable);
         result.append(", photo = '").append(photo);
@@ -172,11 +140,6 @@ public class Dish {
 
         public DishBuilder setAmountGrams(int amountGrams) {
             Dish.this.amountGrams = amountGrams;
-            return this;
-        }
-
-        public DishBuilder setAverageMark(BigDecimal averageMark) {
-            Dish.this.averageMark = averageMark;
             return this;
         }
 

@@ -8,6 +8,7 @@ public final class SessionAttribute {
     public static final String USER_ALREADY_VERIFIED = "user_already_verified";
     public static final String USER_BLOCKED = "user_blocked";
     public static final String INCORRECT_USER_CODE = "incorrect_user_code";
+    public static final String INVALID_USER_CODE = "invalid_user_code";
     public static final String EXPIRED_USER_CODE = "expired_user_code";
     public static final String USER_IS_NOT_AUTHENTICATED = "user_is_not_authenticated";
     public static final String USER_IS_NOT_REGISTERED = "user_is_not_registered";

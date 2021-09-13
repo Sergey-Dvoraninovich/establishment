@@ -16,8 +16,7 @@ import java.util.Optional;
 import static com.dvoraninovich.establishment.controller.command.PagePath.EDIT_DISH_PAGE;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.ID;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.DISH;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.INGREDIENTS;
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
 public class GoToEditDishCommand implements Command {
     DishService service = DishServiceImpl.getInstance();
@@ -41,6 +40,11 @@ public class GoToEditDishCommand implements Command {
         session.setAttribute(DISH, dish.get());
         session.setAttribute(INGREDIENTS, ingredients);
         session.setAttribute("unused_ingredients", unusedIngredients);
+        session.setAttribute(INVALID_DISH_NAME, false);
+        session.setAttribute(INVALID_DISH_PRICE, false);
+        session.setAttribute(INVALID_DISH_AMOUNT_GRAMS, false);
+        session.setAttribute(INVALID_DISH_CALORIES_AMOUNT, false);
+        session.setAttribute(EDIT_DISH_ERROR, false);
         return new Router(EDIT_DISH_PAGE + "?id=" + idParameter, REDIRECT);
     }
 }

@@ -1,3 +1,4 @@
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -23,6 +24,10 @@
 </div>
 </body>
 <style>
+    a {
+        font-size: 15px;
+        text-decoration: none;
+    }
     .workspace-flex-container {
         margin-top: 35px;
         display: flex;
@@ -32,28 +37,29 @@
     .flex-block {
         flex-flow: row nowrap;
         align-content: space-around;
-        background-color: dimgrey;
         color: white;
         font-size: 15px;
         margin: 15px;
         padding: 9px 25px;
         width: min-content;
+        border-radius: 5px;
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+    }
+    .flex-block:hover {
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
     }
     #add-button {
-        flex-flow: row nowrap;
-        align-content: space-around;
-        background-color: #F77A52;
-        color: white;
-        font-size: 15px;
-        margin: 15px;
-        padding: 9px 25px;
-        width: min-content;
+        background-color: #a15566;
     }
-
-    a {
-        color: white;
-        font-size: 15px;
-        text-decoration: none;
+    #add-button>a {
+        color: #ffffff;
+    }
+    #add-button:hover {
+        background-color: #804451;
     }
 </style>
 </html>

@@ -17,7 +17,7 @@
         <h3><fmt:message key="login.login"/></h3>
         <div class="form-row">
             <label for="login"><fmt:message key="login.login_placeholder" /></label>
-            <input type="text" name="login" id="login" value="${login}"/>
+            <input type="text" name="login" id="login" value="${login}" pattern="^[A-za-z_]{3,25}$"/>
             <c:if test="${sessionScope.invalid_login}">
                 <div class="alert alert-danger" role="alert">
                     <fmt:message key="login.invalid_login" />
@@ -26,7 +26,7 @@
         </div>
         <div class="form-row">
             <label for="password"><fmt:message key="login.password_placeholder" /></label>
-            <input type="password" name="password" id="password" value="${password}"/>
+            <input type="password" name="password" id="password" value="${password}" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$"/>
             <c:if test="${sessionScope.invalid_password}">
                 <div class="alert alert-danger" role="alert">
                     <fmt:message key="login.invalid_password" />

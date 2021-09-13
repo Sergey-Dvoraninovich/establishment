@@ -2,6 +2,7 @@ package com.dvoraninovich.establishment.controller.command.impl;
 
 import com.dvoraninovich.establishment.controller.command.Command;
 import com.dvoraninovich.establishment.controller.command.Router;
+import com.dvoraninovich.establishment.controller.command.validator.UserValidator;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.model.entity.UserStatus;
@@ -24,6 +25,7 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 
 public class VerifyCodeCommand implements Command {
     private static final Logger logger = LogManager.getLogger(VerifyCodeCommand.class);
+    private UserValidator validator = UserValidator.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -37,6 +39,7 @@ public class VerifyCodeCommand implements Command {
         session.setAttribute(USER_ALREADY_VERIFIED, false);
         session.setAttribute(USER_BLOCKED, false);
         session.setAttribute(INCORRECT_USER_CODE, false);
+        session.setAttribute(INVALID_USER_CODE, false);
         session.setAttribute(VERIFICATION_ERROR, false);
 
         if (user == null) {
@@ -52,6 +55,11 @@ public class VerifyCodeCommand implements Command {
         if (user.getStatus() == UserStatus.BLOCKED) {
             session.setAttribute(USER_BLOCKED, true);
             return new Router(VERIFICATION_PAGE, REDIRECT);
+        }
+
+        if (!validator.validateLogin(code)) {
+            session.setAttribute(INVALID_USER_CODE, true);
+            return new Router(LOGIN_PAGE, REDIRECT);
         }
 
         try {

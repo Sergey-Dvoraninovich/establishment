@@ -11,8 +11,8 @@ import com.dvoraninovich.establishment.model.service.impl.DishServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
@@ -29,23 +29,33 @@ public class CreateDishCommand implements Command {
         Router router;
         HttpSession session = request.getSession();
 
+        session.setAttribute(INVALID_DISH_NAME, false);
+        session.setAttribute(INVALID_DISH_PRICE, false);
+        session.setAttribute(INVALID_DISH_AMOUNT_GRAMS, false);
+        session.setAttribute(INVALID_DISH_CALORIES_AMOUNT, false);
+        session.setAttribute(ADD_DISH_ERROR, false);
+
         String name = request.getParameter(NAME);
-        String photo = request.getParameter(PHOTO);
         String priceLine = request.getParameter(PRICE);
         String amountGramsLine = request.getParameter(AMOUNT_GRAMS);
         String caloriesAmountLine = request.getParameter(CALORIES_AMOUNT);
 
-        List<String> validationMessages = new ArrayList<>();
-        validationMessages = validator.validateUserData(name, priceLine, amountGramsLine, caloriesAmountLine);
-        if (!validationMessages.isEmpty()) {
-            validationMessages.forEach(validationMessage -> session.setAttribute(validationMessage, true));
+        HashMap<String, Boolean> validationResult = new HashMap<>();
+        validationResult = validator.validateDishData(name, priceLine, amountGramsLine, caloriesAmountLine);
+
+        Set<String> validationMessages = validationResult.keySet();
+        HashMap<String, Boolean> finalValidationResult = validationResult;
+        validationMessages.forEach(message -> session.setAttribute(message, finalValidationResult.get(message)));
+
+        Collection<Boolean> validationErrors = validationResult.values();
+        if (validationErrors.contains(true)) {
             router = new Router(CREATE_DISH_PAGE, REDIRECT);
             return router;
         }
 
         Dish dish = Dish.builder()
                 .setName(name)
-                .setPhoto(photo)
+                .setPhoto("default_dish.png")
                 .setPrice(new BigDecimal(priceLine))
                 .setAmountGrams(new Integer(amountGramsLine))
                 .setCalories(new Integer(caloriesAmountLine))
@@ -66,6 +76,7 @@ public class CreateDishCommand implements Command {
                 router = new Router(CREATE_DISH_PAGE, REDIRECT);
             }
         } catch (ServiceException e) {
+            e.printStackTrace();
             session.setAttribute(EXCEPTION, e);
             router = new Router(ERROR_PAGE, FORWARD);
         }
