@@ -18,10 +18,10 @@ public final class PagePath {
     public static final String INGREDIENTS_PAGE = "/establishment_war_exploded/pages/admin/ingredients/ingredients.jsp";
     public static final String CREATE_INGREDIENT_PAGE ="/establishment_war_exploded/pages/admin/ingredients/add_ingredient.jsp";
 
-    public static final String DISHES_PAGE = "/establishment_war_exploded/pages/admin/dishes/dishes.jsp";
+    public static final String DISHES_PAGE = "/establishment_war_exploded/pages/dishes.jsp";
     public static final String CREATE_DISH_PAGE = "/establishment_war_exploded/pages/admin/dishes/add_dish.jsp";
     public static final String EDIT_DISH_PAGE = "/establishment_war_exploded/pages/admin/dishes/edit_dish.jsp";
-    public static final String DISH_PAGE = "/establishment_war_exploded/pages/admin/dishes/dish.jsp";
+    public static final String DISH_PAGE = "/establishment_war_exploded/pages/dish.jsp";
 
     public static final String ERROR_PAGE = "/establishment_war_exploded/pages/error/error.jsp";
 

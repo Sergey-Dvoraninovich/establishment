@@ -22,7 +22,6 @@
     <div class="workspace-column">
         <div id="description" class="block-item">
             <div class="row-item-flexbox">
-                <h2 hidden="true"><fmt:message key="profile.login"/> : </h2>
                 <div class="row-item-flexbox-item">
                     <img class="profile-item-picture" src="../../images/profile_icon.png">
                 </div>
@@ -31,7 +30,6 @@
                 </div>
             </div>
             <div class="row-item-flexbox">
-                <h2 hidden="true"><fmt:message key="profile.mail"/> : </h2>
                 <div class="row-item-flexbox-item">
                     <img class="profile-item-picture" src="../../images/profile_mail.png">
                 </div>
@@ -39,7 +37,6 @@
                     <h2>${sessionScope.user.mail}</h2></div>
             </div>
             <div class="row-item-flexbox">
-                <h2 hidden="true"><fmt:message key="profile.phone_num"/> : </h2>
                 <div class="row-item-flexbox-item">
                     <img class="profile-item-picture" src="../../images/profile_phone.png">
                 </div>
@@ -50,27 +47,6 @@
             <div id=description-action class="block-item-action">
                 <c:url value="/ApiController?command=go_to_edit_customer_page" var="edit_page"/>
                 <a href="${edit_page}"><fmt:message key="profile.edit"/></a>
-            </div>
-        </div>
-        <div class="block-item">
-            <div class="block-item-text">
-                <a><fmt:message key="profile.orders_info"/></a>
-            </div>
-            <div class="block-item-action">
-                <c:url value="/ApiController?command=go_to_orders_history" var="orders_page"/>
-                <a href="${orders_page}"><fmt:message key="profile.orders"/></a>
-            </div>
-        </div>
-        <div class="block-item">
-            <div class="block-item-header">
-                <h2><fmt:message key="profile.mail_verification"/></h2>
-            </div>
-            <div class="block-item-text">
-                <a><fmt:message key="profile.mail_verification_info"/></a>
-            </div>
-            <div class="block-item-action">
-                <c:url value="/ApiController?command=go_to_verify_code_page" var="verification_page"/>
-                <a href="${verification_page}"><fmt:message key="profile.verify_mail"/></a>
             </div>
         </div>
     </div>

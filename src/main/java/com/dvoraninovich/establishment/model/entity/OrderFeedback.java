@@ -1,5 +1,6 @@
 package com.dvoraninovich.establishment.model.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -8,7 +9,7 @@ public class OrderFeedback {
     private long userId;
     private long orderId;
     private String text;
-    private Date time;
+    private LocalDateTime time;
     private int mark;
 
     private OrderFeedback() {
@@ -18,24 +19,6 @@ public class OrderFeedback {
     public static OrderFeedback.OrderFeedbackBuilder builder() {
         return new OrderFeedback().new OrderFeedbackBuilder();
     }
-
-    //TODO remove constructor
-    /*
-    public OrderFeedback(long id,
-            long userId,
-            long orderId,
-            String text,
-            Date time,
-            int mark) {
-        this.id = id;
-        this.userId = userId;
-        this.orderId = orderId;
-        this.text = text;
-        this.time = time;
-        this.mark = mark;
-    }
-    */
-
 
     public long getId() {
         return id;
@@ -69,11 +52,11 @@ public class OrderFeedback {
         this.text = text;
     }
 
-    public Date getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 
@@ -161,7 +144,7 @@ public class OrderFeedback {
             return this;
         }
 
-        public OrderFeedbackBuilder setTime(Date time) {
+        public OrderFeedbackBuilder setTime(LocalDateTime time) {
             OrderFeedback.this.time = time;
             return this;
         }

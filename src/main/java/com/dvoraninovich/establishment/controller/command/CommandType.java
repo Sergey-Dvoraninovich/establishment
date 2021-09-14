@@ -8,6 +8,7 @@ public enum CommandType {
     DEFAULT,
     START_PAGE,
     LOGIN_PAGE,
+    SIGN_OUT,
     SIGN_UP_PAGE,
     GO_TO_INGREDIENTS_PAGE,
     GO_TO_CREATE_INGREDIENT_PAGE,
@@ -29,6 +30,5 @@ public enum CommandType {
     ADD_ORDER,
     GO_TO_CUSTOMER_BASKET,
     GO_TO_ADMIN_PAGE,
-    TEST
 
 }

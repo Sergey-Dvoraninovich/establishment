@@ -39,7 +39,6 @@
     <div class="workspace-column">
         <div id="description" class="block-item">
             <div class="row-item-flexbox">
-                <h2 hidden="true"><fmt:message key="profile.login"/> : </h2>
                 <div class="row-item-flexbox-item">
                     <img class="profile-item-picture" src="../../images/profile_icon.png">
                 </div>
@@ -48,7 +47,6 @@
                 </div>
             </div>
             <div class="row-item-flexbox">
-                <h2 hidden="true"><fmt:message key="profile.mail"/> : </h2>
                 <div class="row-item-flexbox-item">
                     <img class="profile-item-picture" src="../../images/profile_mail.png">
                 </div>
@@ -56,7 +54,6 @@
                     <h2>${sessionScope.user.mail}</h2></div>
                 </div>
             <div class="row-item-flexbox">
-                <h2 hidden="true"><fmt:message key="profile.phone_num"/> : </h2>
                 <div class="row-item-flexbox-item">
                     <img class="profile-item-picture" src="../../images/profile_phone.png">
                 </div>
@@ -65,7 +62,6 @@
                 </div>
             </div>
             <div class="row-item-flexbox">
-                <h2 hidden="true" ><fmt:message key="profile.card_num"/>  : </h2>
                 <div class="row-item-flexbox-item">
                     <img class="profile-item-picture" src="../../images/profile_card.png">
                 </div>
@@ -73,7 +69,7 @@
                     <h2>${sessionScope.user.cardNumber}</h2>
                 </div>
             </div>
-            <div class="block-item-action">
+            <div id=description-action class="block-item-action">
                 <c:url value="/ApiController?command=go_to_edit_customer_page" var="edit_page"/>
                 <a href="${edit_page}"><fmt:message key="profile.edit"/></a>
             </div>
@@ -125,7 +121,6 @@
         margin: 25px;
     }
     a {
-        color: white;
         font-size: 15px;
         text-decoration: none;
     }
@@ -182,12 +177,16 @@
         font-size: 20px;
     }
     .block-item-action {
+        position: center;
         border-radius: 10px;
         margin-top: 15px;
         padding: 5px;
         text-align: center;
         width: 70%;
         background-color: #a15566;
+    }
+    #description-action {
+        margin-left: 55px;
     }
     .block-item-action:hover {
         -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
@@ -196,7 +195,7 @@
     }
     .block-item-action>a {
         color: #ffffff;
-        font-size: 30px;
+        font-size: 25px;
     }
 </style>
 </html>

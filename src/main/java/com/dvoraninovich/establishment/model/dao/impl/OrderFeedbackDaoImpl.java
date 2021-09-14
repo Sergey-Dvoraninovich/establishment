@@ -7,6 +7,7 @@ import com.dvoraninovich.establishment.model.entity.OrderFeedback;
 import com.dvoraninovich.establishment.model.pool.DatabaseConnectionPool;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -82,7 +83,7 @@ public class OrderFeedbackDaoImpl implements OrderFeedbackDao {
             statement.setLong(1, orderFeedback.getUserId());
             statement.setLong(2, orderFeedback.getOrderId());
             statement.setString(3, orderFeedback.getText());
-            statement.setDate(4, (java.sql.Date) orderFeedback.getTime());
+            statement.setTimestamp(4, Timestamp.valueOf(orderFeedback.getTime()));
             statement.setInt(5, orderFeedback.getMark());
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
@@ -102,7 +103,7 @@ public class OrderFeedbackDaoImpl implements OrderFeedbackDao {
                 statement.setLong(1, orderFeedback.getUserId());
                 statement.setLong(2, orderFeedback.getOrderId());
                 statement.setString(3, orderFeedback.getText());
-                statement.setDate(4, (java.sql.Date) orderFeedback.getTime());
+                statement.setTimestamp(4, Timestamp.valueOf(orderFeedback.getTime()));
                 statement.setInt(5, orderFeedback.getMark());
                 statement.setLong(6, orderFeedback.getId());
                 Integer rowsNum = statement.executeUpdate();
@@ -119,7 +120,8 @@ public class OrderFeedbackDaoImpl implements OrderFeedbackDao {
         long userId = resultSet.getLong(ORDER_FEEDBACK_USER_ID);
         long orderId =  resultSet.getLong(ORDER_FEEDBACK_ORDER_ID);
         String text = resultSet.getString(ORDER_FEEDBACK_TEXT);
-        Date time = resultSet.getTime(ORDER_FEEDBACK_TIME);
+        Timestamp feedbackTimestamp = resultSet.getTimestamp(ORDER_FEEDBACK_TIME);
+        LocalDateTime feedbackTime = feedbackTimestamp.toLocalDateTime();
         int mark = resultSet.getInt(ORDER_FEEDBACK_MARK);
 
         OrderFeedback orderFeedback = OrderFeedback.builder()
@@ -127,7 +129,7 @@ public class OrderFeedbackDaoImpl implements OrderFeedbackDao {
         .setUserId(userId)
         .setOrderId(orderId)
         .setText(text)
-        .setTime(time)
+        .setTime(feedbackTime)
         .setMark(mark)
         .build();
 

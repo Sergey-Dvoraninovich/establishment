@@ -19,18 +19,18 @@ public class DishListItemDaoImpl implements DishListItemDao {
     private static final DatabaseConnectionPool connectionPool = DatabaseConnectionPool.getInstance();
 
     private static final String SELECT_ALL_DISH_LIST_ITEMS
-            = "SELECT id, id_order, id_dish, dish_amount, final_dish_price "
+            = "SELECT id, id_order, id_dish, dish_amount "
             + "FROM dishes_lists_items;";
     private static final String SELECT_DISH_LIST_ITEM_BY_ID
-            = "SELECT id, id_order, id_dish, dish_amount, final_dish_price "
+            = "SELECT id, id_order, id_dish, dish_amount "
             + "FROM dishes_lists_items "
             + "WHERE (id = ?);";
     private static final String INSERT_DISH_LIST_ITEM
-            = "INSERT dishes_lists_items(id_order, id_dish, dish_amount, final_dish_price) "
-            + "VALUES (?, ?, ?, ?);";
+            = "INSERT dishes_lists_items(id_order, id_dish, dish_amount) "
+            + "VALUES (?, ?, ?);";
     private static final String UPDATE_DISH_LIST_ITEM
             = "UPDATE dishes_lists_items "
-            + "SET id_order = ?, id_dish = ?, dish_amount = ?, final_dish_price = ? "
+            + "SET id_order = ?, id_dish = ?, dish_amount = ? "
             + "WHERE id = ?;";
 
     public static DishListItemDaoImpl getInstance() {
@@ -85,7 +85,6 @@ public class DishListItemDaoImpl implements DishListItemDao {
             statement.setLong(1, dishListItem.getOrderId());
             statement.setLong(2, dishListItem.getDishId());
             statement.setInt(3, dishListItem.getDishAmount());
-            statement.setBigDecimal(4, dishListItem.getDishFinalPrice());
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
@@ -104,7 +103,7 @@ public class DishListItemDaoImpl implements DishListItemDao {
                 statement.setLong(1, dishListItem.getOrderId());
                 statement.setLong(2, dishListItem.getDishId());
                 statement.setInt(3, dishListItem.getDishAmount());
-                statement.setBigDecimal(4, dishListItem.getDishFinalPrice());
+                statement.setLong(4, dishListItem.getId());
                 Integer rowsNum = statement.executeUpdate();
                 successfulOperation = rowsNum != 0;
             } catch (DatabaseException | SQLException e) {
@@ -119,14 +118,12 @@ public class DishListItemDaoImpl implements DishListItemDao {
         long orderId = resultSet.getLong(DISH_LIST_ITEM_ID_ORDER);
         long dishId = resultSet.getLong(DISH_LIST_ITEM_ID_DISH);
         int dishAmount = resultSet.getInt(DISH_LIST_ITEM_DISH_AMOUNT);
-        BigDecimal dishFinalPrice = resultSet.getBigDecimal(DISH_LIST_ITEM_DISH_FINAL_PRICE);
 
         DishListItem dishListItem = DishListItem.builder()
                 .setId(id)
                 .setOrderId(orderId)
                 .setDishId(dishId)
                 .setDishAmount(dishAmount)
-                .setDishFinalPrice(dishFinalPrice)
                 .build();
 
         return dishListItem;

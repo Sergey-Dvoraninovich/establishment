@@ -7,7 +7,10 @@ import com.dvoraninovich.establishment.model.entity.User;
 import javafx.util.Pair;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderDao extends BaseDao<Long, Order> {
+    Optional<Order> findOrderInCreation(long userId) throws DaoException;
+    Long insertAndGetId(Order order) throws DaoException;
     List<Pair<Order, User>> findAllOrdersWithUserinfo() throws DaoException;
 }

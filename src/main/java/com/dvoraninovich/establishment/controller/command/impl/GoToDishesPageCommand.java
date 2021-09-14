@@ -1,7 +1,6 @@
-package com.dvoraninovich.establishment.controller.command.impl.admin.dish;
+package com.dvoraninovich.establishment.controller.command.impl;
 
 import com.dvoraninovich.establishment.controller.command.Command;
-import com.dvoraninovich.establishment.controller.command.PagePath;
 import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.Dish;

@@ -1,4 +1,4 @@
-package com.dvoraninovich.establishment.controller.command.impl.admin.dish;
+package com.dvoraninovich.establishment.controller.command.impl;
 
 import com.dvoraninovich.establishment.controller.command.Command;
 import com.dvoraninovich.establishment.controller.command.PagePath;

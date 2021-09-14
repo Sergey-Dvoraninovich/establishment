@@ -45,8 +45,7 @@ public final class CommandProvider {
         commands.put(GO_TO_ORDERS_PAGE, new GoToOrdersPageCommand());
         commands.put(GO_TO_CUSTOMER_BASKET, new GoToCustomerBasketCommand());
         commands.put(GO_TO_ADMIN_PAGE, new GoToAdminProfileCommand());
-
-        commands.put(TEST, new TestCommand());
+        commands.put(SIGN_OUT, new SignOutCommand());
     }
 
     public static CommandProvider getInstance() {

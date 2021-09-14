@@ -8,22 +8,20 @@ import com.dvoraninovich.establishment.model.dao.impl.IngredientDaoImpl;
 import com.dvoraninovich.establishment.model.entity.Ingredient;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.INDEX;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.IS_AUTHENTICATED;
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.USER;
 
-public class TestCommand implements Command {
+public class SignOutCommand implements Command {
     private IngredientDao ingredientDao = IngredientDaoImpl.getInstance();
     @Override
     public Router execute(HttpServletRequest request) {
-        Long id;
-        Ingredient ingredient = Ingredient.builder().setName("Pear").build();
-        try {
-            id = ingredientDao.testInsert(ingredient);
-            System.out.println(id);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+        HttpSession session = request.getSession();
+        session.setAttribute(USER, null);
+        session.setAttribute(IS_AUTHENTICATED, false);
         return new Router(INDEX, REDIRECT);
     }
 }

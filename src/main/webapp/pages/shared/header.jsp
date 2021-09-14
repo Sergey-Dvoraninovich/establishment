@@ -10,13 +10,13 @@
 <header>
   <nav>
     <div class="header-container">
-    <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
       <div class="header-block">
         <c:url value="/ApiController?command=go_to_dishes_page" var="dishes_page"/>
         <a class="header-block-text" href="${dishes_page}">
           <fmt:message key="header.dishes"/>
         </a>
       </div>
+    <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
       <div class="header-block">
         <c:url value="/ApiController?command=go_to_orders_page" var="orders_page"/>
         <a class="header-block-text" href="${orders_page}">
@@ -45,28 +45,40 @@
           </a>
        </div>
     </c:if>
-    <div class="header-block">
-      <c:if test="${sessionScope.user != null}">
-         <c:if test="${sessionScope.user.role.name() == 'CUSTOMER'}">
-           <c:url value="/ApiController?command=go_to_customer_profile_page&id=${sessionScope.user.id}" var="profile_page"/>
-           <a class="header-block-text" href="${profile_page}">
-               ${sessionScope.user.login} <fmt:message key="header.profile"/>
-           </a>
-         </c:if>
-         <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
+
+    <c:if test="${sessionScope.user != null}">
+      <c:if test="${sessionScope.user.role.name() == 'CUSTOMER'}">
+        <div class="header-block">
+          <c:url value="/ApiController?command=go_to_customer_profile_page&id=${sessionScope.user.id}" var="profile_page"/>
+          <a class="header-block-text" href="${profile_page}">
+              ${sessionScope.user.login} <fmt:message key="header.profile"/>
+          </a>
+        </div>
+      </c:if>
+      <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
+        <div class="header-block">
            <c:url value="/ApiController?command=go_to_admin_page&id=${sessionScope.user.id}" var="admin_profile_page"/>
            <a class="header-block-text" href="${admin_profile_page}">
-               ${sessionScope.user.login} <fmt:message key="header.profile"/>
+              ${sessionScope.user.login} <fmt:message key="header.profile"/>
            </a>
-         </c:if>
+        </div>
       </c:if>
-      <c:if test="${!sessionScope.is_authenticated}">
+      <div class="header-block">
+        <c:url value="/ApiController?command=sign_out" var="sign_out"/>
+        <a class="header-block-text" href="${sign_out}">
+          <fmt:message key="header.sign_out"/>
+        </a>
+      </div>
+    </c:if>
+
+    <c:if test="${!sessionScope.is_authenticated}">
+       <div class="header-block">
          <c:url value="/ApiController?command=go_to_login_page" var="login_page"/>
          <a class="header-block-text" href="${login_page}">
            <fmt:message key="header.sign_in"/>
          </a>
-      </c:if>
-    </div>
+       </div>
+    </c:if>
 
     <div id="locale-header-block" class="header-block">
       <div class="locale-container">

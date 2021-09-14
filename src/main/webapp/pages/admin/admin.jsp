@@ -22,7 +22,6 @@
     <div class="workspace-column">
         <div id="description" class="block-item">
             <div class="row-item-flexbox">
-                <h2 hidden="true"><fmt:message key="profile.login"/> : </h2>
                 <div class="row-item-flexbox-item">
                     <img class="profile-item-picture" src="../../images/profile_icon.png">
                 </div>
@@ -31,7 +30,6 @@
                 </div>
             </div>
             <div class="row-item-flexbox">
-                <h2 hidden="true"><fmt:message key="profile.mail"/> : </h2>
                 <div class="row-item-flexbox-item">
                     <img class="profile-item-picture" src="../../images/profile_mail.png">
                 </div>
@@ -39,7 +37,6 @@
                     <h2>${sessionScope.user.mail}</h2></div>
             </div>
             <div class="row-item-flexbox">
-                <h2 hidden="true"><fmt:message key="profile.phone_num"/> : </h2>
                 <div class="row-item-flexbox-item">
                     <img class="profile-item-picture" src="../../images/profile_phone.png">
                 </div>

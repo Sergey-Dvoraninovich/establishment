@@ -19,7 +19,7 @@ public class IngredientDaoImpl implements IngredientDao {
     private static final DatabaseConnectionPool connectionPool = DatabaseConnectionPool.getInstance();
 
     private static final String SELECT_ALL_INGREDIENT
-            = "SELECT id, name "
+            = "SELECT ingredients.id, ingredients.name "
             + "FROM ingredients;";
     private static final String SELECT_INGREDIENT_BY_ID
             = "SELECT ingredients.name "
@@ -29,7 +29,7 @@ public class IngredientDaoImpl implements IngredientDao {
             = "INSERT ingredients(name) "
             + "VALUES (?);";
     private static final String UPDATE_INGREDIENT
-            = "UPDATE dishes "
+            = "UPDATE ingredeints "
             + "SET name = ? "
             + "WHERE id = ?;";
     private static final String FIND_DISH_INGREDIENTS
@@ -104,7 +104,7 @@ public class IngredientDaoImpl implements IngredientDao {
         Ingredient ingredient = Ingredient.builder().build();
         try (Connection connection = connectionPool.acquireConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_INGREDIENT_BY_ID)) {
-            statement.setLong(INGREDIENT_ID, id);
+            statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 ingredient.setId(resultSet.getInt(INGREDIENT_ID));

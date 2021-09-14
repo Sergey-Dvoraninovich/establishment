@@ -1,6 +1,5 @@
 package com.dvoraninovich.establishment.model.entity;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class DishListItem {
@@ -8,26 +7,10 @@ public class DishListItem {
     private long orderId;
     private long dishId;
     private int dishAmount;
-    private BigDecimal finalDishPrice;
 
     private DishListItem() {
 
     }
-
-    //TODO remove constructor
-    /*
-    public DishListItem(long id,
-            long orderId,
-            long dishId,
-            int dishAmount,
-            BigDecimal finalDishPrice) {
-        this.id = id;
-        this.orderId = orderId;
-        this.dishId = dishId;
-        this.dishAmount = dishAmount;
-        this.finalDishPrice = finalDishPrice;
-    }
-    */
 
     public static DishListItem.DishListItemBuilder builder() {
         return new DishListItem().new DishListItemBuilder();
@@ -65,14 +48,6 @@ public class DishListItem {
         this.dishAmount = dishAmount;
     }
 
-    public BigDecimal getDishFinalPrice() {
-        return finalDishPrice;
-    }
-
-    public void setDishFinalPrice(BigDecimal finalDishPrice) {
-        this.finalDishPrice = finalDishPrice;
-    }
-
     @Override
     public String toString() {
         final StringBuilder result = new StringBuilder("DishListItem {");
@@ -80,7 +55,6 @@ public class DishListItem {
         result.append(", id_order = '").append(orderId);
         result.append(", id_dish = '").append(dishId);
         result.append(", dishAmount = '").append(dishAmount);
-        result.append(", finalDihPrice = '").append(finalDishPrice);
         result.append(" }");
         return result.toString();
     }
@@ -103,8 +77,7 @@ public class DishListItem {
         return id == dishListItem.id
                 && Objects.equals(orderId, dishListItem.orderId)
                 && Objects.equals(dishId, dishListItem.dishId)
-                && Objects.equals(dishAmount, dishListItem.dishAmount)
-                && Objects.equals(finalDishPrice, dishListItem.finalDishPrice);
+                && Objects.equals(dishAmount, dishListItem.dishAmount);
     }
 
     @Override
@@ -115,7 +88,6 @@ public class DishListItem {
         result = result * 31 + Long.hashCode(orderId);
         result = result * 31 + Long.hashCode(dishId);
         result = result * 31 + dishAmount;
-        result = result * 31 + (finalDishPrice != null ? finalDishPrice.hashCode() : 0);
 
         return result;
     }
@@ -143,11 +115,6 @@ public class DishListItem {
 
         public DishListItemBuilder setDishAmount(int dishAmount) {
             DishListItem.this.dishAmount = dishAmount;
-            return this;
-        }
-
-        public DishListItemBuilder setDishFinalPrice(BigDecimal finalDishPrice) {
-            DishListItem.this.finalDishPrice = finalDishPrice;
             return this;
         }
 

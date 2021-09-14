@@ -10,11 +10,6 @@ public class Ingredient {
 
     }
 
-    //public Ingredient(long id, String name) {
-    //    this.id = id;
-    //    this.name = name;
-    //}
-
     public static IngredientBuilder builder() {
         return new Ingredient().new IngredientBuilder();
     }
