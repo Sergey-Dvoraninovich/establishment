@@ -1,12 +1,14 @@
 package com.dvoraninovich.establishment.controller.command;
 
 import com.dvoraninovich.establishment.controller.command.impl.*;
+import com.dvoraninovich.establishment.controller.command.impl.admin.GoToAdminProfileCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.dish.*;
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.CreateIngredientCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToCreateIngredientPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToIngredientsPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.order.GoToOrdersPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.user.GoToUsersPageCommand;
+import com.dvoraninovich.establishment.controller.command.impl.customer.GoToCustomerBasketCommand;
 import com.dvoraninovich.establishment.controller.command.impl.customer.GoToCustomerProfilePageCommand;
 
 import java.util.EnumMap;
@@ -41,6 +43,9 @@ public final class CommandProvider {
         commands.put(GO_TO_VERIFY_CODE_PAGE, new GoToVerifyCodePageCommand());
         commands.put(GO_TO_CUSTOMER_PROFILE_PAGE, new GoToCustomerProfilePageCommand());
         commands.put(GO_TO_ORDERS_PAGE, new GoToOrdersPageCommand());
+        commands.put(GO_TO_CUSTOMER_BASKET, new GoToCustomerBasketCommand());
+        commands.put(GO_TO_ADMIN_PAGE, new GoToAdminProfileCommand());
+
         commands.put(TEST, new TestCommand());
     }
 

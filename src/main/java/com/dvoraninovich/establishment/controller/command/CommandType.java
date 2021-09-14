@@ -27,6 +27,8 @@ public enum CommandType {
     GO_TO_CUSTOMER_PROFILE_PAGE,
     GO_TO_ORDERS_PAGE,
     ADD_ORDER,
+    GO_TO_CUSTOMER_BASKET,
+    GO_TO_ADMIN_PAGE,
     TEST
 
 }

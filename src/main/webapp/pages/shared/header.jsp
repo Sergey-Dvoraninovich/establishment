@@ -10,36 +10,55 @@
 <header>
   <nav>
     <div class="header-container">
-    <div class="header-block">
-      <c:url value="/ApiController?command=go_to_dishes_page" var="dishes_page"/>
-      <a class="header-block-text" href="${dishes_page}">
-        <fmt:message key="header.dishes"/>
-      </a>
-    </div>
-    <div class="header-block">
-      <c:url value="/ApiController?command=go_to_orders_page" var="orders_page"/>
-      <a class="header-block-text" href="${orders_page}">
-        <fmt:message key="header.orders"/>
-      </a>
-    </div>
-    <div class="header-block">
-      <c:url value="/ApiController?command=go_to_ingredients_page" var="ingredients_page"/>
-      <a class="header-block-text" href="${ingredients_page}">
-        <fmt:message key="header.ingredients"/>
-      </a>
-    </div>
-    <div class="header-block">
-      <c:url value="/ApiController?command=go_to_users_page" var="users_page"/>
-      <a class="header-block-text" href="${users_page}">
-        <fmt:message key="header.users"/>
-      </a>
-    </div>
+    <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
+      <div class="header-block">
+        <c:url value="/ApiController?command=go_to_dishes_page" var="dishes_page"/>
+        <a class="header-block-text" href="${dishes_page}">
+          <fmt:message key="header.dishes"/>
+        </a>
+      </div>
+      <div class="header-block">
+        <c:url value="/ApiController?command=go_to_orders_page" var="orders_page"/>
+        <a class="header-block-text" href="${orders_page}">
+          <fmt:message key="header.orders"/>
+        </a>
+      </div>
+      <div class="header-block">
+        <c:url value="/ApiController?command=go_to_ingredients_page" var="ingredients_page"/>
+        <a class="header-block-text" href="${ingredients_page}">
+          <fmt:message key="header.ingredients"/>
+        </a>
+      </div>
+      <div class="header-block">
+        <c:url value="/ApiController?command=go_to_users_page" var="users_page"/>
+        <a class="header-block-text" href="${users_page}">
+          <fmt:message key="header.users"/>
+        </a>
+      </div>
+    </c:if>
+
+    <c:if test="${sessionScope.user.role.name() == 'CUSTOMER'}">
+       <div class="header-block">
+          <c:url value="/ApiController?command=go_to_customer_basket" var="basket"/>
+          <a class="header-block-text" href="${basket}">
+            <fmt:message key="header.basket"/>
+          </a>
+       </div>
+    </c:if>
     <div class="header-block">
       <c:if test="${sessionScope.user != null}">
-         <c:url value="/ApiController?command=go_to_customer_profile_page&id=${sessionScope.user.id}" var="profile_page"/>
-         <a class="header-block-text" href="${profile_page}">
-             ${sessionScope.user.login} <fmt:message key="header.profile"/>
-         </a>
+         <c:if test="${sessionScope.user.role.name() == 'CUSTOMER'}">
+           <c:url value="/ApiController?command=go_to_customer_profile_page&id=${sessionScope.user.id}" var="profile_page"/>
+           <a class="header-block-text" href="${profile_page}">
+               ${sessionScope.user.login} <fmt:message key="header.profile"/>
+           </a>
+         </c:if>
+         <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
+           <c:url value="/ApiController?command=go_to_admin_page&id=${sessionScope.user.id}" var="admin_profile_page"/>
+           <a class="header-block-text" href="${admin_profile_page}">
+               ${sessionScope.user.login} <fmt:message key="header.profile"/>
+           </a>
+         </c:if>
       </c:if>
       <c:if test="${!sessionScope.is_authenticated}">
          <c:url value="/ApiController?command=go_to_login_page" var="login_page"/>
