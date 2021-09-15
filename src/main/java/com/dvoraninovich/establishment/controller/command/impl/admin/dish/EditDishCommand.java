@@ -5,6 +5,7 @@ import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.controller.command.validator.DishValidator;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.Dish;
+import com.dvoraninovich.establishment.model.entity.Ingredient;
 import com.dvoraninovich.establishment.model.service.DishService;
 import com.dvoraninovich.establishment.model.service.impl.DishServiceImpl;
 
@@ -20,6 +21,7 @@ import static com.dvoraninovich.establishment.controller.command.Router.RouterTy
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.EXCEPTION;
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.INGREDIENTS;
 
 public class EditDishCommand implements Command {
     private DishService service = DishServiceImpl.getInstance();
@@ -29,6 +31,9 @@ public class EditDishCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
+        List<Ingredient> ingredients = new ArrayList<>();
+        Optional<Dish> optionalDish = Optional.empty();
+        Long dishId = Long.valueOf(0);
 
         session.setAttribute(INVALID_DISH_NAME, false);
         session.setAttribute(INVALID_DISH_PRICE, false);
@@ -37,6 +42,7 @@ public class EditDishCommand implements Command {
         session.setAttribute(EDIT_DISH_ERROR, false);
 
         String id = request.getParameter(ID);
+        dishId = Long.parseLong(id);
         String name = request.getParameter(NAME);
         String priceLine = request.getParameter(PRICE);
         String amountGramsLine = request.getParameter(AMOUNT_GRAMS);
@@ -56,7 +62,7 @@ public class EditDishCommand implements Command {
         }
 
         Dish dish = Dish.builder()
-        .setId(Long.parseLong(id))
+        .setId(dishId)
         .setName(name)
         .setPhoto("default_dish.png")
         .setPrice(new BigDecimal(priceLine))
@@ -69,10 +75,8 @@ public class EditDishCommand implements Command {
             boolean creationResult = false;
             creationResult = service.editDish(dish);
             if (creationResult) {
-                //TODO work with it
-                List<Dish> dishes = service.findAll();
-                session.setAttribute("dishes", dishes);
-                router = new Router(DISHES_PAGE, REDIRECT);
+                session.setAttribute(DISH, dish);
+                router = new Router(DISH_PAGE + "?id:" + id, REDIRECT);
             }
             else {
                 session.setAttribute(EDIT_DISH_ERROR, true);
