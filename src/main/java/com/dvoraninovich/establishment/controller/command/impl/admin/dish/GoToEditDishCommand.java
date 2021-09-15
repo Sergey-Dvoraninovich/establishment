@@ -24,7 +24,6 @@ public class GoToEditDishCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         String idParameter = request.getParameter(ID);
-        //TODO work with it
         Optional<Dish> dish = Optional.empty();
         List<Ingredient> ingredients = new ArrayList<>();
         List<Ingredient> unusedIngredients = new ArrayList<>();
@@ -39,7 +38,7 @@ public class GoToEditDishCommand implements Command {
         HttpSession session = request.getSession();
         session.setAttribute(DISH, dish.get());
         session.setAttribute(INGREDIENTS, ingredients);
-        session.setAttribute("unused_ingredients", unusedIngredients);
+        session.setAttribute(UNUSED_INGREDIENTS, unusedIngredients);
         session.setAttribute(INVALID_DISH_NAME, false);
         session.setAttribute(INVALID_DISH_PRICE, false);
         session.setAttribute(INVALID_DISH_AMOUNT_GRAMS, false);

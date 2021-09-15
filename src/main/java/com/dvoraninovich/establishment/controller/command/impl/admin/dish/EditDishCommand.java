@@ -26,6 +26,7 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 public class EditDishCommand implements Command {
     private DishService service = DishServiceImpl.getInstance();
     private DishValidator validator = DishValidator.getInstance();
+    private final static String DEFAULT_DISH_PHOTO = "default_dish.png";
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -64,7 +65,7 @@ public class EditDishCommand implements Command {
         Dish dish = Dish.builder()
         .setId(dishId)
         .setName(name)
-        .setPhoto("default_dish.png")
+        .setPhoto(DEFAULT_DISH_PHOTO)
         .setPrice(new BigDecimal(priceLine))
         .setAmountGrams(new Integer(amountGramsLine))
         .setCalories(new Integer(caloriesAmountLine))

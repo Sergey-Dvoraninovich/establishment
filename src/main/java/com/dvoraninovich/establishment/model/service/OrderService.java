@@ -19,7 +19,7 @@ public interface OrderService {
 
     boolean update(Order order) throws ServiceException;
 
-    Order getCustomerBasket(long customerId) throws ServiceException;
+    Optional<Order> getCustomerBasket(long customerId) throws ServiceException;
 
     List<Pair<Order, User>> findAllOrdersWithUserinfo() throws ServiceException;
 }

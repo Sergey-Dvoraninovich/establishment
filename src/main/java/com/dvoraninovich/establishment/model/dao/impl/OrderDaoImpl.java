@@ -10,10 +10,12 @@ import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.model.pool.DatabaseConnectionPool;
 import javafx.util.Pair;
 
+import javax.jws.soap.SOAPBinding;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +31,18 @@ public class OrderDaoImpl implements OrderDao {
             + "FROM orders "
             + "INNER JOIN orders_statuses "
             + "ON orders.id_order_status = orders_statuses.id "
+            + "INNER JOIN payment_types "
+            + "ON orders.id_payment_type = payment_types.id; ";
+
+    private static final String SELECT_ALL_ORDERS_WITH_USER_INFO
+            = "SELECT orders.id, orders.id_user, orders_statuses.order_status, orders.order_time, orders.finish_time, "
+            + " orders.card_number, payment_types.payment.type, orders.bonuses_in_payment, orders.final_price, "
+            + "users.login, users.mail, users.photo, users.phone_num "
+            + "FROM orders "
+            + "INNER JOIN orders_statuses "
+            + "ON orders.id_order_status = orders_statuses.id "
+            + "INNER JOIN users "
+            + "ON orders.id_user = users.id "
             + "INNER JOIN payment_types "
             + "ON orders.id_payment_type = payment_types.id; ";
 
@@ -196,8 +210,8 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Pair<Order, User>> findAllOrdersWithUserinfo() throws DaoException {
-        List<Pair<Order, User>> pairList = new ArrayList<>();
+    public HashMap<Order, User> findAllOrdersWithUserinfo() throws DaoException {
+        HashMap<Order, User> userHashMap = new HashMap<>();
         try (Connection connection = connectionPool.acquireConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_ORDERS);
@@ -216,14 +230,14 @@ public class OrderDaoImpl implements OrderDao {
                         .setPhoneNumber(phone_number)
                         .build();
 
-                pairList.add(new Pair<>(order, user));
+                userHashMap.put(order, user);
             }
         } catch (SQLException e) {
             throw new DaoException("Can't handle OrderDaoImpl.findAllOrdersWithUserinfo request", e);
         } catch (DatabaseException e) {
             throw new DaoException(e);
         }
-        return pairList;
+        return userHashMap;
     }
 
     private Order createOrderFromResultSet(ResultSet resultSet) throws SQLException {

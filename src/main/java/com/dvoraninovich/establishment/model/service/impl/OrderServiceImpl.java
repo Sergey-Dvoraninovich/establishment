@@ -72,12 +72,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getCustomerBasket(long customerId) throws ServiceException {
-        Order order;
+    public Optional<Order> getCustomerBasket(long customerId) throws ServiceException {
+        Optional<Order> order = Optional.empty();
         try {
-            Optional<Order> optionalOrder = orderDao.findOrderInCreation(customerId);
-            if (!optionalOrder.isPresent()){
-                order = Order.builder()
+            order = orderDao.findOrderInCreation(customerId);
+            if (!order.isPresent()){
+                Order defaultOrder = Order.builder()
                         .setUserId(customerId)
                         .setOrderState(IN_CREATION)
                         .setOrderTime(LocalDateTime.now())
@@ -86,11 +86,9 @@ public class OrderServiceImpl implements OrderService {
                         .setBonusesInPayment(new BigDecimal(0.00))
                         .setFinalPrice(new BigDecimal(0.00))
                         .build();
-                Long orderId = orderDao.insertAndGetId(order);
-                order.setId(orderId);
-            }
-            else {
-                order = optionalOrder.get();
+                Long orderId = orderDao.insertAndGetId(defaultOrder);
+                defaultOrder.setId(orderId);
+                order = Optional.of(defaultOrder);
             }
 
         } catch (DaoException e) {

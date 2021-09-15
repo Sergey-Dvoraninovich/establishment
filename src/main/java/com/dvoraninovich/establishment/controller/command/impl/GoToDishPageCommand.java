@@ -18,8 +18,7 @@ import java.util.Optional;
 import static com.dvoraninovich.establishment.controller.command.PagePath.DISH_PAGE;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.ID;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.DISH;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.INGREDIENTS;
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
 public class GoToDishPageCommand implements Command {
     DishService service = DishServiceImpl.getInstance();
@@ -27,7 +26,6 @@ public class GoToDishPageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         String idParameter = request.getParameter(ID);
-        //TODO work with it
         Optional<Dish> dish = Optional.empty();
         List<Ingredient> ingredients = new ArrayList<>();
         List<Ingredient> unusedIngredients = new ArrayList<>();
@@ -42,7 +40,7 @@ public class GoToDishPageCommand implements Command {
         HttpSession session = request.getSession();
         session.setAttribute(DISH, dish.get());
         session.setAttribute(INGREDIENTS, ingredients);
-        session.setAttribute("unused_ingredients", unusedIngredients);
+        session.setAttribute(UNUSED_INGREDIENTS, unusedIngredients);
         return new Router(DISH_PAGE + "?id=" + idParameter, REDIRECT);
     }
 }

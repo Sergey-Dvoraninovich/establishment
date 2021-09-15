@@ -23,6 +23,7 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 public class CreateDishCommand implements Command {
     private DishService service = DishServiceImpl.getInstance();
     private DishValidator validator = DishValidator.getInstance();
+    private final static String DEFAULT_DISH_PHOTO = "default_dish.png";
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -55,7 +56,7 @@ public class CreateDishCommand implements Command {
 
         Dish dish = Dish.builder()
                 .setName(name)
-                .setPhoto("default_dish.png")
+                .setPhoto(DEFAULT_DISH_PHOTO)
                 .setPrice(new BigDecimal(priceLine))
                 .setAmountGrams(new Integer(amountGramsLine))
                 .setCalories(new Integer(caloriesAmountLine))
@@ -66,9 +67,8 @@ public class CreateDishCommand implements Command {
             boolean creationResult = false;
             creationResult = service.addDish(dish);
             if (creationResult) {
-                //TODO work with it
                 List<Dish> dishes = service.findAll();
-                session.setAttribute("dishes", dishes);
+                session.setAttribute(DISHES, dishes);
                 router = new Router(DISHES_PAGE, REDIRECT);
             }
             else {

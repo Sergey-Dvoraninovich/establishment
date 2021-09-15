@@ -2,6 +2,7 @@ package com.dvoraninovich.establishment.model.dao.impl;
 
 import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.exception.DatabaseException;
+import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.dao.DishListItemDao;
 import com.dvoraninovich.establishment.model.entity.DishListItem;
 import com.dvoraninovich.establishment.model.pool.DatabaseConnectionPool;
@@ -25,6 +26,10 @@ public class DishListItemDaoImpl implements DishListItemDao {
             = "SELECT id, id_order, id_dish, dish_amount "
             + "FROM dishes_lists_items "
             + "WHERE (id = ?);";
+    private static final String SELECT_ALL_DISH_LIST_ITEMS_BY_ORDER_ID
+            = "SELECT id, id_order, id_dish, dish_amount "
+            + "FROM dishes_lists_items "
+            + "WHERE (id_order = ?);";
     private static final String INSERT_DISH_LIST_ITEM
             = "INSERT dishes_lists_items(id_order, id_dish, dish_amount) "
             + "VALUES (?, ?, ?);";
@@ -127,5 +132,23 @@ public class DishListItemDaoImpl implements DishListItemDao {
                 .build();
 
         return dishListItem;
+    }
+
+    @Override
+    public List<DishListItem> findAllByOrderId(long id) throws DaoException {
+        List<DishListItem> dishListItems = new ArrayList<>();
+        try (Connection connection = connectionPool.acquireConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(SELECT_ALL_DISH_LIST_ITEMS_BY_ORDER_ID);
+            while (resultSet.next()) {
+                DishListItem dishListItem = createDishListItemFromResultSet(resultSet);
+                dishListItems.add(dishListItem);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't handle DishListItemDao.findAll request", e);
+        } catch (DatabaseException e) {
+            throw new DaoException(e);
+        }
+        return dishListItems;
     }
 }

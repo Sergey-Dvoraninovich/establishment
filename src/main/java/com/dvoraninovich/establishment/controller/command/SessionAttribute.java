@@ -36,7 +36,9 @@ public final class SessionAttribute {
     public static final String INGREDIENT_VALIDATION_ERROR = "ingredient_validation_error";
 
     public static final String DISH = "dish";
+    public static final String DISHES = "dishes";
     public static final String INGREDIENTS = "ingredients";
+    public static final String UNUSED_INGREDIENTS = "unused_ingredients";
     public static final String ADD_DISH_ERROR = "add_dish_error";
     public static final String EDIT_DISH_ERROR = "edit_dish_error";
     public static final String INVALID_DISH_NAME = "invalid_dish_name";
@@ -47,6 +49,8 @@ public final class SessionAttribute {
     public static final String REMOVE_DISH_INGREDIENT_ERROR = "remove_dish_ingredient_error";
     public static final String DISH_VALIDATION_ERROR = "dish_validation_error";
 
+    public static final String ORDER = "order";
+    public static final String ORDER_DISH_LIST_ITEMS = "order_dish_list_items";
     public static final String ORDERS_WITH_USER_INFO = "orders_with_users_info";
 
 

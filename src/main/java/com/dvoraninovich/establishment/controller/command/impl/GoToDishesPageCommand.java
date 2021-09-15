@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.DISHES;
 
 public class GoToDishesPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToDishesPageCommand.class);
@@ -24,14 +25,13 @@ public class GoToDishesPageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        //TODO work with it
         List<Dish> dishes = new ArrayList<>();
         try {
             dishes = service.findAll();
         } catch (ServiceException e) {
             logger.info("Can't handle dishes select");
         }
-        session.setAttribute("dishes", dishes);
+        session.setAttribute(DISHES, dishes);
         return new Router(DISHES_PAGE, REDIRECT);
     }
 }
