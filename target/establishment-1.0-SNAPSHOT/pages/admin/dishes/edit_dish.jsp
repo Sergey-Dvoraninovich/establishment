@@ -34,8 +34,7 @@
             </div>
         </c:if>
     </div>
-    <input type="text" name="photo" id="photo" value="${photo}"
-           pattern="^[A-za-z\\s]{2,50}$" placeholder="${sessionScope.dish.name}"/>
+    <input type="hidden" name="photo" id="photo" value="${photo}"/>
     <div class="form-row">
         <label for="price"><fmt:message key="admin.dishes.dish_price" /></label>
         <input type="number" step="0.01" min="0" name="price" id="price" value="${price}" placeholder="${sessionScope.dish.price}"/>
@@ -77,6 +76,33 @@
         </div>
     </c:if>
 </form>
+<c:url value="/ApiController?command=upload_dish_photo&id=${sessionScope.dish.id}" var="edit_dish_photo"/>
+<div class="block-item">
+    <div class="block-item-header">
+        <h2><fmt:message key="admin.dishes.photo_update"/></h2>
+    </div>
+    <form enctype="multipart/form-data" action="${edit_dish_photo}" method="post" id="upload-photo-form">
+        <input type="hidden" name="dish_id" value="${sessionScope.dish.id}">
+        <div class="upload-photo-image">
+            <label for="photo" id="placer">
+                <img id="upload-image" src="../../../images/photo_add.png">
+            </label>
+        </div>
+        <input style="display:none;" type="file" id="photo" name="photo" >
+        <div id="file-name"></div>
+        <input type="submit" value="${edit}" class="block-item-action" id="upload-photo-submit">
+        <c:if test="${sessionScope.impossible_to_upload_dish_photo}">
+            <div class="local-error">
+                <p><fmt:message key="admin.dishes.impossible_to_upload_dish_photo"/></p>
+            </div>
+        </c:if>
+        <c:if test="${sessionScope.edit_dish_error}">
+            <div class="local-error">
+                <p><fmt:message key="admin.dishes.edit_dish_error"/></p>
+            </div>
+        </c:if>
+    </form>
+</div>
 <c:url value="/ApiController?command=add_dish_ingredient" var="add_dish_ingredient"/>
 <form action="${add_dish_ingredient}" method="post" class="ui-form">
     <h3><fmt:message key="admin.dishes.add_dish_ingredient"/></h3>
@@ -120,6 +146,28 @@
     </c:if>
 </form>
 </body>
+<script>
+    document.getElementById('placer').onclick = function(){
+        document.getElementById('files').click();
+    }
+
+    function handleFileSelect(evt) {
+        var files = evt.target.files;
+        for (var i = 0, f; f = files[i]; i++) {
+            if (!f.type.match('image.*')) {
+                continue;
+            }
+            var reader = new FileReader();
+            reader.onload = (function(theFile) {
+                return function(e) {
+                    document.getElementById('upload-image').src = [e.target.result].join('');
+                };
+            })(f);
+            reader.readAsDataURL(f);
+        }
+    }
+    document.getElementById('photo').addEventListener( 'change', handleFileSelect, false);
+</script>
 <style type="text/css">
     body {
         color: #000000;
@@ -130,6 +178,35 @@
         justify-content: space-around;
         align-items: center;
         margin-top: 55px;
+    }
+    .upload-photo-image {
+        width: 70%;
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #placer {
+        width: inherit;
+        height: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #upload-image {
+        border-radius: 5px;
+        height: inherit;
+        width: auto;
+    }
+    #upload-photo-form {
+        width: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    #upload-photo-submit {
+        width: 70%;
     }
     h3 {
         font-size: 25px;
@@ -240,6 +317,9 @@
         text-align: left;
     }
     .block-item-header>a {
+        font-size: 15px;
+    }
+    .block-item-header>h2 {
         font-size: 15px;
     }
     .block-item-text {

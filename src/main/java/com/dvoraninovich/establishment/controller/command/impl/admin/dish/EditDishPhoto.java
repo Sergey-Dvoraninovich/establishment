@@ -34,10 +34,13 @@ public class EditDishPhoto implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
+        Router router = null;
         String idParameter = request.getParameter(ID);
         Optional<Dish> dish = Optional.empty();
-        List<Ingredient> ingredients = new ArrayList<>();
         HttpSession session = request.getSession();
+
+        session.setAttribute(IMPOSSIBLE_TO_UPLOAD_DISH_PHOTO, false);
+        session.setAttribute(EDIT_DISH_ERROR, false);
 
         try {
             String applicationDir = request.getServletContext().getRealPath("");
@@ -45,6 +48,8 @@ public class EditDishPhoto implements Command {
             String photoName = fileUploadService.uploadFile(applicationDir, parts, Dish.class.getName() , idParameter);
             if (photoName.equals("")){
                 session.setAttribute(IMPOSSIBLE_TO_UPLOAD_DISH_PHOTO, true);
+                router = new Router(DISH_PAGE + "?id=" + idParameter, REDIRECT);
+                return router;
             }
 
             dish = dishService.findDishById(Long.valueOf(idParameter));
@@ -54,20 +59,18 @@ public class EditDishPhoto implements Command {
                 boolean updateResult = dishService.editDish(updatedDish);
                 if (!updateResult) {
                     session.setAttribute(EDIT_DISH_ERROR, true);
+                    router = new Router(DISH_PAGE + "?id=" + idParameter, REDIRECT);
+                    return router;
                 }
                 else {
                     session.setAttribute(DISH, updatedDish);
                 }
             }
-
-            Long id = Long.valueOf(idParameter);
-            ingredients = dishService.findDishIngredients(id);
         } catch (ServiceException | IOException | ServletException e) {
             logger.info("Impossible to upload dish photo", e);
+            session.setAttribute(EDIT_DISH_ERROR, true);
         }
-
-        session.setAttribute(DISH, dish.get());
-        session.setAttribute(INGREDIENTS, ingredients);
-        return new Router(DISH_PAGE + "?id=" + idParameter, REDIRECT);
+        router = new Router(DISH_PAGE + "?id=" + idParameter, REDIRECT);
+        return router;
     }
 }

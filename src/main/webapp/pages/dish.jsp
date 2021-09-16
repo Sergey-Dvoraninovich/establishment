@@ -21,7 +21,7 @@
     <div class="workspace-column">
         <div id="icon" class="block-item">
             <img class="profile-picture"
-                 src="../images/${sessionScope.dish.photo}"
+                 src="../images/dish/${sessionScope.dish.photo}"
                  onerror="this.src='../images/default_dish.png';">
         </div>
     </div>
@@ -75,10 +75,19 @@
         <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
             <c:url value="/ApiController?command=upload_dish_photo&id=${sessionScope.dish.id}" var="edit_dish_photo"/>
             <div class="block-item">
-                <form enctype="multipart/form-data" action="${edit_dish_photo}" method="post">
+                <div class="block-item-header">
+                    <h2><fmt:message key="admin.dishes.photo_update"/></h2>
+                </div>
+                <form enctype="multipart/form-data" action="${edit_dish_photo}" method="post" id="upload-photo-form">
                     <input type="hidden" name="dish_id" value="${sessionScope.dish.id}">
-                    <input type="file" name="photo">
-                    <input type="submit" value="${edit}">
+                    <div class="upload-photo-image">
+                        <label for="photo" id="placer">
+                            <img id="upload-image" src="../images/photo_add.png">
+                        </label>
+                    </div>
+                    <input style="display:none;" type="file" id="photo" name="photo" >
+                    <div id="file-name"></div>
+                    <input type="submit" value="${edit}" class="block-item-action" id="upload-photo-submit">
                     <c:if test="${sessionScope.impossible_to_upload_dish_photo}">
                         <div class="local-error">
                             <p><fmt:message key="admin.dishes.impossible_to_upload_dish_photo"/></p>
@@ -122,6 +131,28 @@
         </c:if>
     </div>
 </div>
+<script>
+    document.getElementById('placer').onclick = function(){
+        document.getElementById('files').click();
+    }
+
+    function handleFileSelect(evt) {
+        var files = evt.target.files;
+        for (var i = 0, f; f = files[i]; i++) {
+            if (!f.type.match('image.*')) {
+                continue;
+            }
+            var reader = new FileReader();
+            reader.onload = (function(theFile) {
+                return function(e) {
+                    document.getElementById('upload-image').src = [e.target.result].join('');
+                };
+            })(f);
+            reader.readAsDataURL(f);
+        }
+    }
+    document.getElementById('photo').addEventListener( 'change', handleFileSelect, false);
+</script>
 <style>
     .workspace-flex-container {
         margin-top: 35px;
@@ -139,10 +170,39 @@
         font: 15px 'Roboto', Arial, Helvetica, sans-serif;
         margin: 25px;
     }
+    .upload-photo-image {
+        width: 70%;
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    label {
+        width: inherit;
+        height: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #upload-image {
+        border-radius: 5px;
+        height: inherit;
+        width: auto;
+    }
+    #upload-photo-form {
+        width: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    #upload-photo-submit {
+        width: 70%;
+    }
+
     a {
         text-decoration: none;
     }
-
     #description{
         width: inherit;
         display: flex;
@@ -248,6 +308,20 @@
         -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
         -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
         box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    }
+    input[type=file]{
+        width:100%;
+        border:2px solid #aaa;
+        border-radius:5px;
+        margin:8px 0;
+        outline:none;
+        padding:8px;
+        box-sizing:border-box;
+        transition:.3s;
+    }
+    input[type=file]:focus{
+        border-color:#a15566;
+        box-shadow:0 0 8px 0 #a15566;
     }
     h3 {
         font-size: 25px;

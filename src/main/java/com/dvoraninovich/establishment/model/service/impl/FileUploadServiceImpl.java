@@ -45,12 +45,14 @@ public class FileUploadServiceImpl implements FileUploadService {
         try{
             for (Part part: parts){
                 if (part.getSubmittedFileName() != null){
-                    filename = part.getSubmittedFileName();
-                    String extension = filename.substring(filename.lastIndexOf("."));
-                    filename = objectClassName + "_" + objectId + "_" + LocalDateTime.now() + extension;
-                    filename = filename.replace(":", "-");
-                    part.write(uploadFileDir + filename);
-                    part.write(LOCAL_UPLOAD_DIR + filename);
+                    if (!part.getSubmittedFileName().equals("")) {
+                        filename = part.getSubmittedFileName();
+                        String extension = filename.substring(filename.lastIndexOf("."));
+                        filename = objectClassName + "_" + objectId + "_" + LocalDateTime.now() + extension;
+                        filename = filename.replace(":", "-");
+                        part.write(uploadFileDir + filename);
+                        part.write(LOCAL_UPLOAD_DIR + filename);
+                    }
                 }
             }
 

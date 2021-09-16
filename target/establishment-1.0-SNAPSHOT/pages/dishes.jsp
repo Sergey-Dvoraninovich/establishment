@@ -27,7 +27,7 @@
                 </div>
                 <div id="dish-picture" class="block-item">
                     <img class="dish-picture"
-                         src="../images/${dish.photo}"
+                         src="../images/dish/${dish.photo}"
                          onerror="this.src='/../images/default_dish.png';">
                 </div>
                 <div id="description" class="block-item">
