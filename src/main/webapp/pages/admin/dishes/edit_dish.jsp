@@ -9,6 +9,7 @@
 <c:set var="remove"><fmt:message key="remove" /></c:set>
 <c:set var="id"><%= request.getParameter("id") %></c:set>
 <c:set var="name">${sessionScope.dish.name}</c:set>
+<c:set var="photo">${sessionScope.dish.photo}</c:set>
 <c:set var="price">${sessionScope.dish.price}</c:set>
 <c:set var="amount_grams">${sessionScope.dish.amountGrams}</c:set>
 <c:set var="calories_amount">${sessionScope.dish.calories}</c:set>
@@ -33,6 +34,8 @@
             </div>
         </c:if>
     </div>
+    <input type="text" name="photo" id="photo" value="${photo}"
+           pattern="^[A-za-z\\s]{2,50}$" placeholder="${sessionScope.dish.name}"/>
     <div class="form-row">
         <label for="price"><fmt:message key="admin.dishes.dish_price" /></label>
         <input type="number" step="0.01" min="0" name="price" id="price" value="${price}" placeholder="${sessionScope.dish.price}"/>
@@ -63,6 +66,11 @@
     <div>
         <input type="submit" value="${edit}"/>
     </div>
+    <c:if test="${sessionScope.dish_validation_error}">
+        <div class="local-error">
+            <p><fmt:message key="admin.dishes.dish_validation_error"/></p>
+        </div>
+    </c:if>
     <c:if test="${sessionScope.edit_dish_error}">
         <div class="local-error">
             <p><fmt:message key="admin.dishes.edit_dish_error"/></p>

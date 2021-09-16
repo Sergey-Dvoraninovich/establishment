@@ -46,7 +46,7 @@ public final class CommandProvider {
         commands.put(GO_TO_CUSTOMER_BASKET, new GoToCustomerBasketCommand());
         commands.put(GO_TO_ADMIN_PAGE, new GoToAdminProfileCommand());
         commands.put(SIGN_OUT, new SignOutCommand());
-        commands.put(UPLOAD_DISH_PHOTO, new UploadDishPhoto());
+        commands.put(UPLOAD_DISH_PHOTO, new EditDishPhoto());
     }
 
     public static CommandProvider getInstance() {

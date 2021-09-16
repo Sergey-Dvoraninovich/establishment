@@ -73,30 +73,37 @@ public class DishValidator {
         HashMap<String, Boolean> validationMessages = new HashMap<>();
         boolean currentResult;
 
-        currentResult = Pattern.matches(NAME_REGEXP, name);
-        validationMessages.put(INVALID_DISH_NAME, !currentResult);
+        try {
 
-        currentResult = Pattern.matches(PRICE_REGEXP, priceLine);
-        validationMessages.put(INVALID_DISH_PRICE, !currentResult);
-        if (currentResult) {
-            BigDecimal price = new BigDecimal(priceLine);
-            currentResult = price.compareTo(MIN_PRICE) == 1;
-        }
-        validationMessages.put(INVALID_DISH_PRICE, !currentResult);
+            currentResult = Pattern.matches(NAME_REGEXP, name);
+            validationMessages.put(INVALID_DISH_NAME, !currentResult);
 
-        currentResult = Pattern.matches(AMOUNT_GRAMS_REGEXP, amountGramsLine);
-        if (currentResult) {
-            Integer amountGrams = new Integer(amountGramsLine);
-            currentResult = amountGrams > MIN_AMOUNT_GRAMS;
-        }
-        validationMessages.put(INVALID_DISH_AMOUNT_GRAMS, !currentResult);
+            currentResult = Pattern.matches(PRICE_REGEXP, priceLine);
+            validationMessages.put(INVALID_DISH_PRICE, !currentResult);
+            if (currentResult) {
+                BigDecimal price = new BigDecimal(priceLine);
+                currentResult = price.compareTo(MIN_PRICE) == 1;
+            }
+            validationMessages.put(INVALID_DISH_PRICE, !currentResult);
 
-        currentResult = Pattern.matches(CALORIES_AMOUNT_REGEXP, caloriesAmountLine);
-        if (currentResult) {
-            Integer caloriesAmount = new Integer(caloriesAmountLine);
-            currentResult = caloriesAmount > MIN_CALORIES_AMOUNT;
+            currentResult = Pattern.matches(AMOUNT_GRAMS_REGEXP, amountGramsLine);
+            if (currentResult) {
+                Integer amountGrams = new Integer(amountGramsLine);
+                currentResult = amountGrams > MIN_AMOUNT_GRAMS;
+            }
+            validationMessages.put(INVALID_DISH_AMOUNT_GRAMS, !currentResult);
+
+            currentResult = Pattern.matches(CALORIES_AMOUNT_REGEXP, caloriesAmountLine);
+            if (currentResult) {
+                Integer caloriesAmount = new Integer(caloriesAmountLine);
+                currentResult = caloriesAmount > MIN_CALORIES_AMOUNT;
+            }
+            validationMessages.put(INVALID_DISH_CALORIES_AMOUNT, !currentResult);
+
+        } catch (Exception e) {
+            logger.info("dish validation error: " + e);
+            validationMessages.put(DISH_VALIDATION_ERROR, true);
         }
-        validationMessages.put(INVALID_DISH_CALORIES_AMOUNT, !currentResult);
 
         return validationMessages;
     }

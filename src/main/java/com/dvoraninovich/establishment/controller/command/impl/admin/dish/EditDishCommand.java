@@ -40,11 +40,13 @@ public class EditDishCommand implements Command {
         session.setAttribute(INVALID_DISH_PRICE, false);
         session.setAttribute(INVALID_DISH_AMOUNT_GRAMS, false);
         session.setAttribute(INVALID_DISH_CALORIES_AMOUNT, false);
+        session.setAttribute(DISH_VALIDATION_ERROR, false);
         session.setAttribute(EDIT_DISH_ERROR, false);
 
         String id = request.getParameter(ID);
         dishId = Long.parseLong(id);
         String name = request.getParameter(NAME);
+        String photo = request.getParameter(PHOTO);
         String priceLine = request.getParameter(PRICE);
         String amountGramsLine = request.getParameter(AMOUNT_GRAMS);
         String caloriesAmountLine = request.getParameter(CALORIES_AMOUNT);
@@ -65,7 +67,7 @@ public class EditDishCommand implements Command {
         Dish dish = Dish.builder()
         .setId(dishId)
         .setName(name)
-        .setPhoto(DEFAULT_DISH_PHOTO)
+        .setPhoto(photo)
         .setPrice(new BigDecimal(priceLine))
         .setAmountGrams(new Integer(amountGramsLine))
         .setCalories(new Integer(caloriesAmountLine))

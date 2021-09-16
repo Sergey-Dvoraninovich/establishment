@@ -48,6 +48,7 @@ public final class SessionAttribute {
     public static final String ADD_DISH_INGREDIENT_ERROR = "add_dish_ingredient_error";
     public static final String REMOVE_DISH_INGREDIENT_ERROR = "remove_dish_ingredient_error";
     public static final String DISH_VALIDATION_ERROR = "dish_validation_error";
+    public static final String IMPOSSIBLE_TO_UPLOAD_DISH_PHOTO = "impossible_to_upload_dish_photo";
 
     public static final String ORDER = "order";
     public static final String ORDER_DISH_LIST_ITEMS = "order_dish_list_items";

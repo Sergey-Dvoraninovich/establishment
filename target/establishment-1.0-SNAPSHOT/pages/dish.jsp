@@ -24,16 +24,6 @@
                  src="../images/${sessionScope.dish.photo}"
                  onerror="this.src='../images/default_dish.png';">
         </div>
-        <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
-            <c:url value="/ApiController?command=upload_dish_photo&id=${sessionScope.dish.id}" var="edit_dish_photo"/>
-            <div class="block-item">
-                <form enctype="multipart/form-data" action="${edit_dish_photo}" method="post">
-                    <input type="hidden" name="dish_id" value="${sessionScope.dish.id}">
-                    <input type="file" name="photo">
-                    <input type="submit" value="${edit}">
-                </form>
-            </div>
-        </c:if>
     </div>
     <div class="workspace-column">
         <div class="block-item">
@@ -83,6 +73,24 @@
             </c:if>
         </div>
         <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
+            <c:url value="/ApiController?command=upload_dish_photo&id=${sessionScope.dish.id}" var="edit_dish_photo"/>
+            <div class="block-item">
+                <form enctype="multipart/form-data" action="${edit_dish_photo}" method="post">
+                    <input type="hidden" name="dish_id" value="${sessionScope.dish.id}">
+                    <input type="file" name="photo">
+                    <input type="submit" value="${edit}">
+                    <c:if test="${sessionScope.impossible_to_upload_dish_photo}">
+                        <div class="local-error">
+                            <p><fmt:message key="admin.dishes.impossible_to_upload_dish_photo"/></p>
+                        </div>
+                    </c:if>
+                    <c:if test="${sessionScope.edit_dish_error}">
+                        <div class="local-error">
+                            <p><fmt:message key="admin.dishes.edit_dish_error"/></p>
+                        </div>
+                    </c:if>
+                </form>
+            </div>
             <c:if test="${sessionScope.dish.isAvailable}">
                 <div class="block-item">
                     <div class="block-item-text">
@@ -243,6 +251,10 @@
     }
     h3 {
         font-size: 25px;
+    }
+    .local-error {
+        font-size: 15px;
+        color: red;
     }
 </style>
 </html>
