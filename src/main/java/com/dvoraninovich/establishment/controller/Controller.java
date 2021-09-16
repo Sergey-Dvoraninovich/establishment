@@ -1,6 +1,7 @@
 package com.dvoraninovich.establishment.controller;
 
 import com.dvoraninovich.establishment.controller.command.*;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -24,6 +25,10 @@ import static com.dvoraninovich.establishment.controller.command.RequestParamete
 public class Controller extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(Controller.class);
     private final CommandProvider COMMAND_PROVIDER = CommandProvider.getInstance();
+
+    static {
+        BasicConfigurator.configure();
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {

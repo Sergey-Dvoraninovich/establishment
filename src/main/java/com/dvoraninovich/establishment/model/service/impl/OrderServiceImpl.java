@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Pair<Order, User>> findAllOrdersWithUserinfo() throws ServiceException {
+    public HashMap<Order, User> findAllOrdersWithUserinfo() throws ServiceException {
         try {
             return orderDao.findAllOrdersWithUserinfo();
         } catch (DaoException e) {

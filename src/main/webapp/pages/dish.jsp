@@ -7,6 +7,7 @@
 <c:set var="disable"><fmt:message key="admin.dishes.disable" /></c:set>
 <c:set var="make_available"><fmt:message key="admin.dishes.make_available" /></c:set>
 <c:set var="edit"><fmt:message key="edit" /></c:set>
+<c:set var="set"><fmt:message key="set" /></c:set>
 <c:set var="more_information"><fmt:message key="more_information" /></c:set>
 <c:set var="create_dish_message"><fmt:message key="admin.dishes.create_dish"/></c:set>
 
@@ -23,6 +24,16 @@
                  src="../images/${sessionScope.dish.photo}"
                  onerror="this.src='../images/default_dish.png';">
         </div>
+        <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
+            <c:url value="/ApiController?command=upload_dish_photo&id=${sessionScope.dish.id}" var="edit_dish_photo"/>
+            <div class="block-item">
+                <form enctype="multipart/form-data" action="${edit_dish_photo}" method="post">
+                    <input type="hidden" name="dish_id" value="${sessionScope.dish.id}">
+                    <input type="file" name="photo">
+                    <input type="submit" value="${edit}">
+                </form>
+            </div>
+        </c:if>
     </div>
     <div class="workspace-column">
         <div class="block-item">

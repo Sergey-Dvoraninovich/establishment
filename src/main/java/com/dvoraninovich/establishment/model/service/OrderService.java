@@ -7,6 +7,7 @@ import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.User;
 import javafx.util.Pair;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,5 +22,5 @@ public interface OrderService {
 
     Optional<Order> getCustomerBasket(long customerId) throws ServiceException;
 
-    List<Pair<Order, User>> findAllOrdersWithUserinfo() throws ServiceException;
+    HashMap<Order, User> findAllOrdersWithUserinfo() throws ServiceException;
 }

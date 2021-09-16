@@ -2,6 +2,7 @@ package com.dvoraninovich.establishment.model.pool;
 
 import com.dvoraninovich.establishment.exception.DatabaseException;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

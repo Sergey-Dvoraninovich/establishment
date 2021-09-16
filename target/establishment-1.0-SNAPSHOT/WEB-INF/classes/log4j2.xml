@@ -10,8 +10,8 @@
             <PatternLayout pattern="${pattern_layout_console}" />
         </Console>
         <RollingFile name="file"
-                     fileName="${sys:jboss.server.log.dir}/log/recent.log"
-                     filePattern="${sys:jboss.server.log.dir}/log/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+                     fileName="${sys:catalina.home}/log/recent.log"
+                     filePattern="${sys:catalina.home}/log/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout pattern="${pattern_layout_file}" />
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" />
@@ -20,7 +20,7 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="trace" includeLocation="true">
+        <Root level="debug" includeLocation="true">
             <AppenderRef ref="console" />
             <AppenderRef ref="file" />
         </Root>

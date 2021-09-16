@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.ORDERS_PAGE;
@@ -34,13 +35,13 @@ public class GoToOrdersPageCommand implements Command {
     public Router execute(HttpServletRequest request) {
         //TODO work with it
         HttpSession session = request.getSession();
-        List<Pair<Order, User>> pairList = new ArrayList<>();
+        HashMap<Order, User> ordersUsersMap = new HashMap<>();
         try {
-            pairList = service.findAllOrdersWithUserinfo();
+            ordersUsersMap = service.findAllOrdersWithUserinfo();
         } catch (ServiceException e) {
             logger.info("Can't handle data extraction", e);
         }
-        session.setAttribute(ORDERS_WITH_USER_INFO, pairList);
+        session.setAttribute(ORDERS_WITH_USER_INFO, ordersUsersMap);
         return new Router(ORDERS_PAGE, REDIRECT);
     }
 }
