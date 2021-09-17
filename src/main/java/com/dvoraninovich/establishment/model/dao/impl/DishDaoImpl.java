@@ -21,6 +21,14 @@ public class DishDaoImpl implements DishDao {
     private static final String SELECT_ALL_DISHES
             = "SELECT id, price, calories, amount_grams, name, is_available, photo "
             + "FROM dishes;";
+    private static final String SELECT_ORDER_DISHES
+            = "SELECT id, price, calories, amount_grams, name, is_available, photo "
+            + "FROM dishes "
+            + "INNER JOIN dishes_lists_items "
+            + "ON dishes.id = dishes_lists_items.id_dish "
+            + "INNER JOIN orders "
+            + "ON orders.id = dishes_ingredients.id_order "
+            + "WHERE orders.id = ?;";
     private static final String FIND_ALL_AVAILABLE_DISHES
             = "SELECT id, price, calories, amount_grams, name, is_available, photo "
             + "FROM dishes "

@@ -90,10 +90,15 @@ public class OrderServiceImpl implements OrderService {
                 Long orderId = orderDao.insertAndGetId(defaultOrder);
                 defaultOrder.setId(orderId);
                 order = Optional.of(defaultOrder);
+                System.out.println("default order " + defaultOrder);
+            }
+            else {
+                System.out.println("order from db " + order.get());
             }
 
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            logger.info("Impossible to find customer (id = " + customerId + ") basket or create new one", e);
+            throw new ServiceException("Impossible to find customer (id = " + customerId + ") basket or create new one", e);
         }
         return order;
     }

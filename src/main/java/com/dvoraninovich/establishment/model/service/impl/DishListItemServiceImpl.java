@@ -43,7 +43,11 @@ public class DishListItemServiceImpl implements DishListItemService {
 
     @Override
     public List<DishListItem> findAllByOrderId(long id) throws ServiceException {
-        return null;
+        try {
+            return dishListItemDao.findAllByOrderId(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override

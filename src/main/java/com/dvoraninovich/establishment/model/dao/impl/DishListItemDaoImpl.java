@@ -25,11 +25,11 @@ public class DishListItemDaoImpl implements DishListItemDao {
     private static final String SELECT_DISH_LIST_ITEM_BY_ID
             = "SELECT id, id_order, id_dish, dish_amount "
             + "FROM dishes_lists_items "
-            + "WHERE (id = ?);";
+            + "WHERE id = ?;";
     private static final String SELECT_ALL_DISH_LIST_ITEMS_BY_ORDER_ID
             = "SELECT id, id_order, id_dish, dish_amount "
             + "FROM dishes_lists_items "
-            + "WHERE (id_order = ?);";
+            + "WHERE id_order = ?;";
     private static final String INSERT_DISH_LIST_ITEM
             = "INSERT dishes_lists_items(id_order, id_dish, dish_amount) "
             + "VALUES (?, ?, ?);";
@@ -118,6 +118,26 @@ public class DishListItemDaoImpl implements DishListItemDao {
         return successfulOperation;
     }
 
+    @Override
+    public List<DishListItem> findAllByOrderId(long id) throws DaoException {
+        List<DishListItem> dishListItems = new ArrayList<>();
+        try (Connection connection = connectionPool.acquireConnection();) {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_DISH_LIST_ITEMS_BY_ORDER_ID);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                DishListItem dishListItem = createDishListItemFromResultSet(resultSet);
+                dishListItems.add(dishListItem);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't handle DishListItemDao.findAll request", e);
+        } catch (DatabaseException e) {
+            throw new DaoException(e);
+        }
+        return dishListItems;
+    }
+
     private DishListItem createDishListItemFromResultSet(ResultSet resultSet) throws SQLException {
         long id = resultSet.getLong(DISH_LIST_ITEM_ID);
         long orderId = resultSet.getLong(DISH_LIST_ITEM_ID_ORDER);
@@ -132,23 +152,5 @@ public class DishListItemDaoImpl implements DishListItemDao {
                 .build();
 
         return dishListItem;
-    }
-
-    @Override
-    public List<DishListItem> findAllByOrderId(long id) throws DaoException {
-        List<DishListItem> dishListItems = new ArrayList<>();
-        try (Connection connection = connectionPool.acquireConnection();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(SELECT_ALL_DISH_LIST_ITEMS_BY_ORDER_ID);
-            while (resultSet.next()) {
-                DishListItem dishListItem = createDishListItemFromResultSet(resultSet);
-                dishListItems.add(dishListItem);
-            }
-        } catch (SQLException e) {
-            throw new DaoException("Can't handle DishListItemDao.findAll request", e);
-        } catch (DatabaseException e) {
-            throw new DaoException(e);
-        }
-        return dishListItems;
     }
 }

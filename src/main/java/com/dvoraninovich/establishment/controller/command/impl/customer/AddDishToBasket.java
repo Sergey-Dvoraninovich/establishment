@@ -1,4 +1,4 @@
 package com.dvoraninovich.establishment.controller.command.impl.customer;
 
-public class ChangeCustomerCardNumCommand {
+public class AddDishToBasket {
 }

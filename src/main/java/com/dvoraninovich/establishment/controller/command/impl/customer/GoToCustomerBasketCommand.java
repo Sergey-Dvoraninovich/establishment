@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dvoraninovich.establishment.controller.command.PagePath.CUSTOMER_BASKET;
+import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
 public class GoToCustomerBasketCommand implements Command {
@@ -33,13 +35,15 @@ public class GoToCustomerBasketCommand implements Command {
         List<DishListItem> dishListItems = new ArrayList<>();
         User user = (User) session.getAttribute(USER);
         try {
+            System.out.println(dishListItems);
             order = orderService.getCustomerBasket(user.getId());
             dishListItems = dishListItemService.findAllByOrderId(order.get().getId());
+            System.out.println(dishListItems);
         } catch (ServiceException e) {
-            logger.info("Can't handle customer basket select");
+            logger.info("Impossible to find customer basket", e);
         }
-        session.setAttribute(ORDER, order);
+        session.setAttribute(ORDER, order.get());
         session.setAttribute(ORDER_DISH_LIST_ITEMS, dishListItems);
-        return null;
+        return new Router(CUSTOMER_BASKET, REDIRECT);
     }
 }

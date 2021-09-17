@@ -27,7 +27,7 @@ public class OrderDaoImpl implements OrderDao {
 
     private static final String SELECT_ALL_ORDERS
             = "SELECT orders.id, orders.id_user, orders_statuses.order_status, orders.order_time, orders.finish_time, "
-            + " orders.card_number, payment_types.payment.type, orders.bonuses_in_payment, orders.final_price "
+            + " orders.card_number, payment_types.payment_type, orders.bonuses_in_payment, orders.final_price "
             + "FROM orders "
             + "INNER JOIN orders_statuses "
             + "ON orders.id_order_status = orders_statuses.id "
@@ -36,7 +36,7 @@ public class OrderDaoImpl implements OrderDao {
 
     private static final String SELECT_ALL_ORDERS_WITH_USER_INFO
             = "SELECT orders.id, orders.id_user, orders_statuses.order_status, orders.order_time, orders.finish_time, "
-            + " orders.card_number, payment_types.payment.type, orders.bonuses_in_payment, orders.final_price, "
+            + " orders.card_number, payment_types.payment_type, orders.bonuses_in_payment, orders.final_price, "
             + "users.login, users.mail, users.photo, users.phone_num "
             + "FROM orders "
             + "INNER JOIN orders_statuses "
@@ -48,7 +48,7 @@ public class OrderDaoImpl implements OrderDao {
 
     private static final String FIND_ORDER_BY_ID
             = "SELECT orders.id, orders.id_user, orders_statuses.order_status, orders.order_time, orders.finish_time, "
-            + " orders.card_number, payment_types.payment.type, orders.bonuses_in_payment, orders.final_price "
+            + " orders.card_number, payment_types.payment_type, orders.bonuses_in_payment, orders.final_price "
             + "FROM orders "
             + "INNER JOIN orders_statuses "
             + "ON orders.id_order_status = orders_statuses.id "
@@ -58,12 +58,12 @@ public class OrderDaoImpl implements OrderDao {
 
     private static final String FIND_USER_ORDER_IN_CREATION
             = "SELECT orders.id, orders.id_user, orders_statuses.order_status, orders.order_time, orders.finish_time, "
-            + " orders.card_number, payment_types.payment.type, orders.bonuses_in_payment, orders.final_price "
+            + " orders.card_number, payment_types.payment_type, orders.bonuses_in_payment, orders.final_price "
             + "FROM orders "
             + "INNER JOIN orders_statuses "
             + "ON orders.id_order_status = orders_statuses.id "
             + "INNER JOIN payment_types "
-            + "ON orders.id_payment_type = payment_types.id; "
+            + "ON orders.id_payment_type = payment_types.id "
             + "WHERE orders.id_user = ? AND orders_statuses.order_status = 'IN_CREATION';";
 
     private static final String INSERT_ORDER

@@ -13,32 +13,46 @@
 <jsp:include page="../shared/header.jsp" />
 <div class="workspace-flex-container">
     <div class="basket-order">
+        <div>
+            <fmt:message key="basket.order_state"/>
+            ${sessionScope.order.orderState}
+        </div>
+        <div>
+            <fmt:message key="basket.order_time"/>
+            ${sessionScope.order.orderTime}
+        </div>
+        <div>
+            <fmt:message key="basket.finish_time"/>
+            ${sessionScope.order.finishTime}
+        </div>
+        <div>
+            <fmt:message key="basket.payment_type"/>
+            ${sessionScope.order.paymentType}
+        </div>
+        <div>
+            <fmt:message key="basket.card_number"/>
+            ${sessionScope.order.cardNumber}
+        </div>
+        <div>
+            <fmt:message key="basket.user_id"/>
+            ${sessionScope.order.userId}
+        </div>
+        <div>
+            <fmt:message key="basket.bonuses_in_payment"/>
+            ${sessionScope.order.bonusesInPayment}
+        </div>
+        <div>
+            <fmt:message key="basket.final_price"/>
+            ${sessionScope.order.finalPrice}
+        </div>
+        <c:forEach var="dish_list_item" items="${sessionScope.order_dish_list_items}">
             <div>
-                <h2 hidden="true"><fmt:message key="profile.login"/> : </h2>
-                <img class="profile-item-picture" src="../../images/profile_login.png">
-                <h1>${sessionScope.user.login}</h1>
+                    ${dish_list_item.dishId}
             </div>
             <div>
-                <h2 hidden="true"><fmt:message key="profile.mail"/> : </h2>
-                <img class="profile-item-picture" src="../../images/profile_mail.png">
-                <h1>${sessionScope.user.mail}</h1>
+                    ${dish_list_item.dishAmount}
             </div>
-            <div>
-                <h2 hidden="true"><fmt:message key="profile.phone_num"/> : </h2>
-                <img class="profile-item-picture" src="../../images/profile_phone.png">
-                <h1>${sessionScope.user.phoneNumber}</h1>
-            </div>
-            <div>
-                <h2 hidden="true" ><fmt:message key="profile.card_num"/>  : </h2>
-                <img class="profile-item-picture" src="../../images/profile_card.png">
-                <h1>${sessionScope.user.cardNumber}</h1>
-            </div>
-            <div>
-                <h2><fmt:message key="profile.bonuses_amount"/> : </h2>
-                <h1>${sessionScope.user.bonusesAmount}</h1>
-            </div>
-        <c:url value="/ApiController?command=go_to_verification_page_command" var="verification_page"/>
-        <a href="${verification_page_page}"><fmt:message key="profile.verify_mail"/></a>
+        </c:forEach>
     </div>
 </div>
 </body>
@@ -72,7 +86,6 @@
         width: min-content;
     }
     a {
-        color: white;
         font-size: 15px;
         text-decoration: none;
     }

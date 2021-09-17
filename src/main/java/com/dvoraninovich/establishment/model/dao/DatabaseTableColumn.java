@@ -15,7 +15,7 @@ public final class DatabaseTableColumn {
 
     public static final String DISH_LIST_ITEM_ID = "id";
     public static final String DISH_LIST_ITEM_ID_ORDER = "id_order";
-    public static final String DISH_LIST_ITEM_ID_DISH = "id_dish_amount";
+    public static final String DISH_LIST_ITEM_ID_DISH = "id_dish";
     public static final String DISH_LIST_ITEM_DISH_AMOUNT = "dish_amount";
 
     public static final String ORDER_ID = "orders.id";
@@ -24,7 +24,7 @@ public final class DatabaseTableColumn {
     public static final String ORDER_TIME = "orders.order_time";
     public static final String ORDER_FINISH_TIME = "orders.finish_time";
     public static final String ORDER_CARD_NUMBER = "orders.card_number";
-    public static final String ORDER_PAYMENT_TYPE = "payment_types.payment.type";
+    public static final String ORDER_PAYMENT_TYPE = "payment_types.payment_type";
     public static final String ORDER_BONUSES_IN_PAYMENT = "orders.bonuses_in_payment";
     public static final String ORDER_FINAL_PRICE = "orders.final_price";
 
