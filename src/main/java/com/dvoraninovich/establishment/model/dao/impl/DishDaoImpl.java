@@ -22,12 +22,13 @@ public class DishDaoImpl implements DishDao {
             = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
             + "FROM dishes;";
     private static final String SELECT_ORDER_DISHES
-            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
+            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, "
+            + "dishes.is_available, dishes.photo  "
             + "FROM dishes "
             + "INNER JOIN dishes_lists_items "
             + "ON dishes.id = dishes_lists_items.id_dish "
             + "INNER JOIN orders "
-            + "ON orders.id = dishes_ingredients.id_order "
+            + "ON orders.id = dishes_lists_items.id_order "
             + "WHERE orders.id = ?;";
     private static final String FIND_ALL_AVAILABLE_DISHES
             = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
@@ -101,6 +102,25 @@ public class DishDaoImpl implements DishDao {
             throw new DaoException("Can't handle DishDao.findAllAvailable request", e);
         } catch (DatabaseException e) {
             throw new DaoException(e);
+        }
+        return dishList;
+    }
+
+    @Override
+    public List<Dish> findOrderDishes(long id) throws DaoException {
+        List<Dish> dishList = new ArrayList<>();
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ORDER_DISHES);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Dish dish = createDishFromResultSet(resultSet);
+                dishList.add(dish);
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Can't handle finding dishes for order with id: " + id, e);
         }
         return dishList;
     }

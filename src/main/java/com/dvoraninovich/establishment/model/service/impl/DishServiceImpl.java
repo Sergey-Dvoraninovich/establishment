@@ -53,6 +53,15 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    public List<Dish> findOrderDishes(long id) throws ServiceException {
+        try {
+            return dishDao.findOrderDishes(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public Optional<Dish> findDishById(Long id) throws ServiceException{
         try {
             return dishDao.findById(id);

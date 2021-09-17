@@ -1,5 +1,6 @@
 package com.dvoraninovich.establishment.model.service;
 
+import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.DishListItem;
 import com.dvoraninovich.establishment.model.entity.Order;
@@ -11,6 +12,7 @@ public interface DishListItemService {
     List<DishListItem> findAll() throws ServiceException;
 
     List<DishListItem> findAllByOrderId(long id) throws ServiceException;
+    Optional<DishListItem> findByOrderAndDishId(Long orderId, Long dishId) throws ServiceException;
 
     Optional<DishListItem> findById(long id) throws ServiceException;
 

@@ -16,6 +16,8 @@ public interface DishDao extends BaseDao<Long, Dish>{
     // TODO description
     List<Dish> findAllAvailable() throws DaoException;
 
+    public List<Dish> findOrderDishes(long id) throws DaoException;
+
     // TODO description
     List<Ingredient> findDishIngredients(Long id) throws DaoException;
 

@@ -51,6 +51,15 @@ public class DishListItemServiceImpl implements DishListItemService {
     }
 
     @Override
+    public Optional<DishListItem> findByOrderAndDishId(Long orderId, Long dishId) throws ServiceException {
+        try {
+            return dishListItemDao.findByOrderAndDishId(orderId, dishId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public Optional<DishListItem> findById(long id) throws ServiceException {
         try {
             return dishListItemDao.findById(id);

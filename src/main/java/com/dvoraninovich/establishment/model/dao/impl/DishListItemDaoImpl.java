@@ -26,6 +26,10 @@ public class DishListItemDaoImpl implements DishListItemDao {
             = "SELECT dishes_lists_items.id, dishes_lists_items.id_order, dishes_lists_items.id_dish, dishes_lists_items.dish_amount "
             + "FROM dishes_lists_items "
             + "WHERE id = ?;";
+    private static final String SELECT_DISH_LIST_ITEM_ORDER_AND_DISH_ID
+            = "SELECT dishes_lists_items.id, dishes_lists_items.id_order, dishes_lists_items.id_dish, dishes_lists_items.dish_amount "
+            + "FROM dishes_lists_items "
+            + "WHERE dishes_lists_items.id_order = ? AND dishes_lists_items.id_dish = ?;";
     private static final String SELECT_ALL_DISH_LIST_ITEMS_BY_ORDER_ID
             = "SELECT dishes_lists_items.id, dishes_lists_items.id_order, dishes_lists_items.id_dish, dishes_lists_items.dish_amount "
             + "FROM dishes_lists_items "
@@ -77,6 +81,26 @@ public class DishListItemDaoImpl implements DishListItemDao {
             }
         } catch (DatabaseException | SQLException e) {
             throw new DaoException("Can't handle finding dishListItem with id: " + id, e);
+        }
+        return dishListItem;
+    }
+
+    @Override
+    public Optional<DishListItem> findByOrderAndDishId(Long orderId, Long dishId) throws DaoException {
+        Optional<DishListItem> dishListItem = Optional.empty();
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(SELECT_DISH_LIST_ITEM_ORDER_AND_DISH_ID);
+            statement.setLong(1, orderId);
+            statement.setLong(2, dishId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                dishListItem = Optional.of(createDishListItemFromResultSet(resultSet));
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Can't handle finding dishListItem with orderId: "
+                    + orderId + " and dishId: " + dishId, e);
         }
         return dishListItem;
     }

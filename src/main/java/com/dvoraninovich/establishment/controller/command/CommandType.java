@@ -32,5 +32,6 @@ public enum CommandType {
     GO_TO_CUSTOMER_BASKET,
     GO_TO_ADMIN_PAGE,
     UPLOAD_DISH_PHOTO,
+    ADD_TO_BASKET,
 
 }

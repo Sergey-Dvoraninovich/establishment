@@ -8,6 +8,7 @@ import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToIngredientsPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.order.GoToOrdersPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.user.GoToUsersPageCommand;
+import com.dvoraninovich.establishment.controller.command.impl.customer.AddDishToBasket;
 import com.dvoraninovich.establishment.controller.command.impl.customer.EditCustomerCommand;
 import com.dvoraninovich.establishment.controller.command.impl.customer.GoToCustomerBasketCommand;
 import com.dvoraninovich.establishment.controller.command.impl.customer.GoToCustomerProfilePageCommand;
@@ -49,6 +50,7 @@ public final class CommandProvider {
         commands.put(SIGN_OUT, new SignOutCommand());
         commands.put(UPLOAD_DISH_PHOTO, new EditDishPhoto());
         commands.put(EDIT_CUSTOMER, new EditCustomerCommand());
+        commands.put(ADD_TO_BASKET, new AddDishToBasket());
     }
 
     public static CommandProvider getInstance() {

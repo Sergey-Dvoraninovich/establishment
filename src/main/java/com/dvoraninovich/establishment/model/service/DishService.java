@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface DishService {
     List<Dish> findAll() throws ServiceException;
     List<Dish> findAllAvailable() throws ServiceException;
+    List<Dish> findOrderDishes(long id) throws ServiceException;
 
     boolean addDish(Dish dish) throws ServiceException;
     boolean editDish(Dish dish) throws ServiceException;
