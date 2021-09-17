@@ -20,14 +20,14 @@ public class DishListItemDaoImpl implements DishListItemDao {
     private static final DatabaseConnectionPool connectionPool = DatabaseConnectionPool.getInstance();
 
     private static final String SELECT_ALL_DISH_LIST_ITEMS
-            = "SELECT id, id_order, id_dish, dish_amount "
+            = "SELECT dishes_lists_items.id, dishes_lists_items.id_order, dishes_lists_items.id_dish, dishes_lists_items.dish_amount "
             + "FROM dishes_lists_items;";
     private static final String SELECT_DISH_LIST_ITEM_BY_ID
-            = "SELECT id, id_order, id_dish, dish_amount "
+            = "SELECT dishes_lists_items.id, dishes_lists_items.id_order, dishes_lists_items.id_dish, dishes_lists_items.dish_amount "
             + "FROM dishes_lists_items "
             + "WHERE id = ?;";
     private static final String SELECT_ALL_DISH_LIST_ITEMS_BY_ORDER_ID
-            = "SELECT id, id_order, id_dish, dish_amount "
+            = "SELECT dishes_lists_items.id, dishes_lists_items.id_order, dishes_lists_items.id_dish, dishes_lists_items.dish_amount "
             + "FROM dishes_lists_items "
             + "WHERE id_order = ?;";
     private static final String INSERT_DISH_LIST_ITEM

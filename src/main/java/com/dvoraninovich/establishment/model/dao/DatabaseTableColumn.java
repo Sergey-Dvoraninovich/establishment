@@ -5,18 +5,18 @@ public final class DatabaseTableColumn {
     public static final String INGREDIENT_ID = "ingredients.id";
     public static final String INGREDIENT_NAME = "ingredients.name";
 
-    public static final String DISH_ID = "id";
-    public static final String DISH_PRICE = "price";
-    public static final String DISH_CALORIES = "calories";
-    public static final String DISH_AMOUNT_GRAMS = "amount_grams";
-    public static final String DISH_NAME = "name";
-    public static final String IS_DISH_AVAILABLE = "is_available";
-    public static final String DISH_PHOTO = "photo";
+    public static final String DISH_ID = "dishes.id";
+    public static final String DISH_PRICE = "dishes.price";
+    public static final String DISH_CALORIES = "dishes.calories";
+    public static final String DISH_AMOUNT_GRAMS = "dishes.amount_grams";
+    public static final String DISH_NAME = "dishes.name";
+    public static final String IS_DISH_AVAILABLE = "dishes.is_available";
+    public static final String DISH_PHOTO = "dishes.photo";
 
-    public static final String DISH_LIST_ITEM_ID = "id";
-    public static final String DISH_LIST_ITEM_ID_ORDER = "id_order";
-    public static final String DISH_LIST_ITEM_ID_DISH = "id_dish";
-    public static final String DISH_LIST_ITEM_DISH_AMOUNT = "dish_amount";
+    public static final String DISH_LIST_ITEM_ID = "dishes_lists_items.id";
+    public static final String DISH_LIST_ITEM_ID_ORDER = "dishes_lists_items.id_order";
+    public static final String DISH_LIST_ITEM_ID_DISH = "dishes_lists_items.id_dish";
+    public static final String DISH_LIST_ITEM_DISH_AMOUNT = "dishes_lists_items.dish_amount";
 
     public static final String ORDER_ID = "orders.id";
     public static final String ORDER_USER_ID = "orders.id_user";

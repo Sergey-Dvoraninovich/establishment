@@ -19,10 +19,10 @@ public class DishDaoImpl implements DishDao {
     private static final DatabaseConnectionPool connectionPool = DatabaseConnectionPool.getInstance();
 
     private static final String SELECT_ALL_DISHES
-            = "SELECT id, price, calories, amount_grams, name, is_available, photo "
+            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
             + "FROM dishes;";
     private static final String SELECT_ORDER_DISHES
-            = "SELECT id, price, calories, amount_grams, name, is_available, photo "
+            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
             + "FROM dishes "
             + "INNER JOIN dishes_lists_items "
             + "ON dishes.id = dishes_lists_items.id_dish "
@@ -30,11 +30,11 @@ public class DishDaoImpl implements DishDao {
             + "ON orders.id = dishes_ingredients.id_order "
             + "WHERE orders.id = ?;";
     private static final String FIND_ALL_AVAILABLE_DISHES
-            = "SELECT id, price, calories, amount_grams, name, is_available, photo "
+            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
             + "FROM dishes "
             + "WHERE is_available = true;";
     private static final String FIND_DISH_BY_ID
-            = "SELECT id, price, calories, amount_grams, name, is_available, photo "
+            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
             + "FROM dishes "
             + "WHERE id = ?; ";
     private static final String INSERT_DISH
@@ -45,13 +45,13 @@ public class DishDaoImpl implements DishDao {
             + "SET price = ?, calories = ?, amount_grams = ?, name = ?, is_available = ?, photo = ? "
             + "WHERE id = ?;";
     private static final String DISABLE_DISH
-            = "UPDATE dishes " +
-            "SET is_available = false " +
-            "WHERE id = ?;";
+            = "UPDATE dishes "
+            + "SET is_available = false "
+            + "WHERE id = ?;";
     private static final String MAKE_DISH_AVAILABLE
-            = "UPDATE dishes " +
-            "SET is_available = true " +
-            "WHERE id = ?;";
+            = "UPDATE dishes "
+            + "SET is_available = true "
+            + "WHERE id = ?;";
     private static final String FIND_DISH_INGREDIENTS
             = "SELECT ingredients.id, ingredients.name "
             + "FROM ingredients "
