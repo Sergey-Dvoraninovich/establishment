@@ -24,7 +24,7 @@ import static com.dvoraninovich.establishment.controller.command.Router.RouterTy
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
-public class AddDishToBasket implements Command {
+public class AddDishToBasketCommand implements Command {
     private DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
     private OrderService orderService = OrderServiceImpl.getInstance();
     private DishService dishService = DishServiceImpl.getInstance();

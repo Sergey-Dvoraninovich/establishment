@@ -47,10 +47,12 @@ public final class CommandProvider {
         commands.put(SIGN_OUT, new SignOutCommand());
         commands.put(UPLOAD_DISH_PHOTO, new EditDishPhoto());
         commands.put(EDIT_CUSTOMER, new EditCustomerCommand());
-        commands.put(ADD_TO_BASKET, new AddDishToBasket());
+        commands.put(ADD_TO_BASKET, new AddDishToBasketCommand());
         commands.put(INCREMENT_ORDER_DISH, new IncrementOrderDishCommand());
         commands.put(DECREMENT_ORDER_DISH, new DecrementOrderDishCommand());
         commands.put(DELETE_ORDER_DISH, new DeleteOrderDishCommand());
+        commands.put(BUY_BASKET, new BuyBasketCommand());
+        commands.put(RECALCULATE_PRICE, new RecalculatePriceCommand());
     }
 
     public static CommandProvider getInstance() {

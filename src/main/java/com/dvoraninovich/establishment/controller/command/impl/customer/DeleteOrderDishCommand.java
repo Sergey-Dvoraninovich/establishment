@@ -29,14 +29,12 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 public class DeleteOrderDishCommand implements Command {
     private DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
     private OrderService orderService = OrderServiceImpl.getInstance();
-    private DishService dishService = DishServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
         Optional<DishListItem> optionalDishListItem = Optional.empty();
-        DishListItem dishListItem;
         Optional<Order> optionalBasket = Optional.empty();
 
         User user = (User) session.getAttribute(USER);

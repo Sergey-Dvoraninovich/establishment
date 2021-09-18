@@ -19,6 +19,7 @@ public final class RequestParameter {
     public static final String AVAILABLE_INGREDIENTS = "available_ingredients";
     public static final String INGREDIENTS = "ingredients";
     public static final String CODE = "code";
+    public static final String BONUSES_IN_PAYMENT = "bonuses_in_payment";
 
     private RequestParameter() {
     }

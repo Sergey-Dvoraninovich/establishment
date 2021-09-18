@@ -6,6 +6,7 @@
 
 <c:set var="customer_bonuses">${sessionScope.user.bonusesAmount}</c:set>
 <c:set var="bonuses_in_payment">${sessionScope.order.bonusesInPayment}</c:set>
+<c:set var="recalculate_price_info"><fmt:message key="basket.recalculate_price"/></c:set>
 <c:set var="basket_price"><fmt:message key="basket.buy_for"/> ${sessionScope.order.finalPrice}</c:set>
 
 <html>
@@ -107,13 +108,25 @@
                 </div>
                 <c:url value="/ApiController?command=recalculate_price" var="recalculate_price"/>
                 <a href="${recalculate_price}"><fmt:message key="basket.recalculate_price"/></a>
+                <c:url value="/ApiController?command=recalculate_price" var="recalculate_price"/>
+                <div>
+                    <input formaction="${recalculate_price}" formmethod="post"
+                           type="submit" value="${recalculate_price_info}"/>
+                </div>
                 <c:if test="${sessionScope.too_many_bonuses}">
                     <div class="local-error">
                         <p><fmt:message key="basket.too_many_bonuses"/></p>
                     </div>
                 </c:if>
+                <c:if test="${sessionScope.not_enough_bonuses}">
+                    <div class="local-error">
+                        <p><fmt:message key="basket.not_enough_bonuses"/></p>
+                    </div>
+                </c:if>
+                <c:url value="/ApiController?command=buy_basket" var="buy_basket"/>
                 <div>
-                    <input type="submit" value="${sessionScope.order.finalPrice}"/>
+                    <input formaction="${buy_basket}" formmethod="post"
+                           type="submit" value="${basket_price}"/>
                 </div>
             </form>
         </div>
@@ -335,6 +348,7 @@
         width: auto;
     }
     .control-picture {
+        margin: 10px;
         height: 30px;
         width: 30px;
     }
