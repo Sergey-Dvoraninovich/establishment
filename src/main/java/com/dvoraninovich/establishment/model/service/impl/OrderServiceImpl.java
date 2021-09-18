@@ -2,13 +2,10 @@ package com.dvoraninovich.establishment.model.service.impl;
 
 import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.exception.ServiceException;
-import com.dvoraninovich.establishment.model.dao.IngredientDao;
 import com.dvoraninovich.establishment.model.dao.OrderDao;
-import com.dvoraninovich.establishment.model.dao.impl.IngredientDaoImpl;
 import com.dvoraninovich.establishment.model.dao.impl.OrderDaoImpl;
 import com.dvoraninovich.establishment.model.entity.*;
 import com.dvoraninovich.establishment.model.service.OrderService;
-import javafx.util.Pair;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -116,6 +113,24 @@ public class OrderServiceImpl implements OrderService {
     public Long countDishesAmount(long orderId) throws ServiceException {
         try {
             return orderDao.countOrderDishesAmount(orderId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public BigDecimal countOrderFinalPrice(long id) throws ServiceException {
+        try {
+            return orderDao.countOrderFinalPrice(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Boolean updateOrderFinalPrice(long id) throws ServiceException {
+        try {
+            return orderDao.updateOrderFinalPrice(id);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

@@ -38,12 +38,21 @@
     </c:if>
 
     <c:if test="${sessionScope.user.role.name() == 'CUSTOMER'}">
-       <div class="header-block">
-          <c:url value="/ApiController?command=go_to_customer_basket" var="basket"/>
-          <a class="header-block-text" href="${basket}">
-            <fmt:message key="header.basket"/> ${sessionScope.dishes_in_basket}
-          </a>
-       </div>
+      <c:url value="/ApiController?command=go_to_customer_basket" var="basket"/>
+      <div id="locale-header-block" class="header-block">
+        <div class="locale-container">
+          <div class="locale-item">
+            <a class="header-block-text" href="${basket}">
+              <fmt:message key="header.basket"/>
+            </a>
+          </div>
+          <div class="locale-activated-item">
+            <a class="header-block-text" href="${basket}">
+                ${sessionScope.dishes_in_basket}
+            </a>
+          </div>
+        </div>
+      </div>
     </c:if>
 
     <c:if test="${sessionScope.user != null}">

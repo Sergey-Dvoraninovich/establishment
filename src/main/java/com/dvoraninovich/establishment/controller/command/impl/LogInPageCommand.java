@@ -5,10 +5,13 @@ import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.controller.command.SessionAttribute;
 import com.dvoraninovich.establishment.controller.command.validator.IngredientValidator;
 import com.dvoraninovich.establishment.controller.command.validator.UserValidator;
+import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.Role;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.exception.ServiceException;
+import com.dvoraninovich.establishment.model.service.OrderService;
 import com.dvoraninovich.establishment.model.service.UserService;
+import com.dvoraninovich.establishment.model.service.impl.OrderServiceImpl;
 import com.dvoraninovich.establishment.model.service.impl.UserServiceImpl;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -25,6 +28,7 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 public class LogInPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(LogInPageCommand.class);
     private UserService service = UserServiceImpl.getInstance();
+    private OrderService orderService = OrderServiceImpl.getInstance();
     private UserValidator validator = UserValidator.getInstance();
 
 
@@ -69,6 +73,9 @@ public class LogInPageCommand implements Command {
                         break;
                     }
                     case CUSTOMER: {
+                        Order basket = orderService.getCustomerBasket(user.getId()).get();
+                        Long dishesAmount = orderService.countDishesAmount(basket.getId());
+                        session.setAttribute(DISHES_IN_BASKET, dishesAmount);
                         router = new Router(INDEX, REDIRECT);
                         break;
                     }

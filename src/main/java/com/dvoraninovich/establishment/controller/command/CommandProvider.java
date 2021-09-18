@@ -8,10 +8,7 @@ import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToIngredientsPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.order.GoToOrdersPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.user.GoToUsersPageCommand;
-import com.dvoraninovich.establishment.controller.command.impl.customer.AddDishToBasket;
-import com.dvoraninovich.establishment.controller.command.impl.customer.EditCustomerCommand;
-import com.dvoraninovich.establishment.controller.command.impl.customer.GoToCustomerBasketCommand;
-import com.dvoraninovich.establishment.controller.command.impl.customer.GoToCustomerProfilePageCommand;
+import com.dvoraninovich.establishment.controller.command.impl.customer.*;
 
 import java.util.EnumMap;
 
@@ -51,6 +48,9 @@ public final class CommandProvider {
         commands.put(UPLOAD_DISH_PHOTO, new EditDishPhoto());
         commands.put(EDIT_CUSTOMER, new EditCustomerCommand());
         commands.put(ADD_TO_BASKET, new AddDishToBasket());
+        commands.put(INCREMENT_ORDER_DISH, new IncrementOrderDishCommand());
+        commands.put(DECREMENT_ORDER_DISH, new DecrementOrderDishCommand());
+        commands.put(DELETE_ORDER_DISH, new DeleteOrderDishCommand());
     }
 
     public static CommandProvider getInstance() {

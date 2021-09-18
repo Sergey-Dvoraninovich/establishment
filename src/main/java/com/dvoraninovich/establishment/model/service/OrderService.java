@@ -7,6 +7,7 @@ import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.User;
 import javafx.util.Pair;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -25,4 +26,8 @@ public interface OrderService {
     HashMap<Order, User> findAllOrdersWithUserinfo() throws ServiceException;
 
     Long countDishesAmount(long orderId) throws ServiceException;
+
+    BigDecimal countOrderFinalPrice(long id) throws ServiceException;
+
+    Boolean updateOrderFinalPrice(long id) throws ServiceException;
 }

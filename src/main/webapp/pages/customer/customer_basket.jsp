@@ -21,13 +21,50 @@
             <h2><fmt:message key="basket.title"/></h2>
         </div>
         <div class="block-item-text">
+            <div class="dishes-container">
             <c:forEach var="dish_list_item" items="${sessionScope.order_dish_list_items}">
-                <img class="profile-picture"
-                     src="../../images/dish/${sessionScope.order_dishes_map.get(dish_list_item.dishId).photo}"
-                     onerror="this.src='../../images/default_dish.png';">
-                ${sessionScope.order_dishes_map.get(dish_list_item.dishId).name}
-                ${dish_list_item.dishAmount}
+                <div class="dish-container">
+                    <div class="dish-container-column">
+                        <div id="icon-container" class="photo-container">
+                             <img class="dish-picture"
+                                 src="../../images/dish/${sessionScope.order_dishes_map.get(dish_list_item.dishId).photo}"
+                                 onerror="this.src='../../images/default_dish.png';">
+                        </div>
+                    </div>
+                    <div class="dish-container-column">
+                        <div class="dish-container-line">
+                            <c:url value="/ApiController?command=delete_order_dish&id_dish_list_item=${dish_list_item.id}" var="delete_order_dish"/>
+                            <a href="${delete_order_dish}">
+                                <img class="control-picture"
+                                     src="../../images/delete.png">
+                            </a>
+                        </div>
+                        <div class="dish-container-line">
+                            <div class="dish-text">
+                                <a>
+                                ${sessionScope.order_dishes_map.get(dish_list_item.dishId).name}
+                                </a>
+                            </div>
+                        </div>
+                        <div id="amount-control" class="dish-container-line">
+                            <c:url value="/ApiController?command=decrement_order_dish&id_dish_list_item=${dish_list_item.id}" var="decrement_order_dish"/>
+                            <a href="${decrement_order_dish}">
+                            <img class="control-picture"
+                                 src="../../images/reduce.png">
+                            </a>
+                            <div class="dish-text">
+                            <a>${dish_list_item.dishAmount}</a>
+                            </div>
+                            <c:url value="/ApiController?command=increment_order_dish&id_dish_list_item=${dish_list_item.id}" var="increment_order_dish"/>
+                            <a href="${increment_order_dish}">
+                            <img class="control-picture"
+                                 src="../../images/add.png">
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </c:forEach>
+            </div>
             <form>
                 <div class="form-row">
                     <c:if test="${sessionScope.order.paymentType == 'CASH'}">
@@ -69,7 +106,7 @@
                     </c:if>
                 </div>
                 <div>
-                    <input type="submit" value="${basket_price}"/>
+                    <input type="submit" value="${sessionScope.order.finalPrice}"/>
                 </div>
             </form>
         </div>
@@ -99,8 +136,12 @@
         margin: 25px;
     }
     a {
+        font: 15px 'Roboto', Arial, Helvetica, sans-serif;
         font-size: 15px;
         text-decoration: none;
+    }
+    div {
+        font: 15px 'Roboto', Arial, Helvetica, sans-serif;
     }
 
     #description{
@@ -242,6 +283,52 @@
         color: #ffffff;
         border:2px solid #804451;
         background-color: #804451;
+    }
+    .dishes-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: stretch;
+    }
+    .dish-container{
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+    #icon-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .dish-container-column {
+        height: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    #amount-control {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+    .photo-container {
+        height: 150px;
+        width: 270px;
+    }
+    .dish-picture {
+        height: inherit;
+        width: auto;
+    }
+    .control-picture {
+        height: 30px;
+        width: 30px;
+    }
+    .dish-text a {
+        font-size: 25px;
     }
 </style>
 </html>

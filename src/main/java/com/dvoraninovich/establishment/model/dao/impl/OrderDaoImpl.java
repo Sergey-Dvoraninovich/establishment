@@ -64,6 +64,19 @@ public class OrderDaoImpl implements OrderDao {
             + "ON orders.id = dishes_lists_items.id_order "
             + "WHERE orders.id = ?;";
 
+    private static final String COUNT_ORDER_FINAL_PRICE
+            = "SELECT (SUM(dishes_lists_items.dish_amount*dishes.price) - orders.bonuses_in_payment/100)"
+            + "FROM dishes_lists_items "
+            + "INNER JOIN orders "
+            + "ON orders.id = dishes_lists_items.id_order "
+            + "INNER JOIN dishes "
+            + "ON dishes.id = dishes_lists_items.id_dish "
+            + "WHERE orders.id = ?;";
+    private static final String UPDATE_ORDER_FINAL_PRICE
+            = "UPDATE orders "
+            + "SET final_price = ? "
+            + "WHERE id = ?;";
+
     private static final String FIND_USER_ORDER_IN_CREATION
             = "SELECT orders.id, orders.id_user, orders_statuses.order_status, orders.order_time, orders.finish_time, "
             + " orders.card_number, payment_types.payment_type, orders.bonuses_in_payment, orders.final_price "
@@ -143,6 +156,49 @@ public class OrderDaoImpl implements OrderDao {
             throw new DaoException("Can't handle counting dishes amount for order with id: " + id, e);
         }
         return dishesAmount;
+    }
+
+    @Override
+    public BigDecimal countOrderFinalPrice(long id) throws DaoException {
+        BigDecimal finalPrice = new BigDecimal(0);
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(COUNT_ORDER_FINAL_PRICE);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                finalPrice = resultSet.getBigDecimal(1);
+                finalPrice.setScale(2);
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Can't handle counting final price for order with id: " + id, e);
+        }
+        return finalPrice;
+    }
+
+    @Override
+    public Boolean updateOrderFinalPrice(long id) throws DaoException {
+        BigDecimal finalPrice;
+        Boolean successfulOperation = false;
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(COUNT_ORDER_FINAL_PRICE);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                finalPrice = resultSet.getBigDecimal(1);
+                statement = connection.prepareStatement(UPDATE_ORDER_FINAL_PRICE);
+                statement.setBigDecimal(1, finalPrice);
+                statement.setLong(2, id);
+                Integer rowsNum = statement.executeUpdate();
+                successfulOperation = rowsNum != 0;
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Can't handle reinstalling final price for order with id: " + id, e);
+        }
+        return successfulOperation;
     }
 
     @Override

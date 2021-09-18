@@ -55,6 +55,7 @@ public final class SessionAttribute {
     public static final String ORDERS_WITH_USER_INFO = "orders_with_users_info";
     public static final String ORDER_DISHES_MAP = "order_dishes_map";
     public static final String DISHES_IN_BASKET = "dishes_in_basket";
+    public static final String ID_DISH_LIST_ITEM = "id_dish_list_item";
 
     private SessionAttribute() {
     }
