@@ -19,4 +19,6 @@ public interface DishListItemService {
     boolean insert(DishListItem dishListItem) throws ServiceException;
 
     boolean update(DishListItem dishListItem) throws ServiceException;
+
+    boolean delete(long id) throws ServiceException;
 }

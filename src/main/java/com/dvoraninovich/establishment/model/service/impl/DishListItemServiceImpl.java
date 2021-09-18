@@ -85,4 +85,13 @@ public class DishListItemServiceImpl implements DishListItemService {
             throw new ServiceException(e);
         }
     }
+
+    @Override
+    public boolean delete(long id) throws ServiceException {
+        try {
+            return dishListItemDao.delete(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

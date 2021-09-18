@@ -41,6 +41,9 @@ public class DishListItemDaoImpl implements DishListItemDao {
             = "UPDATE dishes_lists_items "
             + "SET id_order = ?, id_dish = ?, dish_amount = ? "
             + "WHERE id = ?;";
+    private static final String DELETE_DISH_LIST_ITEM
+            = "DELETE FROM dishes_lists_items "
+            + "WHERE id = ?;";
 
     public static DishListItemDaoImpl getInstance() {
         return instance;
@@ -137,6 +140,23 @@ public class DishListItemDaoImpl implements DishListItemDao {
                 successfulOperation = rowsNum != 0;
             } catch (DatabaseException | SQLException e) {
                 throw new DaoException("Can't handle updating dishListItem with id: " + dishListItem.getId(), e);
+            }
+        }
+        return successfulOperation;
+    }
+
+    @Override
+    public boolean delete(long id) throws DaoException {
+        boolean successfulOperation = false;
+        if (!Optional.empty().equals(findById(id))) {
+            try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+            ) {
+                PreparedStatement statement = connection.prepareStatement(DELETE_DISH_LIST_ITEM);
+                statement.setLong(1, id);
+                Integer rowsNum = statement.executeUpdate();
+                successfulOperation = rowsNum != 0;
+            } catch (DatabaseException | SQLException e) {
+                throw new DaoException("Can't handle deleting dishListItem with id: " + id, e);
             }
         }
         return successfulOperation;

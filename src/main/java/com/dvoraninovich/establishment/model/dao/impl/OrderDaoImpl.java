@@ -65,7 +65,7 @@ public class OrderDaoImpl implements OrderDao {
             + "WHERE orders.id = ?;";
 
     private static final String COUNT_ORDER_FINAL_PRICE
-            = "SELECT (SUM(dishes_lists_items.dish_amount*dishes.price) - orders.bonuses_in_payment/100)"
+            = "SELECT ROUND(SUM(dishes_lists_items.dish_amount*dishes.price) - orders.bonuses_in_payment/100, 2)"
             + "FROM dishes_lists_items "
             + "INNER JOIN orders "
             + "ON orders.id = dishes_lists_items.id_order "

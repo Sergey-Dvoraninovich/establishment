@@ -105,6 +105,13 @@
                         </div>
                     </c:if>
                 </div>
+                <c:url value="/ApiController?command=recalculate_price" var="recalculate_price"/>
+                <a href="${recalculate_price}"><fmt:message key="basket.recalculate_price"/></a>
+                <c:if test="${sessionScope.too_many_bonuses}">
+                    <div class="local-error">
+                        <p><fmt:message key="basket.too_many_bonuses"/></p>
+                    </div>
+                </c:if>
                 <div>
                     <input type="submit" value="${sessionScope.order.finalPrice}"/>
                 </div>
@@ -283,6 +290,10 @@
         color: #ffffff;
         border:2px solid #804451;
         background-color: #804451;
+    }
+    .local-error {
+        font-size: 15px;
+        color: red;
     }
     .dishes-container{
         display: flex;

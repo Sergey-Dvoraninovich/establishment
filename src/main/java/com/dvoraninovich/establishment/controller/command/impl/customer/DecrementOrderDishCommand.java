@@ -54,9 +54,15 @@ public class DecrementOrderDishCommand implements Command {
                 if (optionalDishListItem.isPresent()) {
                     dishListItem = optionalDishListItem.get();
                     dishListItems.remove(dishListItem);
-                    dishListItem.setDishAmount(dishListItem.getDishAmount() - 1);
-                    dishListItemService.update(dishListItem);
-                    dishListItems.add(dishListItem);
+                    Integer currentDishAmount = dishListItem.getDishAmount();
+                    if (currentDishAmount > 1) {
+                        dishListItem.setDishAmount(dishListItem.getDishAmount() - 1);
+                        dishListItemService.update(dishListItem);
+                        dishListItems.add(dishListItem);
+                    }
+                    else {
+                        dishListItemService.delete(dishListItem.getId());
+                    }
                 }
                 BigDecimal finalPrice = orderService.countOrderFinalPrice(basket.getId());
                 basket.setFinalPrice(finalPrice);

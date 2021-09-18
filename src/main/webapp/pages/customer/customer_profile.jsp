@@ -31,8 +31,8 @@
                 <a><fmt:message key="profile.basket_info"/></a>
             </div>
             <div class="block-item-action">
-                <c:url value="/ApiController?command=go_to_baskrt_page_command" var="orders_page"/>
-                <a href="${orders_page}"><fmt:message key="profile.basket"/></a>
+                <c:url value="/ApiController?command=go_to_customer_basket" var="basket_page"/>
+                <a href="${basket_page}"><fmt:message key="profile.basket"/></a>
             </div>
         </div>
     </div>
