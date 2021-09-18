@@ -8,6 +8,7 @@ import com.dvoraninovich.establishment.model.entity.OrderState;
 import com.dvoraninovich.establishment.model.entity.PaymentType;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.model.pool.DatabaseConnectionPool;
+import com.dvoraninovich.establishment.util.CodeGenerator;
 import javafx.util.Pair;
 
 import javax.jws.soap.SOAPBinding;
@@ -53,8 +54,15 @@ public class OrderDaoImpl implements OrderDao {
             + "INNER JOIN orders_statuses "
             + "ON orders.id_order_status = orders_statuses.id "
             + "INNER JOIN payment_types "
-            + "ON orders.id_payment_type = payment_types.id; "
-            + "WHERE id = ?;";
+            + "ON orders.id_payment_type = payment_types.id "
+            + "WHERE orders.id = ?;";
+
+    private static final String COUNT_ORDER_DISHES_AMOUNT
+            = "SELECT SUM(dishes_lists_items.dish_amount) "
+            + "FROM dishes_lists_items "
+            + "INNER JOIN orders "
+            + "ON orders.id = dishes_lists_items.id_order "
+            + "WHERE orders.id = ?;";
 
     private static final String FIND_USER_ORDER_IN_CREATION
             = "SELECT orders.id, orders.id_user, orders_statuses.order_status, orders.order_time, orders.finish_time, "
@@ -71,7 +79,7 @@ public class OrderDaoImpl implements OrderDao {
             + "finish_time, card_number, id_payment_type, bonuses_in_payment, final_price) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String UPDATE_ORDER
-            = "UPDATE dishes_lists_items "
+            = "UPDATE orders "
             + "SET id_user = ?, id_order_status = ?, order_time = ?, "
             + "finish_time = ?, card_number = ?, id_payment_type = ?, bonuses_in_payment = ?, final_price = ? "
             + "WHERE id = ?;";
@@ -117,6 +125,24 @@ public class OrderDaoImpl implements OrderDao {
             throw new DaoException("Can't handle finding order with id: " + id, e);
         }
         return order;
+    }
+
+    @Override
+    public Long countOrderDishesAmount(long id) throws DaoException {
+        Long dishesAmount = Long.valueOf(0);
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(COUNT_ORDER_DISHES_AMOUNT);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                dishesAmount = resultSet.getLong(1);
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Can't handle counting dishes amount for order with id: " + id, e);
+        }
+        return dishesAmount;
     }
 
     @Override

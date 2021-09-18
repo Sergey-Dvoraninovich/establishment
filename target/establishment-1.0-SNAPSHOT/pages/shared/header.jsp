@@ -41,7 +41,7 @@
        <div class="header-block">
           <c:url value="/ApiController?command=go_to_customer_basket" var="basket"/>
           <a class="header-block-text" href="${basket}">
-            <fmt:message key="header.basket"/>
+            <fmt:message key="header.basket"/> ${sessionScope.dishes_in_basket}
           </a>
        </div>
     </c:if>

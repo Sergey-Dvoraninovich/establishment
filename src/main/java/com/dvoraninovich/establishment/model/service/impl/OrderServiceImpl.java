@@ -111,4 +111,13 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(e);
         }
     }
+
+    @Override
+    public Long countDishesAmount(long orderId) throws ServiceException {
+        try {
+            return orderDao.countOrderDishesAmount(orderId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

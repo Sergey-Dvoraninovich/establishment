@@ -37,6 +37,7 @@ public class GoToCustomerBasketCommand implements Command {
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Optional<Order> order = Optional.empty();
+        Long dishesAmount = Long.valueOf(0);
         List<DishListItem> dishListItems = new ArrayList<>();
         HashMap<Long, Dish> dishesHashMap = new HashMap<>();
         User user = (User) session.getAttribute(USER);
@@ -47,12 +48,14 @@ public class GoToCustomerBasketCommand implements Command {
             for (Dish dish: dishes){
                 dishesHashMap.put(dish.getId(), dish);
             }
+            dishesAmount = orderService.countDishesAmount(order.get().getId());
         } catch (ServiceException e) {
             logger.info("Impossible to find customer basket", e);
         }
         session.setAttribute(ORDER, order.get());
         session.setAttribute(ORDER_DISH_LIST_ITEMS, dishListItems);
         session.setAttribute(ORDER_DISHES_MAP, dishesHashMap);
+        session.setAttribute(DISHES_IN_BASKET, dishesAmount);
         return new Router(CUSTOMER_BASKET, REDIRECT);
     }
 }

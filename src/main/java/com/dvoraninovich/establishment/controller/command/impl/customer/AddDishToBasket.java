@@ -39,6 +39,7 @@ public class AddDishToBasket implements Command {
         Optional<Order> optionalBasket = Optional.empty();
 
         User user = (User) session.getAttribute(USER);
+        Long dishesAmount = (Long) session.getAttribute(DISHES_IN_BASKET);
         String id = request.getParameter(ID);
         Long dishId = Long.parseLong(id);
 
@@ -50,6 +51,7 @@ public class AddDishToBasket implements Command {
                 if (optionalDishListItem.isPresent()) {
                     dishListItem = optionalDishListItem.get();
                     dishListItem.setDishAmount(dishListItem.getDishAmount() + 1);
+                    dishListItemService.update(dishListItem);
                 } else {
                     dishListItem = DishListItem.builder()
                             .setOrderId(basket.getId())
@@ -62,7 +64,9 @@ public class AddDishToBasket implements Command {
                 BigDecimal totalPrice = basket.getFinalPrice();
                 totalPrice.add(dish.getPrice());
                 orderService.update(basket);
+                dishesAmount = orderService.countDishesAmount(basket.getId());
             }
+            session.setAttribute(DISHES_IN_BASKET, dishesAmount);
             router = new Router(DISHES_PAGE, REDIRECT);
         } catch (ServiceException e) {
             e.printStackTrace();

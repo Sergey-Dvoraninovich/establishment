@@ -23,4 +23,6 @@ public interface OrderService {
     Optional<Order> getCustomerBasket(long customerId) throws ServiceException;
 
     HashMap<Order, User> findAllOrdersWithUserinfo() throws ServiceException;
+
+    Long countDishesAmount(long orderId) throws ServiceException;
 }
