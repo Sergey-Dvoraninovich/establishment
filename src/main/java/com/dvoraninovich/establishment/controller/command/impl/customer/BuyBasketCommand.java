@@ -80,7 +80,7 @@ public class BuyBasketCommand implements Command {
                 if (newBasket.isPresent()){
                     session.setAttribute(ORDER, newBasket.get());
                     session.setAttribute(ORDER_DISH_LIST_ITEMS, new ArrayList<DishListItem>());
-                    session.setAttribute(DISHES_IN_BASKET, 0);
+                    session.setAttribute(DISHES_IN_BASKET, Long.valueOf(0));
                 }
             }
             router = new Router(CUSTOMER_BASKET, REDIRECT);

@@ -139,6 +139,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> findUserOrders(long userId, long minPos, long maxPos) throws ServiceException {
+        try {
+            return orderDao.findUserOrders(userId, minPos, maxPos);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Long countUserOrders(long userId) throws ServiceException {
+        try {
+            return orderDao.countUserOrders(userId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public Boolean updateOrderFinalPrice(long id) throws ServiceException {
         try {
             return orderDao.updateOrderFinalPrice(id);

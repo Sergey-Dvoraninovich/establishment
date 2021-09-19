@@ -53,6 +53,7 @@ public final class CommandProvider {
         commands.put(DELETE_ORDER_DISH, new DeleteOrderDishCommand());
         commands.put(BUY_BASKET, new BuyBasketCommand());
         commands.put(RECALCULATE_PRICE, new RecalculatePriceCommand());
+        commands.put(GO_TO_CUSTOMER_ORDERS, new GoToCustomerOrdersCommand());
     }
 
     public static CommandProvider getInstance() {

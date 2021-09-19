@@ -95,7 +95,17 @@ public class OrderDaoImpl implements OrderDao {
             + "ON orders.id_order_status = orders_statuses.id "
             + "INNER JOIN payment_types "
             + "ON orders.id_payment_type = payment_types.id "
-            + "WHERE orders.id_user = ?;";
+            + "WHERE orders.id_user = ? AND orders_statuses.order_status != 'IN_CREATION' "
+            + "LIMIT ?, ? "
+            + "ORDER_BY orders.order_time desc;";
+    private static final String FIND_USER_ORDERS_AMOUNT
+            = "SELECT COUNT(orders.id) "
+            + "FROM orders "
+            + "INNER JOIN orders_statuses "
+            + "ON orders.id_order_status = orders_statuses.id "
+            + "INNER JOIN payment_types "
+            + "ON orders.id_payment_type = payment_types.id "
+            + "WHERE orders.id_user = ? AND orders_statuses.order_status != 'IN_CREATION' ;";
 
     private static final String INSERT_ORDER
             = "INSERT orders(id_user, id_order_status, order_time, "
@@ -185,6 +195,44 @@ public class OrderDaoImpl implements OrderDao {
             throw new DaoException("Can't handle counting final price for order with id: " + id, e);
         }
         return finalPrice;
+    }
+
+    @Override
+    public List<Order> findUserOrders(long userId, long minPos, long maxPos) throws DaoException {
+        List<Order> orders = new ArrayList<>();
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(FIND_USER_ORDERS);
+            statement.setLong(1, userId);
+            statement.setLong(2, minPos);
+            statement.setLong(3, maxPos);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                orders.add(createOrderFromResultSet(resultSet));
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Can't handle finding orders for user with id: " + userId, e);
+        }
+        return orders;
+    }
+
+    @Override
+    public Long countUserOrders(long userId) throws DaoException {
+        Long amount = Long.valueOf(0);
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(FIND_USER_ORDERS_AMOUNT);
+            statement.setLong(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                amount = resultSet.getLong(1);
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Can't handle counting final price for order with id: " + userId, e);
+        }
+        return amount;
     }
 
     @Override

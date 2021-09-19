@@ -22,7 +22,9 @@ public interface OrderDao extends BaseDao<Long, Order> {
     Long insertAndGetId(Order order) throws DaoException;
     HashMap<Order, User> findAllOrdersWithUserinfo() throws DaoException;
     List<Order> findAllUserOrders(long userId) throws DaoException;
+    List<Order> findUserOrders(long userId, long minPos, long maxPos) throws DaoException;
     Long countOrderDishesAmount(long id) throws DaoException;
     BigDecimal countOrderFinalPrice(long id) throws DaoException;
     Boolean updateOrderFinalPrice(long id) throws DaoException;
+    Long countUserOrders(long userId) throws DaoException;
 }

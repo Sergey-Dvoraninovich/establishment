@@ -2,10 +2,8 @@ package com.dvoraninovich.establishment.model.service;
 
 import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.exception.ServiceException;
-import com.dvoraninovich.establishment.model.entity.Ingredient;
 import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.User;
-import javafx.util.Pair;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -30,6 +28,10 @@ public interface OrderService {
     BigDecimal countOrderFinalPrice(long id) throws ServiceException;
 
     List<Order> findAllUserOrders(long userId) throws ServiceException;
+
+    List<Order> findUserOrders(long userId, long minPos, long maxPos) throws ServiceException;
+
+    Long countUserOrders(long userId) throws ServiceException;
 
     Boolean updateOrderFinalPrice(long id) throws ServiceException;
 }

@@ -35,6 +35,11 @@ public final class SessionAttribute {
     public static final String ADD_INGREDIENT_ERROR = "add_ingredient_error";
     public static final String INGREDIENT_VALIDATION_ERROR = "ingredient_validation_error";
 
+    public static final String MIN_POS = "min_pos";
+    public static final String MAX_POS = "max_pos";
+    public static final String PAGE_ITEMS_AMOUNT = "page_items_amount";
+    public static final String TOTAL_AMOUNT = "total_amount";
+
     public static final String DISH = "dish";
     public static final String DISHES = "dishes";
     public static final String INGREDIENTS = "ingredients";

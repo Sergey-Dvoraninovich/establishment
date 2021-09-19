@@ -22,6 +22,9 @@ public final class RequestParameter {
     public static final String BONUSES_IN_PAYMENT = "bonuses_in_payment";
     public static final String PAYMENT_TYPE = "payment_type";
 
+    public static final String NEW_TOTAL_AMOUNT = "new_total_amount";
+    public static final String ТУЧЕ_TOTAL_AMOUNT = "new_total_amount";
+    public static final String NEW_TOTAL_AMOUNT = "new_total_amount";
     private RequestParameter() {
     }
 }
