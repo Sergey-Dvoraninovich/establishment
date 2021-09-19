@@ -21,7 +21,7 @@
         <div class="container-line">
             <div class="line-item">
                 <div><fmt:message key="basket.order_state"/></div>
-                <div>${order.orderStete}</div>
+                <div>${order.orderState}</div>
             </div>
             <div class="line-item">
                 <div><fmt:message key="basket.order_time"/></div>
@@ -29,7 +29,7 @@
             </div>
             <div class="line-item">
                 <div><fmt:message key="basket.payment_type"/></div>
-                <div>${order.paymentTime}</div>
+                <div>${order.paymentType}</div>
             </div>
             <div class="line-item">
                 <div><fmt:message key="basket.bonuses_in_payment"/></div>
@@ -41,8 +41,8 @@
             </div>
             <div class="line-item">
                 <div class="block-item-action">
-                    <c:url value="/ApiController?command=go_to_order_page" var="order_page"/>
-                    <a href="${order_page}"><fmt:message key="profile.verify_mail"/></a>
+                    <c:url value="/ApiController?command=go_to_order_page&id=${order.id}" var="order_page"/>
+                    <a href="${order_page}"><fmt:message key="details"/></a>
                 </div>
             </div>
         </div>
@@ -50,14 +50,14 @@
     <div class="pagination">
         <c:if test="${sessionScope.min_pos != 1}">
             <div class="block-item-action">
-                <c:url value="/ApiController?go_to_customer_orders&next_min_pos=${sessionScope.max_pos-sessionScope.page_items_amount}&next_max_pos=${sessionScope.max_pos-1}" var="prev_order_page"/>
-                <a href="${prev_order_page}"><fmt:message key="profile.verify_mail"/></a>
+                <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=${sessionScope.min_pos-sessionScope.page_items_amount}&next_max_pos=${sessionScope.min_pos-1}" var="prev_order_page"/>
+                <a href="${prev_order_page}"><fmt:message key="previous"/></a>
             </div>
         </c:if>
         <c:if test="${sessionScope.max_pos != sessionScope.total_amount}">
             <div class="block-item-action">
-                <c:url value="/ApiController?go_to_customer_orders&next_min_pos=${sessionScope.max_pos+1}&next_max_pos=${sessionScope.max_pos+sessionScope.page_items_amount}" var="next_order_page"/>
-                <a href="${next_order_page}"><fmt:message key="profile.verify_mail"/></a>
+                <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=${sessionScope.max_pos+1}&next_max_pos=${sessionScope.max_pos+sessionScope.page_items_amount}" var="next_order_page"/>
+                <a href="${next_order_page}"><fmt:message key="next"/></a>
             </div>
         </c:if>
     </div>

@@ -96,8 +96,8 @@ public class OrderDaoImpl implements OrderDao {
             + "INNER JOIN payment_types "
             + "ON orders.id_payment_type = payment_types.id "
             + "WHERE orders.id_user = ? AND orders_statuses.order_status != 'IN_CREATION' "
-            + "LIMIT ?, ? "
-            + "ORDER_BY orders.order_time desc;";
+            + "ORDER BY orders.order_time DESC "
+            + "LIMIT ?, ?; ";
     private static final String FIND_USER_ORDERS_AMOUNT
             = "SELECT COUNT(orders.id) "
             + "FROM orders "
