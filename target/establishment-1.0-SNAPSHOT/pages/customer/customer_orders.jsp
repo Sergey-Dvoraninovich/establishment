@@ -19,25 +19,30 @@
 <div class="workspace-flex-container">
     <c:forEach var="order" items="${sessionScope.orders}">
         <div class="container-line">
-            <div class="line-item">
-                <div><fmt:message key="basket.order_state"/></div>
-                <div>${order.orderState}</div>
-            </div>
-            <div class="line-item">
+            <c:if test="${order.orderState == 'ACTIVE' || order.orderState == 'COMPLETED'}">
+                <div id="green-state" class="line-item">
+                    <div><fmt:message key="basket.order_state"/></div>
+                    <div>${order.orderState}</div>
+                </div>
+            </c:if>
+            <c:if test="${order.orderState == 'EXPIRED'}">
+                <div id="red-state" class="line-item">
+                    <div><fmt:message key="basket.order_state"/></div>
+                    <div>${order.orderState}</div>
+                </div>
+            </c:if>
+            <c:if test="${order.orderState == 'CREATED'}">
+                <div id="base-state" class="line-item">
+                    <div><fmt:message key="basket.order_state"/></div>
+                    <div>${order.orderState}</div>
+                </div>
+            </c:if>
+            <div id="time-info" class="line-item">
                 <div><fmt:message key="basket.order_time"/></div>
                 <div>${order.orderTime}</div>
             </div>
-            <div class="line-item">
-                <div><fmt:message key="basket.payment_type"/></div>
-                <div>${order.paymentType}</div>
-            </div>
-            <div class="line-item">
-                <div><fmt:message key="basket.bonuses_in_payment"/></div>
-                <div>${order.bonusesInPayment}</div>
-            </div>
-            <div class="line-item">
-                <div><fmt:message key="basket.final_price"/></div>
-                <div>${order.finalPrice}</div>
+            <div id="main-info" class="line-item">
+                <div>${order.finalPrice} <fmt:message key="currency"/> ${order.paymentType} </div>
             </div>
             <div class="line-item">
                 <div class="block-item-action">
@@ -71,14 +76,17 @@
         padding-top: 15px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
+        justify-content: flex-start;
+        align-items: center;
     }
     .container-line {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 5px;
         -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
         -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
         box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
@@ -89,31 +97,59 @@
         box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
     }
     .pagination {
+        margin: 10px;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: flex-start;
     }
     .line-item {
+        padding: 5px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
+        justify-content: flex-start;
+        align-items: center;
+        border-radius: 10px;
     }
     .block-item-action {
-        position: center;
-        border-radius: 10px;
-        margin-top: 15px;
+        width: min-content;
+        margin: 0px;
         padding: 5px;
+        font-size: 25px;
+        border-radius: 10px;
         text-align: center;
-        width: 70%;
         background-color: #a15566;
+    }
+    .block-item-action a {
+        color: #ffffff;
+        font-size: 25px;
     }
     .block-item-action:hover {
         -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
         -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
         box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        background-color: #804451;
+    }
+    #main-info{
+        width: 35%;
+    }
+    #time-info{
+        width: 400px;
+    }
+    #base-state {
+        width: 100px;
+        color: #ffffff;
         background-color: #a15566;
+    }
+    #green-state {
+        width: 100px;
+        color: #ffffff;
+        background-color: #7ba05b;
+    }
+    #red-state {
+        width: 100px;
+        color: #ffffff;
+        background-color: #cf361b;
     }
 
 </style>
