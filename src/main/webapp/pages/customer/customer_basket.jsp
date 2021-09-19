@@ -128,6 +128,11 @@
                     <input formaction="${buy_basket}" formmethod="post"
                            type="submit" value="${basket_price}"/>
                 </div>
+                <c:if test="${sessionScope.you_should_buy_something}">
+                    <div class="local-error">
+                        <p><fmt:message key="basket.you_should_order_smth"/></p>
+                    </div>
+                </c:if>
             </form>
         </div>
     </div>

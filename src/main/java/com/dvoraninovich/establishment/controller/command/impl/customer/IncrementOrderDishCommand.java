@@ -29,7 +29,6 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 public class IncrementOrderDishCommand implements Command {
     private DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
     private OrderService orderService = OrderServiceImpl.getInstance();
-    private DishService dishService = DishServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

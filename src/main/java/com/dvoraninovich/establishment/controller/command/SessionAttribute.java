@@ -58,6 +58,7 @@ public final class SessionAttribute {
     public static final String ID_DISH_LIST_ITEM = "id_dish_list_item";
     public static final String TOO_MANY_BONUSES = "too_many_bonuses";
     public static final String NOT_ENOUGH_BONUSES = "NOT_ENOUGH_BONUSES";
+    public static final String YOU_SHOULD_BUY_SOMETHING = "you_should_buy_something";
 
     private SessionAttribute() {
     }

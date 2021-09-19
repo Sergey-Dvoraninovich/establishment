@@ -59,9 +59,6 @@ public class AddDishToBasketCommand implements Command {
                             .build();
                     dishListItemService.insert(dishListItem);
                 }
-                //Dish dish = dishService.findDishById(dishId).get();
-                //BigDecimal totalPrice = basket.getFinalPrice();
-                //totalPrice.add(dish.getPrice());
                 orderService.update(basket);
                 orderService.updateOrderFinalPrice(basket.getId());
                 dishesAmount = orderService.countDishesAmount(basket.getId());

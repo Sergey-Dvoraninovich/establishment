@@ -37,12 +37,12 @@ public class RecalculatePriceCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
-        Optional<DishListItem> optionalDishListItem = Optional.empty();
-        DishListItem dishListItem;
         Optional<Order> optionalBasket = Optional.empty();
 
         User user = (User) session.getAttribute(USER);
+        session.setAttribute(NOT_ENOUGH_BONUSES, false);
         session.setAttribute(TOO_MANY_BONUSES, false);
+        session.setAttribute(YOU_SHOULD_BUY_SOMETHING, false);
         String newBonusesAmountLine = request.getParameter(BONUSES_IN_PAYMENT);
         BigDecimal newBonusesAmount = new BigDecimal(newBonusesAmountLine);
         Order basket;

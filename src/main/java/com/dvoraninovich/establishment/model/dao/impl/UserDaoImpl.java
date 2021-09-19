@@ -94,7 +94,7 @@ public class UserDaoImpl implements UserDao {
             = "UPDATE users "
             + "SET mail = ?, id_status = ?, id_role = ?, "
             + "card_number = ?, phone_number = ?, bonuses_amount = ?, "
-            + "photo = ?"
+            + "photo = ? "
             + "WHERE id = ?;";
     private static final String DELETE_USER
             = "UPDATE users " +

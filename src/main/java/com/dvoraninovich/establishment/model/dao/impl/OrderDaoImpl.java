@@ -87,6 +87,16 @@ public class OrderDaoImpl implements OrderDao {
             + "ON orders.id_payment_type = payment_types.id "
             + "WHERE orders.id_user = ? AND orders_statuses.order_status = 'IN_CREATION';";
 
+    private static final String FIND_USER_ORDERS
+            = "SELECT orders.id, orders.id_user, orders_statuses.order_status, orders.order_time, orders.finish_time, "
+            + " orders.card_number, payment_types.payment_type, orders.bonuses_in_payment, orders.final_price "
+            + "FROM orders "
+            + "INNER JOIN orders_statuses "
+            + "ON orders.id_order_status = orders_statuses.id "
+            + "INNER JOIN payment_types "
+            + "ON orders.id_payment_type = payment_types.id "
+            + "WHERE orders.id_user = ?;";
+
     private static final String INSERT_ORDER
             = "INSERT orders(id_user, id_order_status, order_time, "
             + "finish_time, card_number, id_payment_type, bonuses_in_payment, final_price) "
@@ -320,6 +330,24 @@ public class OrderDaoImpl implements OrderDao {
             throw new DaoException(e);
         }
         return userHashMap;
+    }
+
+    @Override
+    public List<Order> findAllUserOrders(long userId) throws DaoException {
+        List<Order> orders = new ArrayList<>();
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(FIND_USER_ORDER_IN_CREATION);
+            statement.setLong(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                orders.add(createOrderFromResultSet(resultSet));
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Can't handle finding orders for user with id: " + userId, e);
+        }
+        return orders;
     }
 
     private Order createOrderFromResultSet(ResultSet resultSet) throws SQLException {

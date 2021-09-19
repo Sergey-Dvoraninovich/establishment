@@ -21,6 +21,7 @@ public interface OrderDao extends BaseDao<Long, Order> {
     Optional<Order> findOrderInCreation(long userId) throws DaoException;
     Long insertAndGetId(Order order) throws DaoException;
     HashMap<Order, User> findAllOrdersWithUserinfo() throws DaoException;
+    List<Order> findAllUserOrders(long userId) throws DaoException;
     Long countOrderDishesAmount(long id) throws DaoException;
     BigDecimal countOrderFinalPrice(long id) throws DaoException;
     Boolean updateOrderFinalPrice(long id) throws DaoException;

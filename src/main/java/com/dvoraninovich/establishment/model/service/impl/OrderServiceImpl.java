@@ -10,6 +10,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.Optional;
 
 import static com.dvoraninovich.establishment.model.entity.OrderState.IN_CREATION;
 import static com.dvoraninovich.establishment.model.entity.PaymentType.CASH;
+import static java.time.Instant.MAX;
+import static java.time.Instant.MIN;
 
 public class OrderServiceImpl implements OrderService {
     private static final Logger logger = LogManager.getLogger(OrderServiceImpl.class);
@@ -75,22 +79,20 @@ public class OrderServiceImpl implements OrderService {
         try {
             order = orderDao.findOrderInCreation(customerId);
             if (!order.isPresent()){
+                LocalDateTime defaultOrderTime = LocalDateTime.of(1971, 1, 1, 0, 0, 1);
+                LocalDateTime defaultFinishTime = LocalDateTime.of(2038, 1, 19, 3, 14, 7);
                 Order defaultOrder = Order.builder()
                         .setUserId(customerId)
                         .setOrderState(IN_CREATION)
-                        .setOrderTime(LocalDateTime.now())
-                        .setFinishTime(LocalDateTime.now())
+                        .setOrderTime(defaultOrderTime)
+                        .setFinishTime(defaultFinishTime)
                         .setPaymentType(CASH)
-                        .setBonusesInPayment(new BigDecimal(0.00))
+                        .setBonusesInPayment(new BigDecimal(0))
                         .setFinalPrice(new BigDecimal(0.00))
                         .build();
                 Long orderId = orderDao.insertAndGetId(defaultOrder);
                 defaultOrder.setId(orderId);
                 order = Optional.of(defaultOrder);
-                System.out.println("default order " + defaultOrder);
-            }
-            else {
-                System.out.println("order from db " + order.get());
             }
 
         } catch (DaoException e) {
@@ -122,6 +124,15 @@ public class OrderServiceImpl implements OrderService {
     public BigDecimal countOrderFinalPrice(long id) throws ServiceException {
         try {
             return orderDao.countOrderFinalPrice(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Order> findAllUserOrders(long userId) throws ServiceException {
+        try {
+            return orderDao.findAllUserOrders(userId);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

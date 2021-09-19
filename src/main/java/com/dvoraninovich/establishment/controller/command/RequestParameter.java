@@ -20,6 +20,7 @@ public final class RequestParameter {
     public static final String INGREDIENTS = "ingredients";
     public static final String CODE = "code";
     public static final String BONUSES_IN_PAYMENT = "bonuses_in_payment";
+    public static final String PAYMENT_TYPE = "payment_type";
 
     private RequestParameter() {
     }
