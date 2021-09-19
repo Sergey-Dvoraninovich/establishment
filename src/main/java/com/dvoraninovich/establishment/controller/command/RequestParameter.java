@@ -23,8 +23,8 @@ public final class RequestParameter {
     public static final String PAYMENT_TYPE = "payment_type";
 
     public static final String NEW_TOTAL_AMOUNT = "new_total_amount";
-    public static final String ТУЧЕ_TOTAL_AMOUNT = "new_total_amount";
-    public static final String NEW_TOTAL_AMOUNT = "new_total_amount";
+    public static final String NEXT_MIN_POS = "next_min_pos";
+    public static final String NEXT_MAX_POS = "next_max_pos";
     private RequestParameter() {
     }
 }
