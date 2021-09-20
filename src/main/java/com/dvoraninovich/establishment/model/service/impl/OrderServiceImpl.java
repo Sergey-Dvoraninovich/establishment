@@ -89,8 +89,8 @@ public class OrderServiceImpl implements OrderService {
                         .setOrderTime(defaultOrderTime)
                         .setFinishTime(defaultFinishTime)
                         .setPaymentType(CASH)
-                        .setBonusesInPayment(new BigDecimal(0))
-                        .setFinalPrice(new BigDecimal(0.00))
+                        .setBonusesInPayment(new BigDecimal("0"))
+                        .setFinalPrice(new BigDecimal("0.00"))
                         .build();
                 Long orderId = orderDao.insertAndGetId(defaultOrder);
                 defaultOrder.setId(orderId);

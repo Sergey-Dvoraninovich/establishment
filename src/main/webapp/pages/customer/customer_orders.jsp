@@ -13,34 +13,47 @@
 <div class="workspace-flex-container">
     <c:forEach var="order" items="${sessionScope.orders}">
         <div class="container-line">
-            <c:if test="${order.orderState == 'ACTIVE' || order.orderState == 'COMPLETED'}">
+            <c:if test="${order.orderState == 'ACTIVE'}">
                 <div id="green-state" class="line-item">
                     <div><fmt:message key="basket.order_state"/></div>
-                    <div>${order.orderState}</div>
+                    <div><fmt:message key="order_state.active"/></div>
+                </div>
+            </c:if>
+            <c:if test="${order.orderState == 'COMPLETED'}">
+                <div id="green-state" class="line-item">
+                    <div><fmt:message key="basket.order_state"/></div>
+                    <div><fmt:message key="order_state.completed"/></div>
                 </div>
             </c:if>
             <c:if test="${order.orderState == 'EXPIRED'}">
                 <div id="red-state" class="line-item">
                     <div><fmt:message key="basket.order_state"/></div>
-                    <div>${order.orderState}</div>
+                    <div><fmt:message key="order_state.expired"/></div>
                 </div>
             </c:if>
             <c:if test="${order.orderState == 'CREATED'}">
                 <div id="base-state" class="line-item">
                     <div><fmt:message key="basket.order_state"/></div>
-                    <div>${order.orderState}</div>
+                    <div><fmt:message key="order_state.created"/></div>
                 </div>
             </c:if>
             <div id="time-info" class="line-item">
                 <div><fmt:message key="basket.order_time"/></div>
                 <div>${order.orderTime}</div>
             </div>
-            <div id="main-info" class="line-item">
-                <div>${order.finalPrice} <fmt:message key="currency"/> ${order.paymentType} </div>
-            </div>
+            <c:if test="${order.paymentType == 'CASH'}">
+                <div id="main-info" class="line-item">
+                    <div>${order.finalPrice} <fmt:message key="currency"/> <fmt:message key="payment_type.cash"/></div>
+                </div>
+            </c:if>
+            <c:if test="${order.paymentType == 'CARD'}">
+                <div id="main-info" class="line-item">
+                    <div>${order.finalPrice} <fmt:message key="currency"/> <fmt:message key="payment_type.card"/></div>
+                </div>
+            </c:if>
             <div class="line-item">
                 <div class="block-item-action">
-                    <c:url value="/ApiController?command=go_to_order_page&id=${order.id}" var="order_page"/>
+                    <c:url value="/ApiController?command=go_to_order_page&id_order=${order.id}" var="order_page"/>
                     <a href="${order_page}"><fmt:message key="details"/></a>
                 </div>
             </div>

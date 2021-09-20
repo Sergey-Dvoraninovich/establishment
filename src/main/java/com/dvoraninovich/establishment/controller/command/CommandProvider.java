@@ -54,6 +54,8 @@ public final class CommandProvider {
         commands.put(BUY_BASKET, new BuyBasketCommand());
         commands.put(RECALCULATE_PRICE, new RecalculateOrderPriceCommand());
         commands.put(GO_TO_CUSTOMER_ORDERS, new GoToCustomerOrdersCommand());
+        commands.put(GO_TO_ORDER_PAGE, new GoToOrderPageCommand());
+        commands.put(UPLOAD_USER_PHOTO, new EditProfilePhoto());
     }
 
     public static CommandProvider getInstance() {

@@ -4,6 +4,8 @@
 
 <fmt:setBundle basename="locale" />
 
+<c:set var="edit"><fmt:message key="edit" /></c:set>
+
 <html>
 <head>
     <link href = "../../css/style.css" rel = "style" type = "text/css" />
@@ -34,6 +36,33 @@
                 <c:url value="/ApiController?command=go_to_customer_basket" var="basket_page"/>
                 <a href="${basket_page}"><fmt:message key="profile.basket"/></a>
             </div>
+        </div>
+        <c:url value="/ApiController?command=upload_user_photo&id=${sessionScope.user.id}" var="edit_user_photo"/>
+        <div class="block-item">
+            <div class="block-item-header">
+                <h2><fmt:message key="profile.change_profile_photo"/></h2>
+            </div>
+            <form enctype="multipart/form-data" action="${edit_user_photo}" method="post" id="upload-photo-form">
+                <input type="hidden" name="dish_id" value="${sessionScope.user.id}">
+                <div class="upload-photo-image">
+                    <label for="photo" id="placer">
+                        <img id="upload-image" src="../../images/photo_add.png">
+                    </label>
+                </div>
+                <input style="display:none;" type="file" id="photo" name="photo" >
+                <div id="file-name"></div>
+                <input type="submit" value="${edit}" class="block-item-action" id="upload-photo-submit">
+                <c:if test="${sessionScope.impossible_to_upload_user_photo}">
+                    <div class="local-error">
+                        <p><fmt:message key="profile.impossible_to_upload_user_photo"/></p>
+                    </div>
+                </c:if>
+                <c:if test="${sessionScope.change_profile_photo_error}">
+                    <div class="local-error">
+                        <p><fmt:message key="profile.edit_profile_photo_error"/></p>
+                    </div>
+                </c:if>
+            </form>
         </div>
     </div>
     <div class="workspace-column">
@@ -97,6 +126,28 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('placer').onclick = function(){
+        document.getElementById('files').click();
+    }
+
+    function handleFileSelect(evt) {
+        var files = evt.target.files;
+        for (var i = 0, f; f = files[i]; i++) {
+            if (!f.type.match('image.*')) {
+                continue;
+            }
+            var reader = new FileReader();
+            reader.onload = (function(theFile) {
+                return function(e) {
+                    document.getElementById('upload-image').src = [e.target.result].join('');
+                };
+            })(f);
+            reader.readAsDataURL(f);
+        }
+    }
+    document.getElementById('photo').addEventListener( 'change', handleFileSelect, false);
+</script>
 </body>
 <style>
     .workspace-flex-container {
@@ -162,6 +213,10 @@
         box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
     }
 
+    .local-error {
+        font-size: 15px;
+        color: red;
+    }
     .block-item-header{
         margin: 0px;
         padding: 0px;
@@ -196,6 +251,35 @@
     .block-item-action>a {
         color: #ffffff;
         font-size: 25px;
+    }
+    .upload-photo-image {
+        width: 70%;
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    label {
+        width: inherit;
+        height: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #upload-image {
+        border-radius: 5px;
+        height: inherit;
+        width: auto;
+    }
+    #upload-photo-form {
+        width: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    #upload-photo-submit {
+        width: 70%;
     }
 </style>
 </html>

@@ -25,6 +25,7 @@ public final class PagePath {
 
     public static final String ERROR_PAGE = "/establishment_war_exploded/pages/error/error.jsp";
 
+    public static final String ORDER_PAGE = "/establishment_war_exploded/pages/order.jsp";
     public static final String ORDERS_PAGE = "/establishment_war_exploded/pages/admin/orders/orders.jsp";
     public static final String ADD_ORDER_PAGE = "/establishment_war_exploded/pages/admin/orders/add_order.jsp";
 

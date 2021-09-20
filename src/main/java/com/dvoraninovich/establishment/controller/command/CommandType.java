@@ -39,5 +39,7 @@ public enum CommandType {
     BUY_BASKET,
     RECALCULATE_PRICE,
     GO_TO_CUSTOMER_ORDERS,
+    GO_TO_ORDER_PAGE,
+    UPLOAD_USER_PHOTO,
 
 }

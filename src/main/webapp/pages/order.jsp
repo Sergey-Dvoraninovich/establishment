@@ -4,11 +4,6 @@
 
 <fmt:setBundle basename="locale" />
 
-<c:set var="customer_bonuses">${sessionScope.user.bonusesAmount}</c:set>
-<c:set var="bonuses_in_payment">${sessionScope.order.bonusesInPayment}</c:set>
-<c:set var="recalculate_price_info"><fmt:message key="basket.recalculate_price"/></c:set>
-<c:set var="basket_price"><fmt:message key="basket.buy_for"/> ${sessionScope.order.finalPrice}</c:set>
-
 <html>
 <head>
     <title><fmt:message key="orders.order_title"/></title>
@@ -20,12 +15,36 @@
         <div class="block-item-header">
             <h2><fmt:message key="orders.order_title"/></h2>
         </div>
-        <div class="form-row">
+        <c:if test="${order.orderState == 'ACTIVE'}">
+            <div class="line-item">
+                <div><fmt:message key="basket.order_state"/></div>
+                <div id="green-state-1"><fmt:message key="order_state.active"/></div>
+            </div>
+        </c:if>
+        <c:if test="${order.orderState == 'COMPLETED'}">
+            <div class="line-item">
+                <div><fmt:message key="basket.order_state"/></div>
+                <div id="green-state"><fmt:message key="order_state.completed"/></div>
+            </div>
+        </c:if>
+        <c:if test="${order.orderState == 'EXPIRED'}">
+            <div class="line-item">
+                <div><fmt:message key="basket.order_state"/></div>
+                <div id="red-state"><fmt:message key="order_state.expired"/></div>
+            </div>
+        </c:if>
+        <c:if test="${order.orderState == 'CREATED'}">
+            <div class="line-item">
+                <div><fmt:message key="basket.order_state"/></div>
+                <div id="base-state"><fmt:message key="order_state.created"/></div>
+            </div>
+        </c:if>
+        <div class="line-item">
             <div><fmt:message key="basket.order_time"/></div>
             <div>${sessionScope.order.orderTime}</div>
         </div>
         <c:if test="${sessionScope.order.orderState == 'COMPLETED' || sessionScope.order.orderState == 'EXPIRED'}">
-            <div class="form-row">
+            <div class="line-item">
                 <div><fmt:message key="basket.finish_time"/></div>
                 <div>${sessionScope.order.finishTime}</div>
             </div>
@@ -37,18 +56,20 @@
                         <div class="dish-container-column">
                             <div id="icon-container" class="photo-container">
                                 <img class="dish-picture"
-                                     src="../../images/dish/${sessionScope.order_dishes_map.get(dish_list_item.dishId).photo}"
-                                     onerror="this.src='../../images/default_dish.png';">
+                                     src="../images/dish/${sessionScope.order_dishes_map.get(dish_list_item.dishId).photo}"
+                                     onerror="this.src='../images/default_dish.png';">
                             </div>
                         </div>
                         <div class="dish-container-column">
+                            <c:if test="${sessionScope.user.role == 'ADMIN'}">
                             <div class="dish-container-line">
                                 <c:url value="/ApiController?command=delete_order_dish&id_dish_list_item=${dish_list_item.id}&id_order=${sessionScope.order.id}" var="delete_order_dish"/>
                                 <a href="${delete_order_dish}">
                                     <img class="control-picture"
-                                         src="../../images/delete.png">
+                                         src="../images/delete.png">
                                 </a>
                             </div>
+                            </c:if>
                             <div class="dish-container-line">
                                 <div class="dish-text">
                                     <a>
@@ -57,24 +78,58 @@
                                 </div>
                             </div>
                             <div id="amount-control" class="dish-container-line">
+                                <c:if test="${sessionScope.user.role == 'ADMIN'}">
                                 <c:url value="/ApiController?command=decrement_order_dish&id_dish_list_item=${dish_list_item.id}&id_order=${sessionScope.order.id}" var="decrement_order_dish"/>
                                 <a href="${decrement_order_dish}">
                                     <img class="control-picture"
-                                         src="../../images/reduce.png">
+                                         src="../images/reduce.png">
                                 </a>
+                                </c:if>
                                 <div class="dish-text">
                                     <a>${dish_list_item.dishAmount}</a>
                                 </div>
+                                <c:if test="${sessionScope.user.role == 'ADMIN'}">
                                 <c:url value="/ApiController?command=increment_order_dish&id_dish_list_item=${dish_list_item.id}&id_order=${sessionScope.order.id}" var="increment_order_dish"/>
                                 <a href="${increment_order_dish}">
                                     <img class="control-picture"
-                                         src="../../images/add.png">
+                                         src="../images/add.png">
                                 </a>
+                                </c:if>
                             </div>
                         </div>
                     </div>
                 </c:forEach>
             </div>
+        </div>
+        <c:if test="${sessionScope.user.role == 'CUSTOMER'}">
+            <div class="line-item">
+                <c:if test="${sessionScope.order.paymentType == 'CASH'}">
+                    <div class="line-item">
+                        <div><fmt:message key="basket.payment_type"/></div>
+                        <div><fmt:message key="payment_type.cash"/></div>
+                    </div>
+                </c:if>
+                <c:if test="${sessionScope.order.paymentType == 'CARD'}">
+                    <div class="line-item">
+                        <div><fmt:message key="basket.payment_type"/></div>
+                        <div><fmt:message key="payment_type.card"/></div>
+                    </div>
+                </c:if>
+            </div>
+            <div class="line-item">
+                <div class="line-item">
+                    <div><fmt:message key="basket.bonuses_in_payment"/></div>
+                    <div>${sessionScope.order.bonusesInPayment}</div>
+                </div>
+            </div>
+            <div class="line-item">
+                <div class="line-item">
+                    <div><fmt:message key="basket.final_price"/></div>
+                    <div>${sessionScope.order.finalPrice} <fmt:message key="currency"/> </div>
+                </div>
+            </div>
+        </c:if>
+        <c:if test="${sessionScope.user.role == 'ADMIN'}">
             <form>
                 <div class="form-row">
                     <c:if test="${sessionScope.order.paymentType == 'CASH'}">
@@ -137,16 +192,17 @@
                     <input formaction="${buy_basket}" formmethod="post"
                            type="submit" value="${basket_price}"/>
                 </div>
-                <c:if test="${sessionScope.you_should_buy_something}">
+                <c:if test="${sessionScope.order_cant_be_empty}">
                     <div class="local-error">
                         <p><fmt:message key="basket.you_should_order_smth"/></p>
                     </div>
                 </c:if>
             </form>
-        </div>
+        </c:if>
     </div>
 </div>
 </body>
+<%--suppress CssInvalidPropertyValue --%>
 <style>
     .workspace-flex-container {
         margin-top: 35px;
@@ -341,7 +397,7 @@
         justify-content: space-between;
     }
     .dish-container-column {
-        height: inherit;
+        height: 150px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -367,6 +423,46 @@
         width: 30px;
     }
     .dish-text a {
+        font-size: 25px;
+    }
+    #base-state {
+        width: max-content;
+        padding: 5px;
+        border-radius: 5px;
+        color: #ffffff;
+        background-color: #a15566;
+    }
+    #green-state {
+        width: max-content;
+        padding: 5px;
+        border-radius: 5px;
+        color: #ffffff;
+        background-color: #7ba05b;
+    }
+    #green-state-1 {
+        width: max-content;
+        padding: 5px;
+        border-radius: 5px;
+        color: #ffffff;
+        background-color: #7ba05b;
+    }
+    #red-state {
+        width: max-content;
+        padding: 5px;
+        border-radius: 5px;
+        color: #ffffff;
+        background-color: #cf361b;
+    }
+    .line-item {
+        width: -webkit-fill-available;
+        margin: 5px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+    .line-item>div {
+        margin: 0px 10px;
         font-size: 25px;
     }
 </style>

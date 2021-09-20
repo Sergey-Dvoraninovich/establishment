@@ -332,7 +332,7 @@
         justify-content: space-between;
     }
     .dish-container-column {
-        height: inherit;
+        height: 150px;
         display: flex;
         flex-direction: column;
         align-items: center;

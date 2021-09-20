@@ -2,6 +2,7 @@ package com.dvoraninovich.establishment.controller.command;
 
 public final class SessionAttribute {
     public static final String USER = "user";
+    public static final String EDIT_USER = "user";
     public static final String AUTH_ERROR = "auth_error";
     public static final String REGISTRATION_ERROR = "registration_error";
     public static final String EXCEPTION = "exception";
@@ -20,6 +21,7 @@ public final class SessionAttribute {
     public static final String CHANGE_CARD_NUM_ERROR = "change_card_num_error";
     public static final String CHANGE_PROFILE_PHOTO_ERROR = "change_profile_photo_error";
     public static final String USER_VALIDATION_ERROR = "user_validation_error";
+    public static final String IMPOSSIBLE_TO_UPLOAD_USER_PHOTO = "impossible_to_upload_user_photo";
 
     public static final String DIFFERENT_PASSWORDS = "different_passwords";
     public static final String USER_ALREADY_AUTHENTICATED = "user_already_authenticated";
@@ -58,6 +60,7 @@ public final class SessionAttribute {
     public static final String ORDER = "order";
     public static final String ID_ORDER = "id_order";
     public static final String ORDERS = "orders";
+    public static final String ORDER_USER = "order_user";
     public static final String ORDER_DISH_LIST_ITEMS = "order_dish_list_items";
     public static final String ORDERS_WITH_USER_INFO = "orders_with_users_info";
     public static final String ORDER_DISHES_MAP = "order_dishes_map";

@@ -111,7 +111,7 @@ public class User {
         return photo;
     }
 
-    public void setPhoto(String token) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 
@@ -135,7 +135,7 @@ public class User {
     public String toString() {
         final StringBuilder result = new StringBuilder("User{");
         result.append(" id = ").append(id);
-        result.append("login='").append(login).append("'");
+        result.append(", login='").append(login).append("'");
 //        result.append(", passwordHash='").append(passwordHash).append("'");
 //        result.append(", salt='").append(salt).append("'");
         result.append(", role=").append(role);
