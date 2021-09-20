@@ -1,6 +1,7 @@
 package com.dvoraninovich.establishment.model.service.impl;
 
 import com.dvoraninovich.establishment.controller.command.validator.UserValidator;
+import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.exception.ServiceException;
@@ -12,9 +13,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
+
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.ORDER;
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.TOO_MANY_BONUSES;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
@@ -144,13 +149,9 @@ public class UserServiceImpl implements UserService {
         try {
             user = userDao.findUserByLogin(login);
         } catch (DaoException e) {
-            e.printStackTrace();
             logger.error("Can't handle UserService.isLoginUnique", e);
             return false;
         }
-        //TODO remove it
-        System.out.println(login);
-        System.out.println(user);
         return !user.isPresent();
     }
 

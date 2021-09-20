@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.ORDER;
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.TOO_MANY_BONUSES;
 import static com.dvoraninovich.establishment.model.entity.OrderState.IN_CREATION;
 import static com.dvoraninovich.establishment.model.entity.PaymentType.CASH;
 import static java.time.Instant.MAX;
@@ -101,6 +103,16 @@ public class OrderServiceImpl implements OrderService {
         }
         return order;
     }
+
+    @Override
+    public BigDecimal countNewOrderPrice(Order order, BigDecimal newBonusesAmount) throws ServiceException {
+        BigDecimal currentBonusesAmount = order.getBonusesInPayment().divide(new BigDecimal(100));
+        newBonusesAmount = newBonusesAmount.divide(new BigDecimal(100));
+        BigDecimal finalPrice = order.getFinalPrice();
+        BigDecimal resultPrice = finalPrice.add(currentBonusesAmount).subtract(newBonusesAmount);
+        return resultPrice;
+    }
+
 
     @Override
     public HashMap<Order, User> findAllOrdersWithUserinfo() throws ServiceException {

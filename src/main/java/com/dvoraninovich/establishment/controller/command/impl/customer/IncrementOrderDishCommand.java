@@ -5,6 +5,7 @@ import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.DishListItem;
 import com.dvoraninovich.establishment.model.entity.Order;
+import com.dvoraninovich.establishment.model.entity.Role;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.model.service.DishListItemService;
 import com.dvoraninovich.establishment.model.service.DishService;
@@ -19,12 +20,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dvoraninovich.establishment.controller.command.PagePath.CUSTOMER_BASKET;
-import static com.dvoraninovich.establishment.controller.command.PagePath.ERROR_PAGE;
+import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.FORWARD;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.EXCEPTION;
+import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
+import static com.dvoraninovich.establishment.model.entity.Role.CUSTOMER;
 
 public class IncrementOrderDishCommand implements Command {
     private DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
@@ -36,19 +38,21 @@ public class IncrementOrderDishCommand implements Command {
         HttpSession session = request.getSession();
         Optional<DishListItem> optionalDishListItem = Optional.empty();
         DishListItem dishListItem;
-        Optional<Order> optionalBasket = Optional.empty();
+        Optional<Order> optionalOrder = Optional.empty();
+        Order order;
 
         User user = (User) session.getAttribute(USER);
         Long dishesAmount = (Long) session.getAttribute(DISHES_IN_BASKET);
         List<DishListItem> dishListItems = (List<DishListItem>) session.getAttribute(ORDER_DISH_LIST_ITEMS);
-        String id = request.getParameter(ID_DISH_LIST_ITEM);
-        Long dishListItemId = Long.parseLong(id);
-        Order basket;
+        String dishListItemIdLine = request.getParameter(ID_DISH_LIST_ITEM);
+        String orderIdLine = request.getParameter(ID_ORDER);
 
         try {
-            optionalBasket = orderService.getCustomerBasket(user.getId());
-            if (optionalBasket.isPresent()) {
-                basket = optionalBasket.get();
+            Long dishListItemId = Long.parseLong(dishListItemIdLine);
+            Long orderId = Long.parseLong(orderIdLine);
+            optionalOrder = orderService.findById(orderId);
+            if (optionalOrder.isPresent()) {
+                order = optionalOrder.get();
                 optionalDishListItem = dishListItemService.findById(dishListItemId);
                 if (optionalDishListItem.isPresent()) {
                     dishListItem = optionalDishListItem.get();
@@ -56,16 +60,28 @@ public class IncrementOrderDishCommand implements Command {
                     dishListItem.setDishAmount(dishListItem.getDishAmount() + 1);
                     dishListItemService.update(dishListItem);
                     dishListItems.add(dishListItem);
+                    session.setAttribute(ORDER_DISH_LIST_ITEMS, dishListItems);
                 }
-                BigDecimal finalPrice = orderService.countOrderFinalPrice(basket.getId());
-                basket.setFinalPrice(finalPrice);
-                orderService.update(basket);
-                dishesAmount = orderService.countDishesAmount(basket.getId());
-                session.setAttribute(ORDER, basket);
+                BigDecimal finalPrice = orderService.countOrderFinalPrice(order.getId());
+                order.setFinalPrice(finalPrice);
+                orderService.update(order);
+                dishesAmount = orderService.countDishesAmount(order.getId());
+                session.setAttribute(ORDER, order);
             }
-            session.setAttribute(ORDER_DISH_LIST_ITEMS, dishListItems);
-            session.setAttribute(DISHES_IN_BASKET, dishesAmount);
-            router = new Router(CUSTOMER_BASKET, REDIRECT);
+            switch (user.getRole()) {
+                case ADMIN: {
+                    router = new Router(ORDER + "?id_order=" + orderIdLine, REDIRECT);
+                    break;
+                }
+                case CUSTOMER: {
+                    session.setAttribute(DISHES_IN_BASKET, dishesAmount);
+                    router = new Router(CUSTOMER_BASKET, REDIRECT);
+                    break;
+                }
+                default: {
+                    router = new Router(INDEX, REDIRECT);
+                }
+            }
         } catch (ServiceException e) {
             e.printStackTrace();
             session.setAttribute(EXCEPTION, e);

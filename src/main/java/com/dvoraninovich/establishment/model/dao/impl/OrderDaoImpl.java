@@ -180,7 +180,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public BigDecimal countOrderFinalPrice(long id) throws DaoException {
-        BigDecimal finalPrice = new BigDecimal(0);
+        BigDecimal finalPrice = new BigDecimal("0.00");
         try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
         ) {
             PreparedStatement statement = connection.prepareStatement(COUNT_ORDER_FINAL_PRICE);
@@ -189,7 +189,12 @@ public class OrderDaoImpl implements OrderDao {
 
             if (resultSet.next()) {
                 finalPrice = resultSet.getBigDecimal(1);
-                finalPrice.setScale(2);
+                if (finalPrice != null) {
+                    finalPrice.setScale(2);
+                }
+                else {
+                    finalPrice = new BigDecimal("0.00");
+                }
             }
         } catch (DatabaseException | SQLException e) {
             throw new DaoException("Can't handle counting final price for order with id: " + id, e);
@@ -204,7 +209,7 @@ public class OrderDaoImpl implements OrderDao {
         ) {
             PreparedStatement statement = connection.prepareStatement(FIND_USER_ORDERS);
             statement.setLong(1, userId);
-            statement.setLong(2, minPos);
+            statement.setLong(2, minPos-1);
             statement.setLong(3, maxPos);
             ResultSet resultSet = statement.executeQuery();
 
@@ -237,7 +242,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Boolean updateOrderFinalPrice(long id) throws DaoException {
-        BigDecimal finalPrice;
+        BigDecimal finalPrice = new BigDecimal("0.00");
         Boolean successfulOperation = false;
         try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
         ) {
@@ -247,6 +252,7 @@ public class OrderDaoImpl implements OrderDao {
 
             if (resultSet.next()) {
                 finalPrice = resultSet.getBigDecimal(1);
+                finalPrice = finalPrice == null ? new BigDecimal("0.00") : finalPrice;
                 statement = connection.prepareStatement(UPDATE_ORDER_FINAL_PRICE);
                 statement.setBigDecimal(1, finalPrice);
                 statement.setLong(2, id);

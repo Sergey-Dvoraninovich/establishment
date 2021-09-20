@@ -6,7 +6,7 @@ import com.dvoraninovich.establishment.controller.command.impl.admin.dish.*;
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.CreateIngredientCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToCreateIngredientPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToIngredientsPageCommand;
-import com.dvoraninovich.establishment.controller.command.impl.admin.order.GoToOrdersPageCommand;
+import com.dvoraninovich.establishment.controller.command.impl.admin.order.*;
 import com.dvoraninovich.establishment.controller.command.impl.admin.user.GoToUsersPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.customer.*;
 
@@ -52,7 +52,7 @@ public final class CommandProvider {
         commands.put(DECREMENT_ORDER_DISH, new DecrementOrderDishCommand());
         commands.put(DELETE_ORDER_DISH, new DeleteOrderDishCommand());
         commands.put(BUY_BASKET, new BuyBasketCommand());
-        commands.put(RECALCULATE_PRICE, new RecalculatePriceCommand());
+        commands.put(RECALCULATE_PRICE, new RecalculateOrderPriceCommand());
         commands.put(GO_TO_CUSTOMER_ORDERS, new GoToCustomerOrdersCommand());
     }
 

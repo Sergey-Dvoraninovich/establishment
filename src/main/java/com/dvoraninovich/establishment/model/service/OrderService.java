@@ -34,4 +34,6 @@ public interface OrderService {
     Long countUserOrders(long userId) throws ServiceException;
 
     Boolean updateOrderFinalPrice(long id) throws ServiceException;
+
+    BigDecimal countNewOrderPrice(Order order, BigDecimal newBonusesAmount) throws ServiceException;
 }

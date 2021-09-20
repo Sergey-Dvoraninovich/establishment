@@ -34,7 +34,7 @@
                     </div>
                     <div class="dish-container-column">
                         <div class="dish-container-line">
-                            <c:url value="/ApiController?command=delete_order_dish&id_dish_list_item=${dish_list_item.id}" var="delete_order_dish"/>
+                            <c:url value="/ApiController?command=delete_order_dish&id_dish_list_item=${dish_list_item.id}&id_order=${sessionScope.order.id}" var="delete_order_dish"/>
                             <a href="${delete_order_dish}">
                                 <img class="control-picture"
                                      src="../../images/delete.png">
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div id="amount-control" class="dish-container-line">
-                            <c:url value="/ApiController?command=decrement_order_dish&id_dish_list_item=${dish_list_item.id}" var="decrement_order_dish"/>
+                            <c:url value="/ApiController?command=decrement_order_dish&id_dish_list_item=${dish_list_item.id}&id_order=${sessionScope.order.id}" var="decrement_order_dish"/>
                             <a href="${decrement_order_dish}">
                             <img class="control-picture"
                                  src="../../images/reduce.png">
@@ -56,7 +56,7 @@
                             <div class="dish-text">
                             <a>${dish_list_item.dishAmount}</a>
                             </div>
-                            <c:url value="/ApiController?command=increment_order_dish&id_dish_list_item=${dish_list_item.id}" var="increment_order_dish"/>
+                            <c:url value="/ApiController?command=increment_order_dish&id_dish_list_item=${dish_list_item.id}&id_order=${sessionScope.order.id}" var="increment_order_dish"/>
                             <a href="${increment_order_dish}">
                             <img class="control-picture"
                                  src="../../images/add.png">
@@ -108,7 +108,7 @@
                 </div>
                 <c:url value="/ApiController?command=recalculate_price" var="recalculate_price"/>
                 <a href="${recalculate_price}"><fmt:message key="basket.recalculate_price"/></a>
-                <c:url value="/ApiController?command=recalculate_price" var="recalculate_price"/>
+                <c:url value="/ApiController?command=recalculate_price&id_order=${sessionScope.order.id}" var="recalculate_price"/>
                 <div>
                     <input formaction="${recalculate_price}" formmethod="post"
                            type="submit" value="${recalculate_price_info}"/>

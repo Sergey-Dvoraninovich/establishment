@@ -56,6 +56,7 @@ public final class SessionAttribute {
     public static final String IMPOSSIBLE_TO_UPLOAD_DISH_PHOTO = "impossible_to_upload_dish_photo";
 
     public static final String ORDER = "order";
+    public static final String ID_ORDER = "id_order";
     public static final String ORDERS = "orders";
     public static final String ORDER_DISH_LIST_ITEMS = "order_dish_list_items";
     public static final String ORDERS_WITH_USER_INFO = "orders_with_users_info";

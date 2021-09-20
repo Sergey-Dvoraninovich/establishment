@@ -4,12 +4,6 @@
 
 <fmt:setBundle basename="locale" />
 
-<c:set var="customer_bonuses">${sessionScope.user.bonusesAmount}</c:set>
-<c:set var="bonuses_in_payment">${sessionScope.order.bonusesInPayment}</c:set>
-<c:set var="recalculate_price_info"><fmt:message key="basket.recalculate_price"/></c:set>
-<c:set var="basket_price"><fmt:message key="basket.buy_for"/> ${sessionScope.order.finalPrice}</c:set>
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title><fmt:message key="profile.orders_title"/></title>
@@ -151,6 +145,5 @@
         color: #ffffff;
         background-color: #cf361b;
     }
-
 </style>
 </html>
