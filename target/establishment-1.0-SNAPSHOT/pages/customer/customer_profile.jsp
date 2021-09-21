@@ -14,10 +14,10 @@
 <body>
 <jsp:include page="../shared/header.jsp" />
 <div class="workspace-flex-container">
-    <div class="workspace-column">
+    <div id="profile" class="workspace-column">
         <div id="icon" class="block-item">
             <img class="profile-picture"
-                 src="../../images/${sessionScope.user.photo}"
+                 src="../../images/user/${sessionScope.user.photo}"
                  onerror="this.src='../../images/default_profile.png';">
         </div>
         <div class="block-item">
@@ -171,6 +171,10 @@
         font: 15px 'Roboto', Arial, Helvetica, sans-serif;
         margin: 25px;
     }
+    #profile {
+        padding: 0px;
+        width: 250px;
+    }
     a {
         font-size: 15px;
         text-decoration: none;
@@ -181,6 +185,22 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
+    }
+    input[type="submit"]{
+        font-size: 20px;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        padding: 5px;
+        text-align: center;
+        width: 100%;
+        background-color: #a15566;
+    }
+    input[type="submit"]:hover {
+        background-color: #804451;
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
     }
     .row-item-flexbox{
         display: flex;
@@ -195,7 +215,7 @@
     .block-item{
         border-radius: 10px;
         padding: 10px;
-        margin: 10px;
+        margin: 10px 0px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -216,18 +236,25 @@
     .local-error {
         font-size: 15px;
         color: red;
+        padding-bottom: 0px;
     }
     .block-item-header{
+        text-align: center;
         margin: 0px;
-        padding: 0px;
+        padding: 5px 0px 0px 0px;
     }
     .block-item-header>h2{
+        margin: 0px;
+        padding: 0px;
+        text-align: center;
         color: #000000;
-        font-size: 30px;
+        font-size: 25px;
     }
     .block-item-text{
+        text-align: center;
     }
     .block-item-text>a{
+        text-align: center;
         color: #4d4d4d;
         font-size: 20px;
     }

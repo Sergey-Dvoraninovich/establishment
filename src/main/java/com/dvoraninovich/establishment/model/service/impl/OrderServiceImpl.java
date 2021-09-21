@@ -115,9 +115,9 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public HashMap<Order, User> findAllOrdersWithUserinfo() throws ServiceException {
+    public HashMap<Order, User> findOrdersWithUsersLimit(long minPos, long maxPos) throws ServiceException {
         try {
-            return orderDao.findAllOrdersWithUserinfo();
+            return orderDao.findOrdersWithUsersLimit(minPos, maxPos);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
@@ -172,6 +172,15 @@ public class OrderServiceImpl implements OrderService {
     public Boolean updateOrderFinalPrice(long id) throws ServiceException {
         try {
             return orderDao.updateOrderFinalPrice(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Long countOrders() throws ServiceException {
+        try {
+            return orderDao.countOrders();
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

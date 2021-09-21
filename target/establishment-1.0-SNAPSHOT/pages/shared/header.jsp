@@ -18,7 +18,7 @@
       </div>
     <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
       <div class="header-block">
-        <c:url value="/ApiController?command=go_to_orders_page" var="orders_page"/>
+        <c:url value="/ApiController?command=go_to_orders_page&next_min_pos=1&next_max_pos=10&new_total_amount=true" var="orders_page"/>
         <a class="header-block-text" href="${orders_page}">
           <fmt:message key="header.orders"/>
         </a>

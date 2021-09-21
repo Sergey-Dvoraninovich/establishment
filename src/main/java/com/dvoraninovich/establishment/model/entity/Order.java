@@ -124,14 +124,14 @@ public class Order {
         int result = 1;
 
         result = result * 31 + Long.hashCode(id);
-        result = result * 31 + orderState.hashCode();
-        result = result * 31 + finishTime.hashCode();
+        result = result * 31 + (orderState != null ? orderState.hashCode() : 0);
+        result = result * 31 + (finishTime != null ? finishTime.hashCode() : 0);
         result = result * 31 + (orderTime != null ? orderTime.hashCode() : 0);
-        result = result * 31 + paymentType.hashCode();
-        result = result * 31 + cardNumber.hashCode();
+        result = result * 31 + (paymentType != null ? paymentType.hashCode() : 0);
+        result = result * 31 + (cardNumber != null ? cardNumber.hashCode() : 0);
         result = result * 31 + Long.hashCode(userId);
-        result = result * 31 + bonusesInPayment.hashCode();
-        result = result * 31 + finalPrice.hashCode();
+        result = result * 31 + (bonusesInPayment != null ? bonusesInPayment.hashCode() : 0);
+        result = result * 31 + (finalPrice != null ? finalPrice.hashCode() : 0);
 
         return result;
     }

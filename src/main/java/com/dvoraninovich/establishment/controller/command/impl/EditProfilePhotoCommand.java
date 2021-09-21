@@ -26,7 +26,7 @@ import static com.dvoraninovich.establishment.controller.command.Router.RouterTy
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.model.entity.Role.CUSTOMER;
 
-public class EditProfilePhoto implements Command {
+public class EditProfilePhotoCommand implements Command {
     private static final Logger logger = LogManager.getLogger(EditDishPhoto.class);
     UserService userService = UserServiceImpl.getInstance();
     FileUploadService fileUploadService = FileUploadServiceImpl.getInstance();
@@ -60,7 +60,7 @@ public class EditProfilePhoto implements Command {
                 else {
                     System.out.println(photoName);
                     targetUser.setPhoto(photoName);
-                    System.out.println(user);
+                    System.out.println(targetUser);
                     boolean updateResult = userService.updateUser(targetUser);
                     System.out.println(updateResult);
                     if (!updateResult) {

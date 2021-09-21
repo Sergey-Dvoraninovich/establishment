@@ -4,138 +4,178 @@
 
 <fmt:setBundle basename="locale" />
 
-<c:set var="login_submit"><fmt:message key="login.login" /></c:set>
-
 <html>
 <head>
-    <title><fmt:message key="login.login" /></title>
+    <title><fmt:message key="profile.orders_title"/></title>
 </head>
 <body>
 <jsp:include page="../../shared/header.jsp" />
-<c:forEach var="orders_info" items="${sessionScope.orders_with_user_info}">
-    <div class="form-row">
-        <div>
-                ${orders_info.getKey.userId}
-                ${orders_info.getKey.finalPrice}
-                ${orders_info.getValue.login}
+<div class="workspace-flex-container">
+    <c:forEach var="order" items="${sessionScope.orders}">
+        <div class="container-line">
+            <div class="line-item">
+                <div class="user-info">
+                    <a>
+                        <div>
+                            <img class="profile-picture"
+                                 src="../../../images/user/${sessionScope.orders_users_map.get(order).photo}"
+                                 onerror="this.src='../../../images/default_profile.png';">
+                        </div>
+                        <div>
+                            ${sessionScope.orders_users_map.get(order).login}
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <c:if test="${order.orderState == 'ACTIVE'}">
+                <div id="green-state" class="line-item">
+                    <div><fmt:message key="basket.order_state"/></div>
+                    <div><fmt:message key="order_state.active"/></div>
+                </div>
+            </c:if>
+            <c:if test="${order.orderState == 'COMPLETED'}">
+                <div id="green-state" class="line-item">
+                    <div><fmt:message key="basket.order_state"/></div>
+                    <div><fmt:message key="order_state.completed"/></div>
+                </div>
+            </c:if>
+            <c:if test="${order.orderState == 'EXPIRED'}">
+                <div id="red-state" class="line-item">
+                    <div><fmt:message key="basket.order_state"/></div>
+                    <div><fmt:message key="order_state.expired"/></div>
+                </div>
+            </c:if>
+            <c:if test="${order.orderState == 'CREATED'}">
+                <div id="base-state" class="line-item">
+                    <div><fmt:message key="basket.order_state"/></div>
+                    <div><fmt:message key="order_state.created"/></div>
+                </div>
+            </c:if>
+            <div id="time-info" class="line-item">
+                <div><fmt:message key="basket.order_time"/></div>
+                <div>${order.orderTime}</div>
+            </div>
+            <c:if test="${order.paymentType == 'CASH'}">
+                <div id="main-info" class="line-item">
+                    <div>${order.finalPrice} <fmt:message key="currency"/> <fmt:message key="payment_type.cash"/></div>
+                </div>
+            </c:if>
+            <c:if test="${order.paymentType == 'CARD'}">
+                <div id="main-info" class="line-item">
+                    <div>${order.finalPrice} <fmt:message key="currency"/> <fmt:message key="payment_type.card"/></div>
+                </div>
+            </c:if>
+            <div class="line-item">
+                <div class="block-item-action">
+                    <c:url value="/ApiController?command=go_to_order_page&id_order=${order.id}" var="order_page"/>
+                    <a href="${order_page}"><fmt:message key="details"/></a>
+                </div>
+            </div>
         </div>
+    </c:forEach>
+    <div class="pagination">
+        <c:if test="${sessionScope.min_pos != 1}">
+            <div class="block-item-action">
+                <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=${sessionScope.min_pos-sessionScope.page_items_amount}&next_max_pos=${sessionScope.min_pos-1}" var="prev_order_page"/>
+                <a href="${prev_order_page}"><fmt:message key="previous"/></a>
+            </div>
+        </c:if>
+        <c:if test="${sessionScope.max_pos != sessionScope.total_amount}">
+            <div class="block-item-action">
+                <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=${sessionScope.max_pos+1}&next_max_pos=${sessionScope.max_pos+sessionScope.page_items_amount}" var="next_order_page"/>
+                <a href="${next_order_page}"><fmt:message key="next"/></a>
+            </div>
+        </c:if>
     </div>
-</c:forEach>
+</div>
 </body>
-<style type="text/css">
-    body {
-        color: #000000;
-        text-decoration: none;
+<style>
+    .workspace-flex-container {
         font: 15px 'Roboto', Arial, Helvetica, sans-serif;
+        font-size: 15px;
+        margin-top: 35px;
+        padding-top: 15px;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: flex-start;
         align-items: center;
-        margin-top: 55px;
     }
-    h3 {
-        font-size: 25px;
-    }
-    form {
-        width: 250px;
+    .container-line {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
         border-radius: 10px;
-        padding: 10px;
         margin: 10px;
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-    }
-    form:hover {
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-    }
-    input[type=text]{
-        width:100%;
-        border:2px solid #aaa;
-        border-radius:5px;
-        margin:8px 0;
-        outline:none;
-        padding:8px;
-        box-sizing:border-box;
-        transition:.3s;
-    }
-    input[type=text]:focus{
-        border-color:#a15566;
-        box-shadow:0 0 8px 0 #a15566;
-    }
-    input[type=password]{
-        width:100%;
-        border:2px solid #aaa;
-        border-radius:5px;
-        margin:8px 0;
-        outline:none;
-        padding:8px;
-        box-sizing:border-box;
-        transition:.3s;
-    }
-    input[type=password]:focus{
-        border-color:#a15566;
-        box-shadow:0 0 8px 0 #a15566;
-    }
-    input[type="submit"]{
-        font-size: 20px;
-        color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        margin-top: 15px;
         padding: 5px;
-        text-align: center;
-        width: 100%;
-        background-color: #a15566;
-    }
-    input[type="submit"]:hover {
-        background-color: #804451;
-    }
-    .alert {
-        font-size: 15px;
-        color: red;
-    }
-    .block-item {
-        width: 250px;
-        border-radius: 10px;
-        padding: 10px;
-        margin: 10px;
         -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
         -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
         box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
     }
-    .block-item:hover {
+    .container-line:hover{
         -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
         -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
         box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
     }
-    .block-item-header>a {
-        font-size: 15px;
+    .pagination {
+        margin: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
     }
-    .block-item-text {
-        margin-right: 5px;
-        margin-left: 5px;
-    }
-    .block-item-text>a{
-        color: #4d4d4d;
-        font-size: 15px;
+    .line-item {
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        border-radius: 10px;
     }
     .block-item-action {
-        color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        margin-top: 15px;
+        width: min-content;
+        margin: 0px;
         padding: 5px;
+        font-size: 25px;
+        border-radius: 10px;
         text-align: center;
-        width: 100%;
         background-color: #a15566;
     }
+    .profile-picture {
+        height: 50px;
+        width: 50px;
+        border-radius: 25px;
+    }
+    .block-item-action a {
+        color: #ffffff;
+        font-size: 25px;
+    }
     .block-item-action:hover {
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
         background-color: #804451;
     }
-    .block-item-action>a{
-        font-size: 20px;
+    #main-info{
+        width: 35%;
+    }
+    #time-info{
+        width: 400px;
+    }
+    #base-state {
+        width: 100px;
+        color: #ffffff;
+        background-color: #a15566;
+    }
+    #green-state {
+        width: 100px;
+        color: #ffffff;
+        background-color: #7ba05b;
+    }
+    #red-state {
+        width: 100px;
+        color: #ffffff;
+        background-color: #cf361b;
     }
 </style>
 </html>

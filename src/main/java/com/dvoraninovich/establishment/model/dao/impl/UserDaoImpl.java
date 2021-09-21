@@ -206,7 +206,8 @@ public class UserDaoImpl implements UserDao {
             statement.setBigDecimal(6, user.getBonusesAmount());
             statement.setString(7, user.getPhoto());
             statement.setLong(8, user.getId());
-            successfulOperation = statement.execute();
+            Integer rowsNum = statement.executeUpdate();
+            successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
             throw new DaoException("Error while updating user with login: " + user.getLogin(), e);
         }
@@ -220,7 +221,8 @@ public class UserDaoImpl implements UserDao {
         ) {
             PreparedStatement statement = connection.prepareStatement(DELETE_USER);
             statement.setLong(1, id);
-            successfulOperation = statement.execute();
+            Integer rowsNum = statement.executeUpdate();
+            successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
             throw new DaoException("Error while deleting user with id: " + id, e);
         }

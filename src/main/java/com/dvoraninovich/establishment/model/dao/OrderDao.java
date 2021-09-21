@@ -18,13 +18,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OrderDao extends BaseDao<Long, Order> {
-    Optional<Order> findOrderInCreation(long userId) throws DaoException;
     Long insertAndGetId(Order order) throws DaoException;
-    HashMap<Order, User> findAllOrdersWithUserinfo() throws DaoException;
-    List<Order> findAllUserOrders(long userId) throws DaoException;
-    List<Order> findUserOrders(long userId, long minPos, long maxPos) throws DaoException;
+
+    Optional<Order> findOrderInCreation(long userId) throws DaoException;
+
     Long countOrderDishesAmount(long id) throws DaoException;
     BigDecimal countOrderFinalPrice(long id) throws DaoException;
     Boolean updateOrderFinalPrice(long id) throws DaoException;
+
+    Long countOrders() throws DaoException;
+    HashMap<Order, User> findOrdersWithUsersLimit(long minPos, long maxPos) throws DaoException;
+
     Long countUserOrders(long userId) throws DaoException;
+    List<Order> findAllUserOrders(long userId) throws DaoException;
+    List<Order> findUserOrders(long userId, long minPos, long maxPos) throws DaoException;
 }

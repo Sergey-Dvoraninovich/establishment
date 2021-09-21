@@ -60,6 +60,7 @@ public final class SessionAttribute {
     public static final String ORDER = "order";
     public static final String ID_ORDER = "id_order";
     public static final String ORDERS = "orders";
+    public static final String ORDERS_USERS_MAP = "orders_users_map";
     public static final String ORDER_USER = "order_user";
     public static final String ORDER_DISH_LIST_ITEMS = "order_dish_list_items";
     public static final String ORDERS_WITH_USER_INFO = "orders_with_users_info";
