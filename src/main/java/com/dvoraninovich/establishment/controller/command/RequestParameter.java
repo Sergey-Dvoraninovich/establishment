@@ -25,6 +25,11 @@ public final class RequestParameter {
     public static final String NEW_TOTAL_AMOUNT = "new_total_amount";
     public static final String NEXT_MIN_POS = "next_min_pos";
     public static final String NEXT_MAX_POS = "next_max_pos";
+
+    public static final String REQUEST_FILTER_PAYMENT_TYPE = "request_filter_payment_type";
+    public static final String REQUEST_FILTER_MIN_PRICE = "request_filter_min_price";
+    public static final String REQUEST_FILTER_MAX_PRICE = "request_filter_max_price";
+
     private RequestParameter() {
     }
 }

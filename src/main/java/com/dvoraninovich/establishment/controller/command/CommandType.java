@@ -41,5 +41,6 @@ public enum CommandType {
     GO_TO_CUSTOMER_ORDERS,
     GO_TO_ORDER_PAGE,
     UPLOAD_USER_PHOTO,
+    SET_ORDERS_FILTER_PARAMETERS,
 
 }

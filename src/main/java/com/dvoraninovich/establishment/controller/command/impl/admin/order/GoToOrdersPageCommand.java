@@ -24,8 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.dvoraninovich.establishment.controller.command.PagePath.CUSTOMER_ORDERS;
-import static com.dvoraninovich.establishment.controller.command.PagePath.ORDERS_PAGE;
+import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
@@ -39,17 +38,16 @@ public class GoToOrdersPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
+        Router router;
         HttpSession session = request.getSession();
         List<Order> orders = new ArrayList<>();
         HashMap<Long, User> ordersUsersMap = new HashMap<>();
-        //User user = (User) session.getAttribute(USER);
         String minPosLine = request.getParameter(NEXT_MIN_POS);
         String maxPosLine = request.getParameter(NEXT_MAX_POS);
         String newTotalAmountLine = request.getParameter(NEW_TOTAL_AMOUNT);
         Long totalAmount;
 
         try {
-            //System.out.println(minPosLine + "---" + maxPosLine);
             Long minPos = Long.valueOf(minPosLine);
             Long maxPos = Long.valueOf(maxPosLine);
 
@@ -64,23 +62,18 @@ public class GoToOrdersPageCommand implements Command {
 
             maxPos = maxPos > totalAmount ? totalAmount : maxPos;
             HashMap<Order, User> fullInfoHashMap = new HashMap<>();
-            //System.out.println(minPos + "---" + maxPos);
             fullInfoHashMap = orderService.findOrdersWithUsersLimit(minPos, maxPos);
-            //System.out.println(fullInfoHashMap);
             orders.addAll(fullInfoHashMap.keySet());
-//            Order localOrder = orderService.findById(6).get();
-//            User localUser = fullInfoHashMap.get(localOrder);
-//            System.out.println(localUser);
-            //System.out.println(orders);
 
             session.setAttribute(ORDERS, orders);
             session.setAttribute(ORDERS_USERS_MAP, fullInfoHashMap);
             session.setAttribute(MIN_POS, minPos);
             session.setAttribute(MAX_POS, maxPos);
+            router = new Router(ORDERS_PAGE, REDIRECT);
         } catch (ServiceException e) {
-            e.printStackTrace();
             logger.info("Impossible to find user orders", e);
+            router = new Router(ADMIN_PAGE, REDIRECT);
         }
-        return new Router(ORDERS_PAGE, REDIRECT);
+        return router;
     }
 }

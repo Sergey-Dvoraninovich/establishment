@@ -4,12 +4,37 @@
 
 <fmt:setBundle basename="locale" />
 
+<c:set var="find"><fmt:message key="filter.find" /></c:set>
+
 <html>
 <head>
     <title><fmt:message key="profile.orders_title"/></title>
 </head>
 <body>
 <jsp:include page="../../shared/header.jsp" />
+<div class="filter-line">
+    <c:url value="/ApiController?command=set_orders_filter_parameters" var="orders_filter"/>
+    <form action="${orders_filter}" method="post">
+        <div class="form-row">
+            <label for="request_filter_min_price"><fmt:message key="filter.min_price" /></label>
+            <input type="number" name="request_filter_min_price" id="request_filter_min_price"
+                   step="0.01" min="0" value="${request_filter_min_price}"/>
+        </div>
+        <div class="form-row">
+            <label for="request_filter_max_price"><fmt:message key="filter.max_price" /></label>
+            <input type="number" name="request_filter_max_price" id="request_filter_max_price"
+                   step="0.01" min="0" value="${request_filter_max_price}"/>
+        </div>
+        <div>
+            <input type="submit" value="${find}"/>
+            <c:if test="${sessionScope.invalid_filter_parameters}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_filter_params"/></p>
+                </div>
+            </c:if>
+        </div>
+    </form>
+</div>
 <div class="workspace-flex-container">
     <c:forEach var="order" items="${sessionScope.orders}">
         <div class="container-line">
@@ -90,11 +115,69 @@
 </div>
 </body>
 <style>
-    .workspace-flex-container {
+    body {
         font: 15px 'Roboto', Arial, Helvetica, sans-serif;
         font-size: 15px;
-        margin-top: 35px;
-        padding-top: 15px;
+    }
+    .filter-line {
+        margin-top: 75px;
+    }
+    .filter-line>form {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    .filter-line>form>div {
+        width: 20%;
+        margin: 0px 10px;
+    }
+    input[type=text]{
+        width:100%;
+        border:2px solid #aaa;
+        border-radius:5px;
+        margin:8px 0;
+        outline:none;
+        padding:8px;
+        box-sizing:border-box;
+        transition:.3s;
+    }
+    input[type=text]:focus{
+        border-color:#a15566;
+        box-shadow:0 0 8px 0 #a15566;
+    }
+    input[type=number]{
+        width:100%;
+        border:2px solid #aaa;
+        border-radius:5px;
+        margin:8px 0;
+        outline:none;
+        padding:8px;
+        box-sizing:border-box;
+        transition:.3s;
+    }
+    input[type=number]:focus{
+        border-color:#a15566;
+        box-shadow:0 0 8px 0 #a15566;
+    }
+    input[type="submit"]{
+        font-size: 20px;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        margin-top: 15px;
+        padding: 5px;
+        text-align: center;
+        width: 100%;
+        background-color: #a15566;
+    }
+    input[type="submit"]:hover {
+        background-color: #804451;
+    }
+
+    .workspace-flex-container {
+        margin-top: 5px;
+        padding-top: 5px;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;

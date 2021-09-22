@@ -122,6 +122,7 @@ public class OrderDaoImpl implements OrderDao {
             + "SET id_user = ?, id_order_status = ?, order_time = ?, "
             + "finish_time = ?, card_number = ?, id_payment_type = ?, bonuses_in_payment = ?, final_price = ? "
             + "WHERE id = ?;";
+    private static final String WHERE_LINE = "WHERE ";
 
     public static OrderDaoImpl getInstance() {
         return instance;
@@ -289,6 +290,23 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public Long countOrders(String minPriceLine, String maxPriceLine) throws DaoException {
+        Long amount = Long.valueOf(0);
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(COUNT_ORDERS);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                amount = resultSet.getLong(1);
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Can't handle counting order amount", e);
+        }
+        return amount;
+    }
+
+    @Override
     public boolean insert(Order order) throws DaoException {
         boolean successfulOperation = false;
         try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
@@ -413,6 +431,41 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public HashMap<Order, User> findOrdersWithUsersLimit(String minPriceLine, String maxPriceLine, long minPos, long maxPos) throws DaoException {
+        HashMap<Order, User> userHashMap = new HashMap<>();
+        try (Connection connection = connectionPool.acquireConnection()) {
+
+            String requestLine = addFilterParameters(SELECT_ALL_ORDERS_WITH_USER_INFO, minPriceLine, maxPriceLine);
+            PreparedStatement statement = connection.prepareStatement(requestLine);
+            statement.setLong(1, minPos-1);
+            statement.setLong(2, maxPos);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Order order = createOrderFromResultSet(resultSet);
+
+
+                String login = resultSet.getString(USER_LOGIN);
+                String mail = resultSet.getString(USER_MAIL);
+                String phone_number = resultSet.getString(USER_PHONE_NUMBER);
+                String photo = resultSet.getString(USER_PHOTO);
+
+                User user = User.builder()
+                        .setLogin(login)
+                        .setMail(mail)
+                        .setPhoto(photo)
+                        .setPhoneNumber(phone_number)
+                        .build();
+
+                userHashMap.put(order, user);
+            }
+        } catch (SQLException | DatabaseException e) {
+            throw new DaoException("Can't handle OrderDaoImpl.findAllOrdersWithUserinfo request", e);
+        }
+        return userHashMap;
+    }
+
+    @Override
     public List<Order> findAllUserOrders(long userId) throws DaoException {
         List<Order> orders = new ArrayList<>();
         try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
@@ -428,6 +481,20 @@ public class OrderDaoImpl implements OrderDao {
             throw new DaoException("Can't handle finding orders for user with id: " + userId, e);
         }
         return orders;
+    }
+
+    private String addFilterParameters(String requestLine, String minPriceLine, String maxPriceLine){
+        StringBuilder filterString = new StringBuilder("");
+        if (!minPriceLine.equals("")){
+            filterString.append(ORDER_FINAL_PRICE + " >= " + minPriceLine + " AND ");
+        }
+        if (!maxPriceLine.equals("")){
+            filterString.append(ORDER_FINAL_PRICE + " >= " + maxPriceLine + " AND ");
+        }
+        Integer wherePos = requestLine.indexOf(WHERE_LINE);
+        StringBuilder resultString = new StringBuilder(requestLine);
+        resultString.insert(wherePos + WHERE_LINE.length(), filterString);
+        return resultString.toString();
     }
 
     private Order createOrderFromResultSet(ResultSet resultSet) throws SQLException {

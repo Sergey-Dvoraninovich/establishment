@@ -124,6 +124,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Long countFilteredOrders(String minPriceLine, String maxPriceLine) throws ServiceException {
+        try {
+            return orderDao.countOrders(minPriceLine, maxPriceLine);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public HashMap<Order, User> findFilteredOrdersWithUsers(String minPriceLine, String maxPriceLine, long minPos, long maxPos) throws ServiceException {
+        try {
+            return orderDao.findOrdersWithUsersLimit(minPriceLine, maxPriceLine, minPos, maxPos);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public Long countDishesAmount(long orderId) throws ServiceException {
         try {
             return orderDao.countOrderDishesAmount(orderId);
