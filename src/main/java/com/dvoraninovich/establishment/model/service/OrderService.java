@@ -1,6 +1,5 @@
 package com.dvoraninovich.establishment.model.service;
 
-import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.User;

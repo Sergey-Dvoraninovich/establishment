@@ -39,20 +39,20 @@ public class OrderValidator {
         if (!minPriceLine.equals("")) {
             BigDecimal minPrice = new BigDecimal(minPriceLine);
             currentResult = minPrice.compareTo(new BigDecimal("0.00")) < 0;
-            validationMessages.put(INVALID_MIN_PRICE, !currentResult);
+            validationMessages.put(INVALID_MIN_PRICE, currentResult);
         }
 
         if (!maxPriceLine.equals("")) {
             BigDecimal maxPrice = new BigDecimal(maxPriceLine);
             currentResult = maxPrice.compareTo(new BigDecimal("0.00")) < 0;
-            validationMessages.put(INVALID_MAX_PRICE, !currentResult);
+            validationMessages.put(INVALID_MAX_PRICE, currentResult);
         }
 
         if (!maxPriceLine.equals("")) {
             BigDecimal minPrice = new BigDecimal(minPriceLine);
             BigDecimal maxPrice = new BigDecimal(maxPriceLine);
             currentResult = maxPrice.compareTo(minPrice) < 0;
-            validationMessages.put(INVALID_FILTER_PARAMETERS, !currentResult);
+            validationMessages.put(INVALID_FILTER_PARAMETERS, currentResult);
         }
 
         return validationMessages;

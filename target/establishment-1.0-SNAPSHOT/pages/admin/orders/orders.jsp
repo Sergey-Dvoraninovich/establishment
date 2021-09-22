@@ -6,6 +6,9 @@
 
 <c:set var="find"><fmt:message key="filter.find" /></c:set>
 
+<c:set var="request_filter_min_price">${sessionScope.orders_filter_min_price}</c:set>
+<c:set var="request_filter_max_price">${sessionScope.orders_filter_max_price}</c:set>
+
 <html>
 <head>
     <title><fmt:message key="profile.orders_title"/></title>
@@ -15,17 +18,65 @@
 <div class="filter-line">
     <c:url value="/ApiController?command=set_orders_filter_parameters" var="orders_filter"/>
     <form action="${orders_filter}" method="post">
-        <div class="form-row">
+        <div id="order-states" class="form-row">
+            <div class="checkbox-container">
+                <div><fmt:message key="orders.order_states"/></div>
+                <div>
+                    <div class="form-checkbox-btn">
+                        <input id="check-created" type="checkbox" name="payment_type" value="CREATED">
+                        <label for="check-created"><fmt:message key="order_state.created"/></label>
+                    </div>
+                    <div class="form-checkbox-btn">
+                        <input id="check-active" type="checkbox" name="payment_type" value="ACTIVE">
+                        <label for="check-active"><fmt:message key="order_state.active"/></label>
+                    </div>
+                    <div class="form-checkbox-btn">
+                        <input id="check-completed" type="checkbox" name="payment_type" value="COMPLETED">
+                        <label for="check-completed"><fmt:message key="order_state.completed"/></label>
+                    </div>
+                    <div class="form-checkbox-btn">
+                        <input id="check-expired" type="checkbox" name="payment_type" value="EXPIRED">
+                        <label for="check-expired"><fmt:message key="order_state.expired"/></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="min-price" class="form-row">
             <label for="request_filter_min_price"><fmt:message key="filter.min_price" /></label>
             <input type="number" name="request_filter_min_price" id="request_filter_min_price"
-                   step="0.01" min="0" value="${request_filter_min_price}"/>
+                   step="0.01" min="0" value="${request_filter_min_price}" placeholder="${request_filter_min_price}"/>
+            <c:if test="${sessionScope.invalid_min_price}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_filter_params"/></p>
+                </div>
+            </c:if>
         </div>
-        <div class="form-row">
+        <div id="max-price" class="form-row">
             <label for="request_filter_max_price"><fmt:message key="filter.max_price" /></label>
             <input type="number" name="request_filter_max_price" id="request_filter_max_price"
-                   step="0.01" min="0" value="${request_filter_max_price}"/>
+                   step="0.01" min="0" value="${request_filter_max_price}" placeholder="${request_filter_max_price}"/>
+            <c:if test="${sessionScope.invalid_max_price}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_filter_params"/></p>
+                </div>
+            </c:if>
         </div>
-        <div>
+        <div class="form-row">
+            <div class="checkbox-container">
+                <div><fmt:message key="basket.payment_type"/></div>
+                <div>
+                <div class="form-checkbox-btn">
+                    <input id="check-cash" type="checkbox" name="payment_type" value="CASH">
+                    <label for="check-cash"><fmt:message key="cash"/></label>
+                </div>
+                <div class="form-checkbox-btn">
+                    <input id="check-card" type="checkbox" name="payment_type" value="CARD">
+                    <label for="check-card"><fmt:message key="card"/></label>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div id="find-action">
             <input type="submit" value="${find}"/>
             <c:if test="${sessionScope.invalid_filter_parameters}">
                 <div class="local-error">
@@ -38,20 +89,6 @@
 <div class="workspace-flex-container">
     <c:forEach var="order" items="${sessionScope.orders}">
         <div class="container-line">
-            <div class="line-item">
-                <div class="user-info">
-                    <a>
-                        <div>
-                            <img class="profile-picture"
-                                 src="../../../images/user/${sessionScope.orders_users_map.get(order).photo}"
-                                 onerror="this.src='../../../images/default_profile.png';">
-                        </div>
-                        <div>
-                            ${sessionScope.orders_users_map.get(order).login}
-                        </div>
-                    </a>
-                </div>
-            </div>
             <c:if test="${order.orderState == 'ACTIVE'}">
                 <div id="green-state" class="line-item">
                     <div><fmt:message key="basket.order_state"/></div>
@@ -79,6 +116,25 @@
             <div id="time-info" class="line-item">
                 <div><fmt:message key="basket.order_time"/></div>
                 <div>${order.orderTime}</div>
+            </div>
+            <div class="line-item">
+                <div class="user-info">
+                    <div>
+                        <a>
+                            <img class="profile-picture"
+                                 src="../../../images/user/${sessionScope.orders_users_map.get(order).photo}"
+                                 onerror="this.src='../../../images/default_profile.png';">
+                        </a>
+                    </div>
+                    <div class="orders-user-actions">
+                        <div>
+                            <a>${sessionScope.orders_users_map.get(order).login}</a>
+                        </div>
+                        <div class="action">
+                            <a><fmt:message key="orders.orders"/></a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <c:if test="${order.paymentType == 'CASH'}">
                 <div id="main-info" class="line-item">
@@ -118,6 +174,18 @@
     body {
         font: 15px 'Roboto', Arial, Helvetica, sans-serif;
         font-size: 15px;
+    }
+    #min-price {
+        width: 100px;
+    }
+    #max-price {
+        width: 100px;
+    }
+    #find-action {
+        width: 100px;
+    }
+    #order-states {
+        width: 35%;
     }
     .filter-line {
         margin-top: 75px;
@@ -173,6 +241,21 @@
     }
     input[type="submit"]:hover {
         background-color: #804451;
+    }
+    .orders-user-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+    }
+    .user-info {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .user-info>div {
+        margin: 5px;
     }
 
     .workspace-flex-container {
@@ -239,6 +322,22 @@
         box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
         background-color: #804451;
     }
+    .action {
+        margin-top: 5px;
+        padding: 5px;
+        border-radius: 10px;
+        text-align: center;
+        background-color: #a15566;
+    }
+    .action a {
+        color: #ffffff;
+    }
+    .action:hover {
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        background-color: #804451;
+    }
     #main-info{
         width: 35%;
     }
@@ -246,19 +345,57 @@
         width: 400px;
     }
     #base-state {
-        width: 100px;
+        width: 120px;
         color: #ffffff;
         background-color: #a15566;
     }
     #green-state {
-        width: 100px;
+        width: 120px;
         color: #ffffff;
         background-color: #7ba05b;
     }
     #red-state {
-        width: 100px;
+        width: 120px;
         color: #ffffff;
         background-color: #cf361b;
+    }
+
+
+    .checkbox-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .form-checkbox-btn {
+        display: inline-block;
+        margin: 8px 10px;
+        border-radius: 5px;
+        width: -moz-available;
+    }
+    .form-checkbox-btn:hover {
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    }
+    .form-checkbox-btn input[type=checkbox] {
+        display: none;
+    }
+    .form-checkbox-btn label {
+        width: available;
+        display: inline-block;
+        cursor: pointer;
+        padding: 0px 15px;
+        line-height: 34px;
+        border:2px solid #aaa;
+        border-radius: 5px;
+        user-select: none;
+    }
+
+    .form-checkbox-btn input[type=checkbox]:checked + label {
+        color: #ffffff;
+        border:2px solid #804451;
+        background-color: #804451;
     }
 </style>
 </html>

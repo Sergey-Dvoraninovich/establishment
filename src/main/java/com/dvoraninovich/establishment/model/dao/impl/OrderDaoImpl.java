@@ -489,11 +489,12 @@ public class OrderDaoImpl implements OrderDao {
             filterString.append(ORDER_FINAL_PRICE + " >= " + minPriceLine + " AND ");
         }
         if (!maxPriceLine.equals("")){
-            filterString.append(ORDER_FINAL_PRICE + " >= " + maxPriceLine + " AND ");
+            filterString.append(ORDER_FINAL_PRICE + " <= " + maxPriceLine + " AND ");
         }
         Integer wherePos = requestLine.indexOf(WHERE_LINE);
         StringBuilder resultString = new StringBuilder(requestLine);
         resultString.insert(wherePos + WHERE_LINE.length(), filterString);
+        System.out.println(resultString);
         return resultString.toString();
     }
 
@@ -526,47 +527,4 @@ public class OrderDaoImpl implements OrderDao {
 
         return order;
     }
-
-//    private Pair<Order, User> createOrderAndUserFromResultSet(ResultSet resultSet) throws SQLException {
-//        long id = resultSet.getLong(ORDER_ID);
-//        long userId = resultSet.getLong(ORDER_USER_ID);
-//        String orderStatusLine = resultSet.getString(ORDER_ORDER_STATUS);
-//        Timestamp orderTimeTimestamp = resultSet.getTimestamp(ORDER_TIME);
-//        LocalDateTime orderTime = orderTimeTimestamp.toLocalDateTime();
-//        Timestamp finishTimeTimestamp = resultSet.getTimestamp(ORDER_FINISH_TIME);
-//        LocalDateTime finishTime = finishTimeTimestamp.toLocalDateTime();
-//        String cardNumber = resultSet.getString(ORDER_CARD_NUMBER);
-//        String paymentTypeLine = resultSet.getString(ORDER_PAYMENT_TYPE);
-//        BigDecimal bonusesInPayment = resultSet.getBigDecimal(ORDER_BONUSES_IN_PAYMENT);
-//        BigDecimal finalPrice = resultSet.getBigDecimal(ORDER_FINAL_PRICE);
-//        OrderState orderState = OrderState.valueOf(orderStatusLine);
-//        PaymentType paymentType = PaymentType.valueOf(paymentTypeLine);
-//
-//        String login = resultSet.getString(USER_LOGIN);
-//        String mail = resultSet.getString(USER_MAIL);
-//        String phone_number = resultSet.getString(USER_PHONE_NUMBER);
-//        String photo = resultSet.getString(USER_PHOTO);
-//
-//        Order order = Order.builder()
-//                .setId(id)
-//                .setUserId(userId)
-//                .setOrderState(orderState)
-//                .setOrderTime(orderTime)
-//                .setFinishTime(finishTime)
-//                .setCardNumber(cardNumber)
-//                .setPaymentType(paymentType)
-//                .setBonusesInPayment(bonusesInPayment)
-//                .setFinalPrice(finalPrice)
-//                .build();
-//
-//        User user = User.builder()
-//                .setLogin(login)
-//                .setMail(mail)
-//                .setPhoto(photo)
-//                .setPhoneNumber(phone_number)
-//                .build();
-//
-//        return new Pair<>(order, user);
-//    }
-
 }
