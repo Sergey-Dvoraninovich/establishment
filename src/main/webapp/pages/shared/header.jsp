@@ -163,9 +163,9 @@
   #locale-header-block:hover {
   }
   .header-block:hover {
-    -webkit-box-shadow: 4px 4px 9px 0px rgba(161, 85, 102, 0.62) inset;
-    -moz-box-shadow: 4px 4px 9px 0px rgba(161, 85, 102, 0.62) inset;
-    box-shadow: 4px 4px 9px 0px rgba(161, 85, 102, 0.62) inset;
+    -webkit-box-shadow: 0px 5px 20px 8px rgba(34, 60, 80, 0.2) inset;
+    -moz-box-shadow: 0px 5px 20px 8px rgba(34, 60, 80, 0.2) inset;
+    box-shadow: 0px 5px 20px 8px rgba(34, 60, 80, 0.2) inset;
   }
   .header-block-text{
     font-size: 20px;

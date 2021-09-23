@@ -71,10 +71,13 @@ public final class SessionAttribute {
     public static final String NOT_ENOUGH_BONUSES = "NOT_ENOUGH_BONUSES";
     public static final String YOU_SHOULD_BUY_SOMETHING = "you_should_buy_something";
 
-    public static final String ORDERS_FILTER_PAYMENT_TYPE = "orders_filter_payment_type";
+    public static final String ORDERS_FILTER_ORDER_STATES = "orders_filter_order_states";
+    public static final String ORDERS_FILTER_PAYMENT_TYPES = "orders_filter_payment_types";
     public static final String ORDERS_FILTER_MIN_PRICE = "orders_filter_min_price";
     public static final String ORDERS_FILTER_MAX_PRICE = "orders_filter_max_price";
 
+    public static final String INVALID_ORDER_STATES = "invalid_order_states";
+    public static final String INVALID_PAYMENT_TYPES = "invalid_payment_types";
     public static final String INVALID_MIN_PRICE = "invalid_min_price";
     public static final String INVALID_MAX_PRICE = "invalid_max_price";
     public static final String INVALID_FILTER_PARAMETERS = "invalid_filter_parameters";

@@ -23,22 +23,47 @@
                 <div><fmt:message key="orders.order_states"/></div>
                 <div>
                     <div class="form-checkbox-btn">
-                        <input id="check-created" type="checkbox" name="payment_type" value="CREATED">
+                        <c:if test="${sessionScope.orders_filter_order_states.contains('CREATED')}">
+                            <input id="check-created" type="checkbox" name="request_filter_order_states" value="CREATED" checked>
+                        </c:if>
+                        <c:if test="${not sessionScope.orders_filter_order_states.contains('CREATED')}">
+                            <input id="check-created" type="checkbox" name="request_filter_order_states" value="CREATED">
+                        </c:if>
                         <label for="check-created"><fmt:message key="order_state.created"/></label>
                     </div>
                     <div class="form-checkbox-btn">
-                        <input id="check-active" type="checkbox" name="payment_type" value="ACTIVE">
+                        <c:if test="${sessionScope.orders_filter_order_states.contains('ACTIVE')}">
+                            <input id="check-active" type="checkbox" name="request_filter_order_states" value="ACTIVE" checked>
+                        </c:if>
+                        <c:if test="${not sessionScope.orders_filter_order_states.contains('ACTIVE')}">
+                            <input id="check-active" type="checkbox" name="request_filter_order_states" value="ACTIVE">
+                        </c:if>
                         <label for="check-active"><fmt:message key="order_state.active"/></label>
                     </div>
                     <div class="form-checkbox-btn">
-                        <input id="check-completed" type="checkbox" name="payment_type" value="COMPLETED">
+                        <c:if test="${sessionScope.orders_filter_order_states.contains('COMPLETED')}">
+                            <input id="check-completed" type="checkbox" name="request_filter_order_states" value="COMPLETED" checked>
+                        </c:if>
+                        <c:if test="${not sessionScope.orders_filter_order_states.contains('COMPLETED')}">
+                            <input id="check-completed" type="checkbox" name="request_filter_order_states" value="COMPLETED">
+                        </c:if>
                         <label for="check-completed"><fmt:message key="order_state.completed"/></label>
                     </div>
                     <div class="form-checkbox-btn">
-                        <input id="check-expired" type="checkbox" name="payment_type" value="EXPIRED">
+                        <c:if test="${sessionScope.orders_filter_order_states.contains('EXPIRED')}">
+                            <input id="check-expired" type="checkbox" name="request_filter_order_states" value="EXPIRED" checked>
+                        </c:if>
+                        <c:if test="${not sessionScope.orders_filter_order_states.contains('EXPIRED')}">
+                            <input id="check-expired" type="checkbox" name="request_filter_order_states" value="EXPIRED">
+                        </c:if>
                         <label for="check-expired"><fmt:message key="order_state.expired"/></label>
                     </div>
                 </div>
+                <c:if test="${sessionScope.invalid_order_states}">
+                    <div class="local-error">
+                        <p><fmt:message key="filter.invalid_order_states"/></p>
+                    </div>
+                </c:if>
             </div>
         </div>
         <div id="min-price" class="form-row">
@@ -66,14 +91,29 @@
                 <div><fmt:message key="basket.payment_type"/></div>
                 <div>
                 <div class="form-checkbox-btn">
-                    <input id="check-cash" type="checkbox" name="payment_type" value="CASH">
+                    <c:if test="${sessionScope.orders_filter_payment_types.contains('CASH')}">
+                        <input id="check-cash" type="checkbox" name="request_filter_payment_types" value="CASH" checked>
+                    </c:if>
+                    <c:if test="${not sessionScope.orders_filter_payment_types.contains('CASH')}">
+                        <input id="check-cash" type="checkbox" name="request_filter_payment_types" value="CASH">
+                    </c:if>
                     <label for="check-cash"><fmt:message key="cash"/></label>
                 </div>
                 <div class="form-checkbox-btn">
-                    <input id="check-card" type="checkbox" name="payment_type" value="CARD">
+                    <c:if test="${sessionScope.orders_filter_payment_types.contains('CARD')}">
+                        <input id="check-card" type="checkbox" name="request_filter_payment_types" value="CARD" checked>
+                    </c:if>
+                    <c:if test="${not sessionScope.orders_filter_payment_types.contains('CARD')}">
+                        <input id="check-card" type="checkbox" name="request_filter_payment_types" value="CARD">
+                    </c:if>
                     <label for="check-card"><fmt:message key="card"/></label>
                 </div>
                 </div>
+                <c:if test="${sessionScope.invalid_payment_types}">
+                    <div class="local-error">
+                        <p><fmt:message key="filter.invalid_payment_types"/></p>
+                    </div>
+                </c:if>
             </div>
         </div>
         <div id="find-action">

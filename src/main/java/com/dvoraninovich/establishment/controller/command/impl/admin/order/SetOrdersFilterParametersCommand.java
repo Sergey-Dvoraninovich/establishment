@@ -34,14 +34,21 @@ public class SetOrdersFilterParametersCommand implements Command {
         Router router;
         HttpSession session = request.getSession();
 
+        session.setAttribute(INVALID_ORDER_STATES, false);
+        session.setAttribute(INVALID_MIN_PRICE, false);
+        session.setAttribute(INVALID_MAX_PRICE, false);
+        session.setAttribute(INVALID_PAYMENT_TYPES, false);
         session.setAttribute(INVALID_FILTER_PARAMETERS, false);
 
-        String paymentTypeLine = request.getParameter(REQUEST_FILTER_PAYMENT_TYPE);
+        String[] orderStatesLines = request.getParameterValues(REQUEST_FILTER_ORDER_STATES);
+        orderStatesLines = orderStatesLines == null ? new String[0] : orderStatesLines;
+        String[] paymentTypesLines = request.getParameterValues(REQUEST_FILTER_PAYMENT_TYPES);
+        paymentTypesLines = paymentTypesLines == null ? new String[0] : paymentTypesLines;
         String minPriceLine = request.getParameter(REQUEST_FILTER_MIN_PRICE);
         String maxPriceLine = request.getParameter(REQUEST_FILTER_MAX_PRICE);
 
         HashMap<String, Boolean> validationResult = new HashMap<>();
-        validationResult = validator.validateFilterParameters(minPriceLine, maxPriceLine);
+        validationResult = validator.validateFilterParameters(minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
 
         Set<String> validationMessages = validationResult.keySet();
         HashMap<String, Boolean> finalValidationResult = validationResult;
@@ -70,8 +77,10 @@ public class SetOrdersFilterParametersCommand implements Command {
             session.setAttribute(ORDERS_USERS_MAP, fullInfoHashMap);
             session.setAttribute(MIN_POS, minPos);
             session.setAttribute(MAX_POS, maxPos);
+            session.setAttribute(ORDERS_FILTER_ORDER_STATES, Arrays.asList(orderStatesLines));
             session.setAttribute(ORDERS_FILTER_MIN_PRICE, minPriceLine.equals("") ? null : new BigDecimal(minPriceLine));
             session.setAttribute(ORDERS_FILTER_MAX_PRICE, maxPriceLine.equals("") ? null : new BigDecimal(maxPriceLine));
+            session.setAttribute(ORDERS_FILTER_PAYMENT_TYPES, Arrays.asList(paymentTypesLines));
             router = new Router(ORDERS_PAGE, REDIRECT);
         } catch (ServiceException e) {
             logger.info("Impossible to find user orders", e);

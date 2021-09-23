@@ -26,7 +26,8 @@ public final class RequestParameter {
     public static final String NEXT_MIN_POS = "next_min_pos";
     public static final String NEXT_MAX_POS = "next_max_pos";
 
-    public static final String REQUEST_FILTER_PAYMENT_TYPE = "request_filter_payment_type";
+    public static final String REQUEST_FILTER_ORDER_STATES = "request_filter_order_states";
+    public static final String REQUEST_FILTER_PAYMENT_TYPES = "request_filter_payment_types";
     public static final String REQUEST_FILTER_MIN_PRICE = "request_filter_min_price";
     public static final String REQUEST_FILTER_MAX_PRICE = "request_filter_max_price";
 
