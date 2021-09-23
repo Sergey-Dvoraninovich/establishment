@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
-import static com.dvoraninovich.establishment.controller.command.RequestParameter.BONUSES_IN_PAYMENT;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.PAYMENT_TYPE;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.FORWARD;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
@@ -48,7 +47,7 @@ public class BuyBasketCommand implements Command {
 
         session.setAttribute(NOT_ENOUGH_BONUSES, false);
         session.setAttribute(TOO_MANY_BONUSES, false);
-        session.setAttribute(YOU_SHOULD_BUY_SOMETHING, false);
+        session.setAttribute(YOU_SHOULD_CHOOSE_SOMETHING, false);
         User user = (User) session.getAttribute(USER);
         String paymentTypeLine = request.getParameter(PAYMENT_TYPE);
         PaymentType paymentType = PaymentType.valueOf(paymentTypeLine);
@@ -60,7 +59,7 @@ public class BuyBasketCommand implements Command {
 
                 List<DishListItem> dishListItems = dishListItemService.findAllByOrderId(basket.getId());
                 if (dishListItems.isEmpty()) {
-                    session.setAttribute(YOU_SHOULD_BUY_SOMETHING, true);
+                    session.setAttribute(YOU_SHOULD_CHOOSE_SOMETHING, true);
                     return new Router(CUSTOMER_BASKET, REDIRECT);
                 }
 

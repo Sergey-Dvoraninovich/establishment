@@ -51,6 +51,8 @@ public class OrderDaoImpl implements OrderDao {
             + "FROM orders "
             + "INNER JOIN orders_statuses "
             + "ON orders.id_order_status = orders_statuses.id "
+            + "INNER JOIN payment_types "
+            + "ON orders.id_payment_type = payment_types.id "
             + "WHERE orders_statuses.order_status != 'IN_CREATION';";
 
     private static final String FIND_ORDER_BY_ID
@@ -290,11 +292,14 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Long countOrders(String minPriceLine, String maxPriceLine) throws DaoException {
+    public Long countOrders(String minPriceLine, String maxPriceLine,
+                            String[] orderStatesLines, String[] paymentTypesLines) throws DaoException {
         Long amount = Long.valueOf(0);
         try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
         ) {
-            PreparedStatement statement = connection.prepareStatement(COUNT_ORDERS);
+            String requestLine = addFilterParameters(COUNT_ORDERS, minPriceLine, maxPriceLine,
+                    orderStatesLines, paymentTypesLines);
+            PreparedStatement statement = connection.prepareStatement(requestLine);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
@@ -431,11 +436,13 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public HashMap<Order, User> findOrdersWithUsersLimit(String minPriceLine, String maxPriceLine, long minPos, long maxPos) throws DaoException {
+    public HashMap<Order, User> findOrdersWithUsersLimit(String minPriceLine, String maxPriceLine, long minPos, long maxPos,
+                                                         String[] orderStatesLines, String[] paymentTypesLines) throws DaoException {
         HashMap<Order, User> userHashMap = new HashMap<>();
         try (Connection connection = connectionPool.acquireConnection()) {
 
-            String requestLine = addFilterParameters(SELECT_ALL_ORDERS_WITH_USER_INFO, minPriceLine, maxPriceLine);
+            String requestLine = addFilterParameters(SELECT_ALL_ORDERS_WITH_USER_INFO, minPriceLine, maxPriceLine,
+                                                     orderStatesLines, paymentTypesLines);
             PreparedStatement statement = connection.prepareStatement(requestLine);
             statement.setLong(1, minPos-1);
             statement.setLong(2, maxPos);
@@ -483,19 +490,41 @@ public class OrderDaoImpl implements OrderDao {
         return orders;
     }
 
-    private String addFilterParameters(String requestLine, String minPriceLine, String maxPriceLine){
+    private String addFilterParameters(String requestLine, String minPriceLine, String maxPriceLine,
+                                       String[] orderStates, String[] paymentTypes){
         StringBuilder filterString = new StringBuilder("");
         if (!minPriceLine.equals("")){
-            filterString.append(ORDER_FINAL_PRICE + " >= " + minPriceLine + " AND ");
+            filterString.append(ORDER_FINAL_PRICE).append(" >= ")
+                    .append(minPriceLine).append(" AND ");
         }
         if (!maxPriceLine.equals("")){
-            filterString.append(ORDER_FINAL_PRICE + " <= " + maxPriceLine + " AND ");
+            filterString.append(ORDER_FINAL_PRICE).append(" <= ")
+                    .append(maxPriceLine).append(" AND ");
+        }
+        if (orderStates.length != 0){
+            filterString.append(makeFilterGroup(ORDER_ORDER_STATUS, orderStates)).append(" AND ");
+        }
+        if (paymentTypes.length != 0){
+            filterString.append(makeFilterGroup(ORDER_PAYMENT_TYPE, paymentTypes)).append(" AND ");
         }
         Integer wherePos = requestLine.indexOf(WHERE_LINE);
         StringBuilder resultString = new StringBuilder(requestLine);
         resultString.insert(wherePos + WHERE_LINE.length(), filterString);
-        System.out.println(resultString);
         return resultString.toString();
+    }
+
+    private String makeFilterGroup(String DBLine, String[] parameters) {
+        StringBuilder itemsString = new StringBuilder(" (");
+        for (String line : parameters) {
+            itemsString.append(" ")
+                    .append(DBLine)
+                    .append(" = '")
+                    .append(line)
+                    .append("' OR");
+        }
+        itemsString.replace(itemsString.lastIndexOf("OR"), itemsString.length(), "");
+        itemsString.append(") ");
+        return itemsString.toString();
     }
 
     private Order createOrderFromResultSet(ResultSet resultSet) throws SQLException {

@@ -35,7 +35,7 @@ public class RecalculateOrderPriceCommand implements Command {
         User user = (User) session.getAttribute(USER);
         session.setAttribute(NOT_ENOUGH_BONUSES, false);
         session.setAttribute(TOO_MANY_BONUSES, false);
-        session.setAttribute(YOU_SHOULD_BUY_SOMETHING, false);
+        session.setAttribute(YOU_SHOULD_CHOOSE_SOMETHING, false);
         String newBonusesAmountLine = request.getParameter(BONUSES_IN_PAYMENT);
         String orderIdLine = request.getParameter(ID_ORDER);
         BigDecimal newBonusesAmount = new BigDecimal(newBonusesAmountLine);

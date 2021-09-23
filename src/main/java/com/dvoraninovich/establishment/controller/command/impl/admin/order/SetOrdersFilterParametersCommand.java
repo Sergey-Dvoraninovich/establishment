@@ -18,7 +18,6 @@ import java.util.*;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
-import static com.dvoraninovich.establishment.controller.command.Router.RouterType.FORWARD;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.MAX_POS;
@@ -65,12 +64,13 @@ public class SetOrdersFilterParametersCommand implements Command {
             Long minPos = Long.valueOf(1);
             Long maxPos = ORDERS_PAGE_ITEMS_AMOUNT;
 
-            Long totalAmount = service.countFilteredOrders(minPriceLine, maxPriceLine);
+            Long totalAmount = service.countFilteredOrders(minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
+            maxPos = maxPos > totalAmount ? totalAmount : maxPos;
             session.setAttribute(TOTAL_AMOUNT, totalAmount);
             session.setAttribute(PAGE_ITEMS_AMOUNT, ORDERS_PAGE_ITEMS_AMOUNT);
 
             HashMap<Order, User> fullInfoHashMap = new HashMap<>();
-            fullInfoHashMap = service.findFilteredOrdersWithUsers(minPriceLine, maxPriceLine, minPos, maxPos);
+            fullInfoHashMap = service.findFilteredOrdersWithUsers(minPriceLine, maxPriceLine, minPos, maxPos, orderStatesLines, paymentTypesLines);
             orders.addAll(fullInfoHashMap.keySet());
 
             session.setAttribute(ORDERS, orders);

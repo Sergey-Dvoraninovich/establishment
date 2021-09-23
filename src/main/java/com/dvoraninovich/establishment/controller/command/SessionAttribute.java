@@ -62,6 +62,7 @@ public final class SessionAttribute {
     public static final String ORDERS = "orders";
     public static final String ORDERS_USERS_MAP = "orders_users_map";
     public static final String ORDER_USER = "order_user";
+    public static final String ORDER_STATE = "order_state";
     public static final String ORDER_DISH_LIST_ITEMS = "order_dish_list_items";
     public static final String ORDERS_WITH_USER_INFO = "orders_with_users_info";
     public static final String ORDER_DISHES_MAP = "order_dishes_map";
@@ -69,7 +70,8 @@ public final class SessionAttribute {
     public static final String ID_DISH_LIST_ITEM = "id_dish_list_item";
     public static final String TOO_MANY_BONUSES = "too_many_bonuses";
     public static final String NOT_ENOUGH_BONUSES = "NOT_ENOUGH_BONUSES";
-    public static final String YOU_SHOULD_BUY_SOMETHING = "you_should_buy_something";
+    public static final String YOU_SHOULD_CHOOSE_SOMETHING = "you_should_buy_something";
+    public static final String EDIT_ORDER_ERROR = "edit_order_error";
 
     public static final String ORDERS_FILTER_ORDER_STATES = "orders_filter_order_states";
     public static final String ORDERS_FILTER_PAYMENT_TYPES = "orders_filter_payment_types";

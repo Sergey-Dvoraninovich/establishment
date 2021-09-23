@@ -1,20 +1,12 @@
 package com.dvoraninovich.establishment.controller.command.impl.admin.order;
 
 import com.dvoraninovich.establishment.controller.command.Command;
-import com.dvoraninovich.establishment.controller.command.PagePath;
 import com.dvoraninovich.establishment.controller.command.Router;
-import com.dvoraninovich.establishment.controller.command.SessionAttribute;
-import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToIngredientsPageCommand;
-import com.dvoraninovich.establishment.controller.command.impl.customer.GoToCustomerOrdersCommand;
 import com.dvoraninovich.establishment.exception.ServiceException;
-import com.dvoraninovich.establishment.model.entity.Ingredient;
 import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.User;
-import com.dvoraninovich.establishment.model.service.IngredientService;
 import com.dvoraninovich.establishment.model.service.OrderService;
-import com.dvoraninovich.establishment.model.service.impl.IngredientServiceImpl;
 import com.dvoraninovich.establishment.model.service.impl.OrderServiceImpl;
-import javafx.util.Pair;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -24,11 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.dvoraninovich.establishment.controller.command.PagePath.*;
+import static com.dvoraninovich.establishment.controller.command.PagePath.ADMIN_PAGE;
+import static com.dvoraninovich.establishment.controller.command.PagePath.ORDERS_PAGE;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.MAX_POS;
 
 public class GoToOrdersPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToOrdersPageCommand.class);
@@ -46,6 +38,8 @@ public class GoToOrdersPageCommand implements Command {
         String maxPosLine = request.getParameter(NEXT_MAX_POS);
         String newTotalAmountLine = request.getParameter(NEW_TOTAL_AMOUNT);
         Long totalAmount;
+
+        //TODO set parameters from session
 
         try {
             Long minPos = Long.valueOf(minPosLine);
@@ -69,6 +63,10 @@ public class GoToOrdersPageCommand implements Command {
             session.setAttribute(ORDERS_USERS_MAP, fullInfoHashMap);
             session.setAttribute(MIN_POS, minPos);
             session.setAttribute(MAX_POS, maxPos);
+//            session.setAttribute(ORDERS_FILTER_ORDER_STATES, Arrays.asList(orderStatesLines));
+//            session.setAttribute(ORDERS_FILTER_MIN_PRICE, minPriceLine.equals("") ? null : new BigDecimal(minPriceLine));
+//            session.setAttribute(ORDERS_FILTER_MAX_PRICE, maxPriceLine.equals("") ? null : new BigDecimal(maxPriceLine));
+//            session.setAttribute(ORDERS_FILTER_PAYMENT_TYPES, Arrays.asList(paymentTypesLines));
             router = new Router(ORDERS_PAGE, REDIRECT);
         } catch (ServiceException e) {
             logger.info("Impossible to find user orders", e);

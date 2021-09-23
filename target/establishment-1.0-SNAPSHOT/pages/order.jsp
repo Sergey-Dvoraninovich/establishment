@@ -4,6 +4,11 @@
 
 <fmt:setBundle basename="locale" />
 
+<c:set var="customer_bonuses">${sessionScope.order_user.bonusesAmount}</c:set>
+<c:set var="bonuses_in_payment">${sessionScope.order.bonusesInPayment}</c:set>
+<c:set var="recalculate_price_info"><fmt:message key="basket.recalculate_price"/></c:set>
+<c:set var="set_price"><fmt:message key="set"/> ${sessionScope.order.finalPrice}</c:set>
+
 <html>
 <head>
     <title><fmt:message key="orders.order_title"/></title>
@@ -130,7 +135,42 @@
             </div>
         </c:if>
         <c:if test="${sessionScope.user.role == 'ADMIN'}">
-            <form>
+            <c:url value="/ApiController?command=edit_order&id=${sessionScope.order.id}" var="edit_order"/>
+            <form action="${edit_order}" method="post">
+                <div class="form-row">
+                    <div class="radio-container">
+                        <div id="active" class="form_radio_btn">
+                            <c:if test="${sessionScope.order.orderState == 'ACTIVE'}">
+                                <input id="radio-active" type="radio" name="order_state" value="ACTIVE" checked>
+                                <label for="radio-active"><fmt:message key="order_state.active"/></label>
+                            </c:if>
+                            <c:if test="${sessionScope.order.orderState != 'ACTIVE'}">
+                                <input id="radio-active" type="radio" name="order_state" value="ACTIVE">
+                                <label for="radio-active"><fmt:message key="order_state.active"/></label>
+                            </c:if>
+                        </div>
+                        <div id="completed" class="form_radio_btn">
+                            <c:if test="${sessionScope.order.orderState == 'COMPLETED'}">
+                                <input id="radio-completed" type="radio" name="order_state" value="COMPLETED" checked>
+                                <label for="radio-completed"><fmt:message key="order_state.completed"/></label>
+                            </c:if>
+                            <c:if test="${sessionScope.order.orderState != 'COMPLETED'}">
+                                <input id="radio-completed" type="radio" name="order_state" value="COMPLETED">
+                                <label for="radio-completed"><fmt:message key="order_state.completed"/></label>
+                            </c:if>
+                        </div>
+                        <div id="expired" class="form_radio_btn">
+                            <c:if test="${sessionScope.order.orderState == 'EXPIRED'}">
+                                <input id="radio-expired" type="radio" name="order_state" value="EXPIRED" checked>
+                                <label for="radio-expired"><fmt:message key="order_state.expired"/></label>
+                            </c:if>
+                            <c:if test="${sessionScope.order.orderState != 'EXPIRED'}">
+                                <input id="radio-expired" type="radio" name="order_state" value="EXPIRED">
+                                <label for="radio-expired"><fmt:message key="order_state.expired"/></label>
+                            </c:if>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-row">
                     <c:if test="${sessionScope.order.paymentType == 'CASH'}">
                         <div class="radio-container">
@@ -147,36 +187,32 @@
                     <c:if test="${sessionScope.order.paymentType == 'CARD'}">
                         <div class="radio-container">
                             <div class="form_radio_btn">
-                                <input id="radio-cash-copy" type="radio" name="payment_type" value="CASH" checked>
-                                <label for="radio-cash"><fmt:message key="basket.pay_in_cash"/></label>
+                                <input id="radio-cash-copy" type="radio" name="payment_type" value="CASH">
+                                <label for="radio-cash-copy"><fmt:message key="basket.pay_in_cash"/></label>
                             </div>
                             <div class="form_radio_btn">
-                                <input id="radio-card-copy" type="radio" name="payment_type" value="CARD">
-                                <label for="radio-card"><fmt:message key="basket.pay_by_card"/></label>
+                                <input id="radio-card-copy" type="radio" name="payment_type" value="CARD" checked>
+                                <label for="radio-card-copy"><fmt:message key="basket.pay_by_card"/></label>
                             </div>
                         </div>
                     </c:if>
                 </div>
                 <div class="form-row">
                     <div>
-                        <label for="bonuses_in_payment"><fmt:message key="basket.your_bonuses"/>: ${customer_bonuses}</label>
+                        <label for="bonuses_in_payment"><fmt:message key="basket.customer_bonuses"/>: ${customer_bonuses}</label>
                     </div>
                     <label for="bonuses_in_payment"><fmt:message key="basket.bonuses_in_payment" /></label>
                     <input type="number" step="1" min="0" max="${customer_bonuses}" name="bonuses_in_payment" id="bonuses_in_payment"
                            value="${bonuses_in_payment}" placeholder="${bonuses_in_payment}"/>
-                    <c:if test="${sessionScope.invalid_bonuces_amount}">
-                        <div class="local-error">
-                            <p><fmt:message key="admin.dishes.invalid_dish_calories_amount"/></p>
-                        </div>
-                    </c:if>
                 </div>
-                <c:url value="/ApiController?command=recalculate_price" var="recalculate_price"/>
-                <a href="${recalculate_price}"><fmt:message key="basket.recalculate_price"/></a>
-                <c:url value="/ApiController?command=recalculate_price&id_order=${sessionScope.order.id}" var="recalculate_price"/>
                 <div>
-                    <input formaction="${recalculate_price}" formmethod="post"
-                           type="submit" value="${recalculate_price_info}"/>
+                    <input type="submit" value="${set_price}"/>
                 </div>
+                <c:if test="${sessionScope.edit_order_error}">
+                    <div class="local-error">
+                        <p><fmt:message key="orders.edit_order_error"/></p>
+                    </div>
+                </c:if>
                 <c:if test="${sessionScope.too_many_bonuses}">
                     <div class="local-error">
                         <p><fmt:message key="basket.too_many_bonuses"/></p>
@@ -187,14 +223,19 @@
                         <p><fmt:message key="basket.not_enough_bonuses"/></p>
                     </div>
                 </c:if>
-                <c:url value="/ApiController?command=buy_basket" var="buy_basket"/>
-                <div>
-                    <input formaction="${buy_basket}" formmethod="post"
-                           type="submit" value="${basket_price}"/>
-                </div>
-                <c:if test="${sessionScope.order_cant_be_empty}">
+                <c:if test="${sessionScope.you_should_choose_something}">
                     <div class="local-error">
                         <p><fmt:message key="basket.you_should_order_smth"/></p>
+                    </div>
+                </c:if>
+                <c:if test="${sessionScope.invalid_order_states}">
+                    <div class="local-error">
+                        <p><fmt:message key="filter.invalid_order_states"/></p>
+                    </div>
+                </c:if>
+                <c:if test="${sessionScope.invalid_payment_types}">
+                    <div class="local-error">
+                        <p><fmt:message key="filter.invalid_payment_types"/></p>
                     </div>
                 </c:if>
             </form>
@@ -202,7 +243,6 @@
     </div>
 </div>
 </body>
-<%--suppress CssInvalidPropertyValue --%>
 <style>
     .workspace-flex-container {
         margin-top: 35px;
@@ -222,16 +262,16 @@
         width: 35px;
     }
     .workspace-column {
-        font: 15px 'Roboto', Arial, Helvetica, sans-serif;
+        font: 20px 'Roboto', Arial, Helvetica, sans-serif;
         margin: 25px;
     }
     a {
-        font: 15px 'Roboto', Arial, Helvetica, sans-serif;
+        font: 20px 'Roboto', Arial, Helvetica, sans-serif;
         font-size: 15px;
         text-decoration: none;
     }
     div {
-        font: 15px 'Roboto', Arial, Helvetica, sans-serif;
+        font: 20px 'Roboto', Arial, Helvetica, sans-serif;
     }
 
     #description{
@@ -336,7 +376,7 @@
     }
     .radio-container {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
         justify-content: center;
     }
@@ -373,6 +413,21 @@
         color: #ffffff;
         border:2px solid #804451;
         background-color: #804451;
+    }
+    #active input[type=radio]:checked + label {
+        color: #ffffff;
+        border:2px solid #7ba05b;
+        background-color: #7ba05b;
+    }
+    #completed input[type=radio]:checked + label {
+        color: #ffffff;
+        border:2px solid #7ba05b;
+        background-color: #7ba05b;
+    }
+    #expired input[type=radio]:checked + label {
+        color: #ffffff;
+        border:2px solid #cf361b;
+        background-color: #cf361b;
     }
     .local-error {
         font-size: 15px;
@@ -463,7 +518,10 @@
     }
     .line-item>div {
         margin: 0px 10px;
-        font-size: 25px;
+        font-size: 20px;
+    }
+    form {
+        width: 100%;
     }
 </style>
 </html>

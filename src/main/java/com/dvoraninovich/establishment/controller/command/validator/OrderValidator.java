@@ -35,6 +35,30 @@ public class OrderValidator {
         return instance;
     }
 
+    public boolean validateOrderState(String orderStateLine) {
+        Boolean result = false;
+        ArrayList<String> orderStateValues = new ArrayList<>();
+        for (OrderState state: OrderState.values()){
+            orderStateValues.add(state.name());
+        }
+        if (orderStateValues.contains(orderStateLine)) {
+            result = true;
+        }
+        return result;
+    }
+
+    public boolean validatePaymentType(String paymentTypeLine) {
+        Boolean result = false;
+        ArrayList<String> paymentTypesValues = new ArrayList<>();
+        for (PaymentType type: PaymentType.values()){
+            paymentTypesValues.add(type.name());
+        }
+        if (paymentTypesValues.contains(paymentTypeLine)) {
+            result = true;
+        }
+        return result;
+    }
+
     public HashMap<String, Boolean> validateFilterParameters(String minPriceLine, String maxPriceLine,
                                                              String[] orderStatesLines, String[] paymentTypesLine){
 

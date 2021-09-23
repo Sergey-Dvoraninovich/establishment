@@ -57,6 +57,7 @@ public final class CommandProvider {
         commands.put(GO_TO_ORDER_PAGE, new GoToOrderPageCommand());
         commands.put(UPLOAD_USER_PHOTO, new EditProfilePhotoCommand());
         commands.put(SET_ORDERS_FILTER_PARAMETERS, new SetOrdersFilterParametersCommand());
+        commands.put(EDIT_ORDER, new EditOrderCommand());
     }
 
     public static CommandProvider getInstance() {
