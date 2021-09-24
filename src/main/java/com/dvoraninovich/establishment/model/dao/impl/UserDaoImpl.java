@@ -138,6 +138,7 @@ public class UserDaoImpl implements UserDao {
             = "UPDATE users " +
             "SET id_status = ?, code_expiration_time = TIMESTAMPADD(MINUTE, 5, CURRENT_TIMESTAMP())) " +
             "WHERE id = ?;";
+    private static final String LIMIT_LINE = "LIMIT";
 
     public static UserDao getInstance(){
         return instance;
@@ -270,6 +271,50 @@ public class UserDaoImpl implements UserDao {
         try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
         ) {
             PreparedStatement statement = connection.prepareStatement(SELECT_FILTERED_USERS);
+            statement.setLong(1, minPos-1);
+            statement.setLong(2, maxPos);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                users.add(createUserFromResultSet(resultSet));
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Error while selecting users", e);
+        }
+        return users;
+    }
+
+    @Override
+    public Long countUsers(String login, String mail, String phoneNumber, String cardNumber, String[] userStatuses, String[] userRoles) throws DaoException {
+        Long usersAmount = Long.valueOf(0);
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            String requestLine = addFilterParameters(COUNT_FILTERED_USERS, login, mail,
+                    phoneNumber, cardNumber, userStatuses, userRoles);
+            //TODO remove it
+            System.out.println(requestLine);
+            PreparedStatement statement = connection.prepareStatement(requestLine);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                usersAmount = resultSet.getLong(1);
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Error while counting users", e);
+        }
+        return usersAmount;
+    }
+
+    @Override
+    public List<User> findFilteredUsers(String login, String mail, String phoneNumber, String cardNumber, String[] userStatuses, String[] userRoles, long minPos, long maxPos) throws DaoException {
+        List<User> users = new ArrayList<>();
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            String requestLine = addFilterParameters(COUNT_FILTERED_USERS, login, mail,
+                    phoneNumber, cardNumber, userStatuses, userRoles);
+            //TODO remove it
+            System.out.println(requestLine);
+            PreparedStatement statement = connection.prepareStatement(requestLine);
             statement.setLong(1, minPos-1);
             statement.setLong(2, maxPos);
             ResultSet resultSet = statement.executeQuery();
@@ -454,37 +499,75 @@ public class UserDaoImpl implements UserDao {
         return codeExpirationTime;
     }
 
+    private String addFilterParameters(String requestLine, String login, String mail, String phoneNumber,
+                                       String cardNumber, String[] userStatuses, String[] userRoles){
+        StringBuilder filterString = new StringBuilder("");
+        if (!login.equals("")){
+            filterString.append(USER_LOGIN).append(" LIKE '%")
+                    .append(login).append("%' AND ");
+        }
+        if (!mail.equals("")){
+            filterString.append(USER_MAIL).append(" LIKE '%")
+                    .append(mail).append("%' AND ");
+        }
+        if (!phoneNumber.equals("")){
+            filterString.append(USER_PHONE_NUMBER).append(" LIKE '%")
+                    .append(phoneNumber).append("%' AND ");
+        }
+        if (!cardNumber.equals("")){
+            filterString.append(USER_CARD_NUMBER).append(" LIKE '%")
+                    .append(cardNumber).append("%' AND ");
+        }
+        if (userStatuses.length != 0){
+            filterString.append(makeFilterGroup(ORDER_ORDER_STATUS, userStatuses)).append(" AND ");
+        }
+        if (userRoles.length != 0){
+            filterString.append(makeFilterGroup(ORDER_PAYMENT_TYPE, userRoles)).append(" AND ");
+        }
+
+        String lineToFind = !requestLine.contains(LIMIT_LINE) ? ";" : LIMIT_LINE;
+        Integer wherePos = requestLine.indexOf(lineToFind);
+        StringBuilder resultString = new StringBuilder(requestLine);
+        resultString.insert(wherePos + lineToFind.length() - 1, filterString);
+        return resultString.toString();
+    }
+
+    private String makeFilterGroup(String DBLine, String[] parameters) {
+        StringBuilder itemsString = new StringBuilder(" (");
+        for (String line : parameters) {
+            itemsString.append(" ")
+                    .append(DBLine)
+                    .append(" = '")
+                    .append(line)
+                    .append("' OR");
+        }
+        itemsString.replace(itemsString.lastIndexOf("OR"), itemsString.length(), "");
+        itemsString.append(") ");
+        return itemsString.toString();
+    }
+
     private User createUserFromResultSet(ResultSet resultSet) throws SQLException {
         long userId = resultSet.getLong(USER_ID);
         String login = resultSet.getString(USER_LOGIN);
         String mail = resultSet.getString(USER_MAIL);
-//        String passwordHash = resultSet.getString(USER_PASSWORD_HASH);
-//        String salt = resultSet.getString(USER_SALT);
         String status = resultSet.getString(USER_STATUS);
         String role = resultSet.getString(USER_ROLE);
         String card_number = resultSet.getString(USER_CARD_NUMBER);
         String phone_number = resultSet.getString(USER_PHONE_NUMBER);
         BigDecimal bonuses_amount = resultSet.getBigDecimal(USER_BONUSES_AMOUNT);
         String photo = resultSet.getString(USER_PHOTO);
-//        String code = resultSet.getString(USER_CODE);
-//        Timestamp expirationCodeTimeTimestamp = resultSet.getTimestamp(USER_CODE_EXPIRATION_TIME);
-//        LocalDateTime expirationCodeTime = expirationCodeTimeTimestamp.toLocalDateTime();
 
         User user = User.builder()
                         .setId(userId)
         .setLogin(login)
         .setMail(mail)
-//        .setPasswordHash(passwordHash)
-//        .setSalt(salt)
         .setStatus(UserStatus.valueOf(status))
         .setRole(Role.valueOf(role))
         .setCardNumber(card_number)
         .setPhoneNumber(phone_number)
         .setBonusesAmount(bonuses_amount)
         .setPhoto(photo)
-//        .setCode(code)
-//        .setExpirationCodeTime(expirationCodeTime)
-                 .build();
+        .build();
 
         return user;
     }

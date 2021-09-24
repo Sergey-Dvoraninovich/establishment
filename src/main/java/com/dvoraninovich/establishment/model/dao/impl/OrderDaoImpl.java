@@ -293,12 +293,12 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Long countOrders(String minPriceLine, String maxPriceLine,
-                            String[] orderStatesLines, String[] paymentTypesLines) throws DaoException {
+                            String[] orderStates, String[] paymentTypes) throws DaoException {
         Long amount = Long.valueOf(0);
         try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
         ) {
             String requestLine = addFilterParameters(COUNT_ORDERS, minPriceLine, maxPriceLine,
-                    orderStatesLines, paymentTypesLines);
+                    orderStates, paymentTypes);
             PreparedStatement statement = connection.prepareStatement(requestLine);
             ResultSet resultSet = statement.executeQuery();
 
@@ -437,12 +437,12 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public HashMap<Order, User> findOrdersWithUsersLimit(String minPriceLine, String maxPriceLine, long minPos, long maxPos,
-                                                         String[] orderStatesLines, String[] paymentTypesLines) throws DaoException {
+                                                         String[] orderStates, String[] paymentTypes) throws DaoException {
         HashMap<Order, User> userHashMap = new HashMap<>();
         try (Connection connection = connectionPool.acquireConnection()) {
 
             String requestLine = addFilterParameters(SELECT_ALL_ORDERS_WITH_USER_INFO, minPriceLine, maxPriceLine,
-                                                     orderStatesLines, paymentTypesLines);
+                                                     orderStates, paymentTypes);
             PreparedStatement statement = connection.prepareStatement(requestLine);
             statement.setLong(1, minPos-1);
             statement.setLong(2, maxPos);

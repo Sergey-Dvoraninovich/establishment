@@ -23,6 +23,11 @@ public interface UserService {
     Long countUsers() throws ServiceException;
     List<User> findFilteredUsers(long minPos, long maxPos) throws ServiceException;
 
+    Long countUsers(String login, String mail, String phoneNumber, String cardNumber,
+                    String[] userStatuses, String[] userRoles) throws ServiceException;
+    List<User> findFilteredUsers(String login, String mail, String phoneNumber, String cardNumber, String[] userStatuses,
+                                 String[] userRoles, long minPos, long maxPos) throws ServiceException;
+
     boolean isLoginUnique(String login);
     boolean isMailUnique(String login);
 

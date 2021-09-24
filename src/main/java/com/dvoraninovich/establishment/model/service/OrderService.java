@@ -25,9 +25,9 @@ public interface OrderService {
     HashMap<Order, User> findOrdersWithUsersLimit(long minPos, long maxPos) throws ServiceException;
 
     Long countFilteredOrders(String minPriceLine, String maxPriceLine,
-                             String[] orderStatesLines, String[] paymentTypesLines) throws ServiceException;
+                             String[] orderStates, String[] paymentTypes) throws ServiceException;
     HashMap<Order, User> findFilteredOrdersWithUsers(String minPriceLine, String maxPriceLine, long minPos, long maxPos,
-                                                     String[] orderStatesLines, String[] paymentTypesLines) throws ServiceException;
+                                                     String[] orderStates, String[] paymentTypes) throws ServiceException;
 
     Long countUserOrders(long userId) throws ServiceException;
     List<Order> findAllUserOrders(long userId) throws ServiceException;

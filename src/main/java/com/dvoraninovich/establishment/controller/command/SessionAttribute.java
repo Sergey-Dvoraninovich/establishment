@@ -80,10 +80,11 @@ public final class SessionAttribute {
     public static final String ORDERS_FILTER_MAX_PRICE = "orders_filter_max_price";
 
     public static final String USERS_FILTER_USER_STATUSES = "users_filter_user_statuses";
+    public static final String USERS_FILTER_USER_ROLES = "users_filter_user_roles";
     public static final String USERS_FILTER_LOGIN = "users_filter_login";
     public static final String USERS_FILTER_PHONE_NUMBER = "users_filter_phone_number";
     public static final String USERS_FILTER_MAIL = "users_filter_mail";
-    public static final String USERS_FILTER_CARD_NUM = "users_filter_card_num";
+    public static final String USERS_FILTER_CARD_NUMBER = "users_filter_card_number";
 
     public static final String INVALID_USER_STATUS = "invalid_user_status";
     public static final String INVALID_USER_ROLE = "invalid_user_role";

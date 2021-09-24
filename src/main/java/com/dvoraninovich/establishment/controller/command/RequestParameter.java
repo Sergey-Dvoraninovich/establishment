@@ -31,6 +31,13 @@ public final class RequestParameter {
     public static final String REQUEST_FILTER_MIN_PRICE = "request_filter_min_price";
     public static final String REQUEST_FILTER_MAX_PRICE = "request_filter_max_price";
 
+    public static final String REQUEST_FILTER_USER_STATUSES = "request_filter_user_statuses";
+    public static final String REQUEST_FILTER_USER_ROLES = "request_filter_user_roles";
+    public static final String REQUEST_FILTER_LOGIN = "request_filter_login";
+    public static final String REQUEST_FILTER_PHONE_NUMBER = "request_filter_phone_number";
+    public static final String REQUEST_FILTER_MAIL = "request_filter_mail";
+    public static final String REQUEST_FILTER_CARD_NUMBER = "request_filter_card_number";
+
     private RequestParameter() {
     }
 }

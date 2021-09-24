@@ -18,7 +18,7 @@
 <body>
 <jsp:include page="../../shared/header.jsp" />
 <div class="filter-line">
-    <c:url value="/ApiController?command=set_orders_filter_parameters" var="orders_filter"/>
+    <c:url value="/ApiController?command=set_users_filter_parameters" var="orders_filter"/>
     <form action="${orders_filter}" method="post">
         <div id="user-statuses" class="form-row">
             <div class="checkbox-container">
@@ -91,7 +91,7 @@
         </div>
         <div id="login-mail" class="form-row">
             <label for="request_filter_login"><fmt:message key="profile.login" /></label>
-            <input type="number" name="request_filter_login" id="request_filter_login" pattern="^[A-za-z_]{3,25}$"
+            <input type="number" name="request_filter_login" id="request_filter_login" pattern="^[A-za-z_]{1,25}$"
                    value="${request_filter_login}" placeholder="${request_filter_login}"/>
             <c:if test="${sessionScope.invalid_login}">
                 <div class="local-error">
@@ -99,7 +99,7 @@
                 </div>
             </c:if>
             <label for="request_filter_mail"><fmt:message key="profile.mail" /></label>
-            <input type="text" name="request_filter_mail" id="request_filter_mail" pattern = ^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$
+            <input type="text" name="request_filter_mail" id="request_filter_mail" pattern="^[a-z0-9_-@]+$"
                    value="${request_filter_mail}" placeholder="${request_filter_mail}"/>
             <c:if test="${sessionScope.invalid_mail}">
                 <div class="local-error">
@@ -109,7 +109,7 @@
         </div>
         <div id="phone-num-card" class="form-row">
             <label for="request_filter_phone_number"><fmt:message key="profile.phone_num" /></label>
-            <input type="text" name="request_filter_phone_number" id="request_filter_phone_number" pattern="^\+\d{12}$"
+            <input type="text" name="request_filter_phone_number" id="request_filter_phone_number" pattern="^[+]{0,1}[\\d]{1,12}$"
                    value="${request_filter_login}" placeholder="${request_filter_login}"/>
             <c:if test="${sessionScope.invalid_phone_number}">
                 <div class="local-error">
@@ -117,7 +117,7 @@
                 </div>
             </c:if>
             <label for="request_filter_card_number"><fmt:message key="profile.card_num" /></label>
-            <input type="number" name="request_filter_card_number" id="request_filter_card_number" pattern="^\d{1,16}$"
+            <input type="number" name="request_filter_card_number" id="request_filter_card_number" pattern="^\\d{1,16}$"
                    value="${request_filter_card_number}" placeholder="${request_filter_card_number}"/>
             <c:if test="${sessionScope.invalid_card_number}">
                 <div class="local-error">

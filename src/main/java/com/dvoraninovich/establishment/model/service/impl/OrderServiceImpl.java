@@ -125,9 +125,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Long countFilteredOrders(String minPriceLine, String maxPriceLine,
-                                    String[] orderStatesLines, String[] paymentTypesLines) throws ServiceException {
+                                    String[] orderStates, String[] paymentTypes) throws ServiceException {
         try {
-            return orderDao.countOrders(minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
+            return orderDao.countOrders(minPriceLine, maxPriceLine, orderStates, paymentTypes);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
@@ -135,9 +135,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public HashMap<Order, User> findFilteredOrdersWithUsers(String minPriceLine, String maxPriceLine, long minPos, long maxPos,
-                                                            String[] orderStatesLines, String[] paymentTypesLines) throws ServiceException {
+                                                            String[] orderStates, String[] paymentTypes) throws ServiceException {
         try {
-            return orderDao.findOrdersWithUsersLimit(minPriceLine, maxPriceLine, minPos, maxPos, orderStatesLines, paymentTypesLines);
+            return orderDao.findOrdersWithUsersLimit(minPriceLine, maxPriceLine, minPos, maxPos, orderStates, paymentTypes);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

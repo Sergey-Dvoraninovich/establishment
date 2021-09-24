@@ -162,6 +162,24 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public Long countUsers(String login, String mail, String phoneNumber, String cardNumber, String[] userStatuses, String[] userRoles) throws ServiceException {
+        try {
+            return userDao.countUsers(login, mail, phoneNumber, cardNumber, userStatuses, userRoles);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<User> findFilteredUsers(String login, String mail, String phoneNumber, String cardNumber, String[] userStatuses, String[] userRoles, long minPos, long maxPos) throws ServiceException {
+        try {
+            return userDao.findFilteredUsers(login, mail, phoneNumber, cardNumber, userStatuses, userRoles, minPos, maxPos);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
     public boolean isLoginUnique(String login){
         Optional<User> user;
 

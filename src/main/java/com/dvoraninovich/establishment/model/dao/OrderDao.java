@@ -30,9 +30,9 @@ public interface OrderDao extends BaseDao<Long, Order> {
     HashMap<Order, User> findOrdersWithUsersLimit(long minPos, long maxPos) throws DaoException;
 
     Long countOrders(String minPriceLine, String maxPriceLine,
-                     String[] orderStatesLines, String[] paymentTypesLines) throws DaoException;
+                     String[] orderStates, String[] paymentTypes) throws DaoException;
     HashMap<Order, User> findOrdersWithUsersLimit(String minPriceLine, String maxPriceLine, long minPos, long maxPos,
-                                                  String[] orderStatesLines, String[] paymentTypesLines) throws DaoException;
+                                                  String[] orderStates, String[] paymentTypes) throws DaoException;
 
     Long countUserOrders(long userId) throws DaoException;
     List<Order> findAllUserOrders(long userId) throws DaoException;

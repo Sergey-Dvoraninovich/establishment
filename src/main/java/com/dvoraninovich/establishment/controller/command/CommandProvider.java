@@ -8,6 +8,7 @@ import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToIngredientsPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.order.*;
 import com.dvoraninovich.establishment.controller.command.impl.admin.user.GoToUsersPageCommand;
+import com.dvoraninovich.establishment.controller.command.impl.admin.user.SetUsersFilterParametersCommand;
 import com.dvoraninovich.establishment.controller.command.impl.customer.*;
 
 import java.util.EnumMap;
@@ -58,6 +59,7 @@ public final class CommandProvider {
         commands.put(UPLOAD_USER_PHOTO, new EditProfilePhotoCommand());
         commands.put(SET_ORDERS_FILTER_PARAMETERS, new SetOrdersFilterParametersCommand());
         commands.put(EDIT_ORDER, new EditOrderCommand());
+        commands.put(SET_USERS_FILTER_PARAMETERS, new SetUsersFilterParametersCommand());
     }
 
     public static CommandProvider getInstance() {

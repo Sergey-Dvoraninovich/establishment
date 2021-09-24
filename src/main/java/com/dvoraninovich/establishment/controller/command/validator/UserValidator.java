@@ -1,14 +1,14 @@
 package com.dvoraninovich.establishment.controller.command.validator;
 
+import com.dvoraninovich.establishment.model.entity.Role;
+import com.dvoraninovich.establishment.model.entity.UserStatus;
 import com.dvoraninovich.establishment.model.service.UserService;
 import com.dvoraninovich.establishment.model.service.impl.UserServiceImpl;
-import javafx.util.Pair;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
@@ -24,6 +24,11 @@ public class UserValidator {
     private static final String PHONE_NUM_REGEXP = "^\\+\\d{12}$";
     private static final String CARD_NUM_REGEXP = "^\\d{16}$";
     private static final String CODE_REGEXP = "^[a-zA-Z0-9]{16}$";
+
+    private static final String FILTER_LOGIN_REGEXP = "^[A-Za-z_]{1,25}$";
+    private static final String FILTER_MAIL_REGEXP = "^[a-z0-9_@-]+$";
+    private static final String FILTER_PHONE_NUM_REGEXP = "^[+]{0,1}[\\d]{1,12}$";
+    private static final String FILTER_CARD_NUM_REGEXP = "^\\d{1,16}$";
 
     private UserValidator() {
     }
@@ -95,8 +100,62 @@ public class UserValidator {
         currentResult = service.isLoginUnique(login);
         validationMessages.put(NOT_UNIQUE_LOGIN, !currentResult);
 
-        //currentResult = service.isMailUnique(mail);
-        //validationMessages.put(NOT_UNIQUE_MAIL, !currentResult);
+        currentResult = service.isMailUnique(mail);
+        validationMessages.put(NOT_UNIQUE_MAIL, !currentResult);
+
+        return validationMessages;
+    }
+
+    public HashMap<String, Boolean> validateFilterParameters(String login, String mail, String phoneNumber, String cardNumber,
+                                                             String[] userStatusesLines, String[] userRolesLine){
+
+        HashMap<String, Boolean> validationMessages = new HashMap<>();
+        boolean currentResult;
+
+        if (!login.equals("")) {
+            currentResult = Pattern.matches(FILTER_LOGIN_REGEXP, login);
+            validationMessages.put(INVALID_LOGIN, !currentResult);
+        }
+
+        if (!mail.equals("")) {
+            currentResult = Pattern.matches(FILTER_MAIL_REGEXP, mail);
+            validationMessages.put(INVALID_MAIL, !currentResult);
+        }
+
+        if (!phoneNumber.equals("")) {
+            currentResult = Pattern.matches(FILTER_PHONE_NUM_REGEXP, phoneNumber);
+            validationMessages.put(INVALID_PHONE_NUM, !currentResult);
+        }
+
+        if (!cardNumber.equals("")) {
+            currentResult = Pattern.matches(FILTER_CARD_NUM_REGEXP, cardNumber);
+            validationMessages.put(INVALID_CARD_NUM, !currentResult);
+        }
+
+
+        currentResult = false;
+        ArrayList<String> userStatusesValues = new ArrayList<>();
+        for (UserStatus state: UserStatus.values()){
+            userStatusesValues.add(state.name());
+        }
+        for (String line : userStatusesLines) {
+            if (!userStatusesValues.contains(line)) {
+                currentResult = true;
+            }
+        }
+        validationMessages.put(INVALID_USER_STATUS, currentResult);
+
+        currentResult = false;
+        ArrayList<String> userRolesValues = new ArrayList<>();
+        for (Role type: Role.values()){
+            userRolesValues.add(type.name());
+        }
+        for (String line : userRolesLine) {
+            if (!userRolesValues.contains(line)) {
+                currentResult = true;
+            }
+        }
+        validationMessages.put(INVALID_USER_ROLE, currentResult);
 
         return validationMessages;
     }

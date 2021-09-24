@@ -1,6 +1,5 @@
 package com.dvoraninovich.establishment.model.dao;
 
-import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.exception.DaoException;
 
@@ -47,4 +46,9 @@ public interface UserDao extends BaseDao<Long, User> {
 
     Long countUsers() throws DaoException;
     List<User> findFilteredUsers(long minPos, long maxPos) throws DaoException;
+
+    Long countUsers(String login, String mail, String phoneNumber, String cardNumber,
+                    String[] userStatuses, String[] userRoles) throws DaoException;
+    List<User> findFilteredUsers(String login, String mail, String phoneNumber, String cardNumber, String[] userStatuses,
+                                 String[] userRoles, long minPos, long maxPos) throws DaoException;
 }
