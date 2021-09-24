@@ -1,9 +1,11 @@
 package com.dvoraninovich.establishment.model.dao;
 
+import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.exception.DaoException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserDao extends BaseDao<Long, User> {
@@ -42,4 +44,7 @@ public interface UserDao extends BaseDao<Long, User> {
 
     // TODO description
     boolean delete(Long id) throws DaoException;
+
+    Long countUsers() throws DaoException;
+    List<User> findFilteredUsers(long minPos, long maxPos) throws DaoException;
 }

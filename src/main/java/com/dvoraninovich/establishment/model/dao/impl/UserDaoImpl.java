@@ -33,6 +33,24 @@ public class UserDaoImpl implements UserDao {
             + "ON users.id_role = roles.id "
             + "INNER JOIN statuses "
             + "ON users.id_status = statuses.id; ";
+    private static final String COUNT_FILTERED_USERS
+            = "SELECT COUNT(users.id) "
+            + "FROM users "
+            + "INNER JOIN roles "
+            + "ON users.id_role = roles.id "
+            + "INNER JOIN statuses "
+            + "ON users.id_status = statuses.id; ";
+    private static final String SELECT_FILTERED_USERS
+            = "SELECT users.id, users.login, users.mail, "
+            + "statuses.status, roles.role, "
+            + "users.card_number, users.phone_number, users.bonuses_amount, "
+            + "users.photo "
+            + "FROM users "
+            + "INNER JOIN roles "
+            + "ON users.id_role = roles.id "
+            + "INNER JOIN statuses "
+            + "ON users.id_status = statuses.id "
+            + "LIMIT ?, ?;";
     private static final String FIND_USER_BY_LOGIN
             = "SELECT users.id, users.login, users.mail, "
             + "statuses.status, roles.role, "
@@ -227,6 +245,42 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("Error while deleting user with id: " + id, e);
         }
         return successfulOperation;
+    }
+
+    @Override
+    public Long countUsers() throws DaoException {
+        Long usersAmount = Long.valueOf(0);
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(COUNT_FILTERED_USERS);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                usersAmount = resultSet.getLong(1);
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Error while counting users", e);
+        }
+        return usersAmount;
+    }
+
+    @Override
+    public List<User> findFilteredUsers(long minPos, long maxPos) throws DaoException {
+        List<User> users = new ArrayList<>();
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(SELECT_FILTERED_USERS);
+            statement.setLong(1, minPos);
+            statement.setLong(2, maxPos);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                users.add(createUserFromResultSet(resultSet));
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Error while selecting users", e);
+        }
+        return users;
     }
 
     @Override

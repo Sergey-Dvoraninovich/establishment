@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -138,6 +139,24 @@ public class UserServiceImpl implements UserService {
     public Optional<LocalDateTime> getCodeExpirationTime(long id) throws ServiceException {
         try {
             return userDao.getCodeExpirationTimeById(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Long countUsers() throws ServiceException {
+        try {
+            return userDao.countUsers();
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<User> findFilteredUsers(long minPos, long maxPos) throws ServiceException {
+        try {
+            return userDao.findFilteredUsers(minPos, maxPos);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

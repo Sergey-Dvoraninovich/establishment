@@ -30,7 +30,7 @@
         </a>
       </div>
       <div class="header-block">
-        <c:url value="/ApiController?command=go_to_users_page" var="users_page"/>
+        <c:url value="/ApiController?command=go_to_users_page&next_min_pos=1&next_max_pos=10&new_total_amount=true" var="users_page"/>
         <a class="header-block-text" href="${users_page}">
           <fmt:message key="header.users"/>
         </a>

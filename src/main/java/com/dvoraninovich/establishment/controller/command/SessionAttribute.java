@@ -2,6 +2,7 @@ package com.dvoraninovich.establishment.controller.command;
 
 public final class SessionAttribute {
     public static final String USER = "user";
+    public static final String USERS = "users";
     public static final String EDIT_USER = "user";
     public static final String AUTH_ERROR = "auth_error";
     public static final String REGISTRATION_ERROR = "registration_error";
@@ -78,6 +79,14 @@ public final class SessionAttribute {
     public static final String ORDERS_FILTER_MIN_PRICE = "orders_filter_min_price";
     public static final String ORDERS_FILTER_MAX_PRICE = "orders_filter_max_price";
 
+    public static final String USERS_FILTER_USER_STATUSES = "users_filter_user_statuses";
+    public static final String USERS_FILTER_LOGIN = "users_filter_login";
+    public static final String USERS_FILTER_PHONE_NUMBER = "users_filter_phone_number";
+    public static final String USERS_FILTER_MAIL = "users_filter_mail";
+    public static final String USERS_FILTER_CARD_NUM = "users_filter_card_num";
+
+    public static final String INVALID_USER_STATUS = "invalid_user_status";
+    public static final String INVALID_USER_ROLE = "invalid_user_role";
     public static final String INVALID_ORDER_STATES = "invalid_order_states";
     public static final String INVALID_PAYMENT_TYPES = "invalid_payment_types";
     public static final String INVALID_MIN_PRICE = "invalid_min_price";
