@@ -57,7 +57,7 @@ public class GoToUsersPageCommand implements Command {
             }
 
             maxPos = maxPos > totalAmount ? totalAmount : maxPos;
-            //users = userService.findFilteredUsers(minPos, maxPos);
+            users = userService.findFilteredUsers(minPos, maxPos);
 
             session.setAttribute(USERS, users);
             session.setAttribute(MIN_POS, minPos);

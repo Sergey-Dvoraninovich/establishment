@@ -13,7 +13,7 @@
 
 <html>
 <head>
-    <title><fmt:message key="profile.orders_title"/></title>
+    <title><fmt:message key="header.users"/></title>
 </head>
 <body>
 <jsp:include page="../../shared/header.jsp" />
@@ -33,7 +33,7 @@
                         </c:if>
                         <label for="check-in-registration"><fmt:message key="user_statuses.in_registration"/></label>
                     </div>
-                    <div class="form-checkbox-btn">
+                    <div id="green-checkbox" class="form-checkbox-btn">
                         <c:if test="${sessionScope.orders_filter_order_states.contains('CONFIRMED')}">
                             <input id="check-confirmed" type="checkbox" name="request_filter_user_statuses" value="CONFIRMED" checked>
                         </c:if>
@@ -42,7 +42,7 @@
                         </c:if>
                         <label for="check-confirmed"><fmt:message key="user_statuses.confirmed"/></label>
                     </div>
-                    <div class="form-checkbox-btn">
+                    <div id="red-checkbox" class="form-checkbox-btn">
                         <c:if test="${sessionScope.orders_filter_order_states.contains('BLOCKED')}">
                             <input id="check-blocked" type="checkbox" name="request_filter_user_statuses" value="BLOCKED" checked>
                         </c:if>
@@ -91,16 +91,16 @@
         </div>
         <div id="login-mail" class="form-row">
             <label for="request_filter_login"><fmt:message key="profile.login" /></label>
-            <input type="number" name="request_filter_login" id="request_filter_login"
-                   step="0.01" min="0" value="${request_filter_login}" placeholder="${request_filter_login}"/>
+            <input type="number" name="request_filter_login" id="request_filter_login" pattern="^[A-za-z_]{3,25}$"
+                   value="${request_filter_login}" placeholder="${request_filter_login}"/>
             <c:if test="${sessionScope.invalid_login}">
                 <div class="local-error">
                     <p><fmt:message key="login.invalid_login"/></p>
                 </div>
             </c:if>
             <label for="request_filter_mail"><fmt:message key="profile.mail" /></label>
-            <input type="number" name="request_filter_mail" id="request_filter_mail"
-                   step="0.01" min="0" value="${request_filter_mail}" placeholder="${request_filter_mail}"/>
+            <input type="text" name="request_filter_mail" id="request_filter_mail" pattern = ^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$
+                   value="${request_filter_mail}" placeholder="${request_filter_mail}"/>
             <c:if test="${sessionScope.invalid_mail}">
                 <div class="local-error">
                     <p><fmt:message key="registration.invalid_mail"/></p>
@@ -108,17 +108,17 @@
             </c:if>
         </div>
         <div id="phone-num-card" class="form-row">
-            <label for="request_filter_phone_number"><fmt:message key="profile.login" /></label>
-            <input type="number" name="request_filter_phone_number" id="request_filter_phone_number"
-                   step="0.01" min="0" value="${request_filter_login}" placeholder="${request_filter_login}"/>
+            <label for="request_filter_phone_number"><fmt:message key="profile.phone_num" /></label>
+            <input type="text" name="request_filter_phone_number" id="request_filter_phone_number" pattern="^\+\d{12}$"
+                   value="${request_filter_login}" placeholder="${request_filter_login}"/>
             <c:if test="${sessionScope.invalid_phone_number}">
                 <div class="local-error">
                     <p><fmt:message key="registration.invalid_phone_num"/></p>
                 </div>
             </c:if>
-            <label for="request_filter_card_number"><fmt:message key="profile.mail" /></label>
-            <input type="number" name="request_filter_card_number" id="request_filter_card_number"
-                   step="0.01" min="0" value="${request_filter_card_number}" placeholder="${request_filter_card_number}"/>
+            <label for="request_filter_card_number"><fmt:message key="profile.card_num" /></label>
+            <input type="number" name="request_filter_card_number" id="request_filter_card_number" pattern="^\d{1,16}$"
+                   value="${request_filter_card_number}" placeholder="${request_filter_card_number}"/>
             <c:if test="${sessionScope.invalid_card_number}">
                 <div class="local-error">
                     <p><fmt:message key="registration.invalid_card_num"/></p>
@@ -138,24 +138,37 @@
 <div class="workspace-flex-container">
     <c:forEach var="user" items="${sessionScope.users}">
         <div class="container-line">
-            <c:if test="${user.userStatus == 'IN_REGISTRATION'}">
+            <c:if test="${user.status == 'IN_REGISTRATION'}">
                 <div id="base-state" class="line-item">
                     <div><fmt:message key="status"/></div>
                     <div><fmt:message key="user_statuses.in_registration"/></div>
                 </div>
             </c:if>
-            <c:if test="${user.userStatus == 'CONFIRMED'}">
+            <c:if test="${user.status == 'CONFIRMED'}">
                 <div id="green-state" class="line-item">
                     <div><fmt:message key="status"/></div>
                     <div><fmt:message key="user_statuses.confirmed"/></div>
                 </div>
             </c:if>
-            <c:if test="${user.userStatus == 'BLOCKED'}">
+            <c:if test="${user.status == 'BLOCKED'}">
                 <div id="red-state" class="line-item">
                     <div><fmt:message key="status"/></div>
                     <div><fmt:message key="user_statuses.blocked"/></div>
                 </div>
             </c:if>
+            <div id="mail-info" class="line-item">
+                <div><fmt:message key="profile.mail"/></div>
+                <div>${user.mail}</div>
+            </div>
+            <div id="base-role-state" class="line-item">
+                <div><fmt:message key="status"/></div>
+                <c:if test="${user.role == 'ADMIN'}">
+                    <div><fmt:message key="user_roles.admin"/></div>
+                </c:if>
+                <c:if test="${user.role == 'CUSTOMER'}">
+                    <div><fmt:message key="user_roles.customer"/></div>
+                </c:if>
+            </div>
             <div class="line-item">
                 <div class="user-info">
                     <div>
@@ -175,26 +188,13 @@
                     </div>
                 </div>
             </div>
-            <div id="mail-info" class="line-item">
-                <div><fmt:message key="profile.mail"/></div>
-                <div>${user.mail}</div>
-            </div>
             <div id="phone-number-number-info" class="line-item">
                 <div><fmt:message key="profile.phone_num"/></div>
                 <div>${user.phoneNumber}</div>
             </div>
             <div id="card-number-info" class="line-item">
                 <div><fmt:message key="profile.card_num"/></div>
-                <div>${user.cardNumberl}</div>
-            </div>
-            <div id="base-role-state" class="line-item">
-                <div><fmt:message key="status"/></div>
-                <c:if test="${user.role == 'ADMIN'}">
-                    <div><fmt:message key="user_roles.admin"/></div>
-                </c:if>
-                <c:if test="${user.role == 'CUSTOMER'}">
-                    <div><fmt:message key="user_roles.customer"/></div>
-                </c:if>
+                <div>${user.cardNumber}</div>
             </div>
             <div class="line-item">
                 <div class="block-item-action">
@@ -225,6 +225,9 @@
         font: 15px 'Roboto', Arial, Helvetica, sans-serif;
         font-size: 15px;
     }
+    .form-row {
+        margin: 10px;
+    }
     #min-price {
         width: 100px;
     }
@@ -236,6 +239,9 @@
     }
     #order-states {
         width: 35%;
+    }
+    #base-role-state {
+        width: 50px;
     }
     .filter-line {
         margin-top: 75px;
@@ -341,6 +347,7 @@
         align-items: flex-start;
     }
     .line-item {
+        margin: 0px 10px;
         padding: 5px;
         display: flex;
         flex-direction: column;
@@ -451,6 +458,16 @@
         color: #ffffff;
         border:2px solid #804451;
         background-color: #804451;
+    }
+    #green-checkbox input[type=checkbox]:checked + label {
+        color: #ffffff;
+        border:2px solid #7ba05b;
+        background-color: #7ba05b;
+    }
+    #red-checkbox input[type=checkbox]:checked + label {
+        color: #ffffff;
+        border:2px solid #cf361b;
+        background-color: #cf361b;
     }
 </style>
 </html>

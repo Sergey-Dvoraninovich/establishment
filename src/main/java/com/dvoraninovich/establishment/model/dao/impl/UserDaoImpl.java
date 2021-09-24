@@ -270,7 +270,7 @@ public class UserDaoImpl implements UserDao {
         try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
         ) {
             PreparedStatement statement = connection.prepareStatement(SELECT_FILTERED_USERS);
-            statement.setLong(1, minPos);
+            statement.setLong(1, minPos-1);
             statement.setLong(2, maxPos);
             ResultSet resultSet = statement.executeQuery();
 
