@@ -4,6 +4,7 @@ public final class RequestParameter {
     public static final String COMMAND = "command";
     public static final String ID = "id";
     public static final String SHOW_DISABLES_DISHES = "show_disabled_dishes";
+    public static final String EDIT_FORM = "edit_form";
     public static final String NAME = "name";
     public static final String LOGIN = "login";
     public static final String PHOTO = "photo";

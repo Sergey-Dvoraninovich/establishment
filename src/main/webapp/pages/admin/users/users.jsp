@@ -10,6 +10,8 @@
 <c:set var="request_filter_mail">${sessionScope.users_filter_mail}</c:set>
 <c:set var="request_filter_phone_number">${sessionScope.users_filter_phone_number}</c:set>
 <c:set var="request_filter_card_number">${sessionScope.users_filter_card_number}</c:set>
+<c:set var="user_statuses">${sessionScope.users_filter_user_statuses}</c:set>
+<c:set var="user_roles">${sessionScope.users_filter_user_roles}</c:set>
 
 <html>
 <head>
@@ -25,28 +27,28 @@
                 <div><fmt:message key="filter.user_statuses"/></div>
                 <div>
                     <div class="form-checkbox-btn">
-                        <c:if test="${sessionScope.users_filter_user_statuses.contains('IN_REGISTRATION')}">
+                        <c:if test="${user_statuses.contains('IN_REGISTRATION')}">
                             <input id="check-in-registration" type="checkbox" name="request_filter_user_statuses" value="IN_REGISTRATION" checked>
                         </c:if>
-                        <c:if test="${not sessionScope.users_filter_user_statuses.contains('IN_REGISTRATION')}">
+                        <c:if test="${not user_statuses.contains('IN_REGISTRATION')}">
                             <input id="check-in-registration" type="checkbox" name="request_filter_user_statuses" value="IN_REGISTRATION">
                         </c:if>
                         <label for="check-in-registration"><fmt:message key="user_statuses.in_registration"/></label>
                     </div>
                     <div id="green-checkbox" class="form-checkbox-btn">
-                        <c:if test="${sessionScope.orders_filter_order_states.contains('CONFIRMED')}">
+                        <c:if test="${user_statuses.contains('CONFIRMED')}">
                             <input id="check-confirmed" type="checkbox" name="request_filter_user_statuses" value="CONFIRMED" checked>
                         </c:if>
-                        <c:if test="${not sessionScope.orders_filter_order_states.contains('CONFIRMED')}">
+                        <c:if test="${not user_statuses.contains('CONFIRMED')}">
                             <input id="check-confirmed" type="checkbox" name="request_filter_user_statuses" value="CONFIRMED">
                         </c:if>
                         <label for="check-confirmed"><fmt:message key="user_statuses.confirmed"/></label>
                     </div>
                     <div id="red-checkbox" class="form-checkbox-btn">
-                        <c:if test="${sessionScope.orders_filter_order_states.contains('BLOCKED')}">
+                        <c:if test="${user_statuses.contains('BLOCKED')}">
                             <input id="check-blocked" type="checkbox" name="request_filter_user_statuses" value="BLOCKED" checked>
                         </c:if>
-                        <c:if test="${not sessionScope.orders_filter_order_states.contains('BLOCKED')}">
+                        <c:if test="${not user_statuses.contains('BLOCKED')}">
                             <input id="check-blocked" type="checkbox" name="request_filter_user_statuses" value="BLOCKED">
                         </c:if>
                         <label for="check-blocked"><fmt:message key="user_statuses.blocked"/></label>
@@ -64,22 +66,22 @@
                 <div><fmt:message key="filter.user_roles"/></div>
                 <div>
                     <div class="form-checkbox-btn">
-                        <c:if test="${sessionScope.users_filter_user_roles.contains('ADMIN')}">
+                        <c:if test="${user_roles.contains('ADMIN')}">
                             <input id="check-admin" type="checkbox" name="request_filter_user_roles" value="ADMIN" checked>
                         </c:if>
-                        <c:if test="${not sessionScope.users_filter_user_roles.contains('ADMIN')}">
+                        <c:if test="${not user_roles.contains('ADMIN')}">
                             <input id="check-admin" type="checkbox" name="request_filter_user_roles" value="ADMIN">
                         </c:if>
                         <label for="check-admin"><fmt:message key="user_roles.admin"/></label>
                     </div>
                     <div class="form-checkbox-btn">
-                        <c:if test="${sessionScope.users_filter_user_roles.contains('CUSTOMER')}">
+                        <c:if test="${user_roles.contains('CUSTOMER')}">
                             <input id="check-customer" type="checkbox" name="request_filter_user_roles" value="CUSTOMER" checked>
                         </c:if>
-                        <c:if test="${not sessionScope.users_filter_user_roles.contains('CUSTOMER')}">
+                        <c:if test="${not user_roles.contains('CUSTOMER')}">
                             <input id="check-customer" type="checkbox" name="request_filter_user_roles" value="CUSTOMER">
                         </c:if>
-                        <label for="check-customer"><fmt:message key="user_roles.admin"/></label>
+                        <label for="check-customer"><fmt:message key="user_roles.customer"/></label>
                     </div>
                 </div>
                 <c:if test="${sessionScope.invalid_user_role}">
@@ -99,7 +101,7 @@
                 </div>
             </c:if>
             <label for="request_filter_mail"><fmt:message key="profile.mail" /></label>
-            <input type="text" name="request_filter_mail" id="request_filter_mail" pattern="^[a-z0-9_@-]+$"
+            <input type="text" name="request_filter_mail" id="request_filter_mail" pattern="^[a-z0-9._@-]+$"
                    value="${request_filter_mail}" placeholder="${request_filter_mail}"/>
             <c:if test="${sessionScope.invalid_mail}">
                 <div class="local-error">
@@ -109,15 +111,15 @@
         </div>
         <div id="phone-num-card" class="form-row">
             <label for="request_filter_phone_number"><fmt:message key="profile.phone_num" /></label>
-            <input type="text" name="request_filter_phone_number" id="request_filter_phone_number" pattern="^[+]{0,1}[\\d]{1,12}$"
-                   value="${request_filter_login}" placeholder="${request_filter_login}"/>
+            <input type="text" name="request_filter_phone_number" id="request_filter_phone_number" pattern="^[+]{0,1}[\d]{1,12}$"
+                   value="${request_filter_phone_number}" placeholder="${request_filter_phone_number}"/>
             <c:if test="${sessionScope.invalid_phone_number}">
                 <div class="local-error">
                     <p><fmt:message key="registration.invalid_phone_num"/></p>
                 </div>
             </c:if>
             <label for="request_filter_card_number"><fmt:message key="profile.card_num" /></label>
-            <input type="number" name="request_filter_card_number" id="request_filter_card_number" pattern="^\\d{1,16}$"
+            <input type="text" name="request_filter_card_number" id="request_filter_card_number" pattern="^\d{1,16}$"
                    value="${request_filter_card_number}" placeholder="${request_filter_card_number}"/>
             <c:if test="${sessionScope.invalid_card_number}">
                 <div class="local-error">
@@ -255,6 +257,9 @@
     .filter-line>form>div {
         width: 20%;
         margin: 0px 10px;
+    }
+    input {
+        font-size: 20px;
     }
     input[type=text]{
         width:100%;

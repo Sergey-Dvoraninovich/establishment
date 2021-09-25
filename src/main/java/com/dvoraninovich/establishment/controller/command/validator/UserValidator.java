@@ -26,7 +26,7 @@ public class UserValidator {
     private static final String CODE_REGEXP = "^[a-zA-Z0-9]{16}$";
 
     private static final String FILTER_LOGIN_REGEXP = "^[A-Za-z_]{1,25}$";
-    private static final String FILTER_MAIL_REGEXP = "^[a-z0-9_@-]+$";
+    private static final String FILTER_MAIL_REGEXP = "^[a-z0-9_.@-]+$";
     private static final String FILTER_PHONE_NUM_REGEXP = "^[+]{0,1}[\\d]{1,12}$";
     private static final String FILTER_CARD_NUM_REGEXP = "^\\d{1,16}$";
 

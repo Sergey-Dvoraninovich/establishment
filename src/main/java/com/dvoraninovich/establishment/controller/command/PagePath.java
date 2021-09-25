@@ -7,7 +7,7 @@ public final class PagePath {
     public static final String SIGN_UP_PAGE = "/establishment_war_exploded/pages/sign_up.jsp";
     public static final String VERIFICATION_PAGE = "/establishment_war_exploded/pages/verification.jsp";
 
-    public static final String CUSTOMER_PROFILE_PAGE = "/establishment_war_exploded/pages/customer/customer_profile.jsp";
+    public static final String USER_PAGE = "/establishment_war_exploded/pages/user.jsp";
     public static final String EDIT_CUSTOMER_PAGE = "/establishment_war_exploded/pages/customer/customer_edit_data.jsp";
     public static final String CUSTOMER_BASKET = "/establishment_war_exploded/pages/customer/customer_basket.jsp";
     public static final String CUSTOMER_ORDERS = "/establishment_war_exploded/pages/customer/customer_orders.jsp";

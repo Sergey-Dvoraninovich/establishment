@@ -2,10 +2,11 @@ package com.dvoraninovich.establishment.controller.command;
 
 public final class SessionAttribute {
     public static final String USER = "user";
+    public static final String USER_PROFILE = "user_profile";
     public static final String USERS = "users";
-    public static final String EDIT_USER = "user";
     public static final String AUTH_ERROR = "auth_error";
     public static final String REGISTRATION_ERROR = "registration_error";
+    public static final String IS_EDITING_PAGE = "is_editing_page";
     public static final String EXCEPTION = "exception";
     public static final String USER_ALREADY_VERIFIED = "user_already_verified";
     public static final String USER_BLOCKED = "user_blocked";
@@ -18,8 +19,7 @@ public final class SessionAttribute {
     public static final String IS_AUTHENTICATED = "is_authenticated";
     public static final String CHANGE_PASSWORD_ERROR = "change_password_error";
     public static final String CHANGE_MAIL_ERROR = "change_mail_error";
-    public static final String CHANGE_PHONE_NUM_ERROR = "change_phone_num_error";
-    public static final String CHANGE_CARD_NUM_ERROR = "change_card_num_error";
+    public static final String CHANGE_USER_DATA_ERROR = "change_phone_num_error";
     public static final String CHANGE_PROFILE_PHOTO_ERROR = "change_profile_photo_error";
     public static final String USER_VALIDATION_ERROR = "user_validation_error";
     public static final String IMPOSSIBLE_TO_UPLOAD_USER_PHOTO = "impossible_to_upload_user_photo";

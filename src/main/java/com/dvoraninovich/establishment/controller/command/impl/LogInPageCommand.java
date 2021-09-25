@@ -64,12 +64,13 @@ public class LogInPageCommand implements Command {
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
                 session.setAttribute(USER, user);
+                session.setAttribute(USER_PROFILE, user);
                 session.setAttribute(IS_AUTHENTICATED, true);
                 Role role = user.getRole();
 
                 switch (role) {
                     case ADMIN: {
-                        router = new Router(ADMIN_PAGE, REDIRECT);
+                        router = new Router(USER_PAGE + "?id=" + user.getId(), REDIRECT);
                         break;
                     }
                     case CUSTOMER: {

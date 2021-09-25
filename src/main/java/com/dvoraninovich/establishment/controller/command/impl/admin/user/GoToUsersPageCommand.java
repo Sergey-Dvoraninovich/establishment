@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,14 +43,30 @@ public class GoToUsersPageCommand implements Command {
         String newTotalAmountLine = request.getParameter(NEW_TOTAL_AMOUNT);
         Long totalAmount;
 
-        //TODO set parameters from session
+        List<String> userStatusesList = (List<String>) session.getAttribute(USERS_FILTER_USER_STATUSES);
+        List<String> userRolesList = (List<String>) session.getAttribute(USERS_FILTER_USER_ROLES);
+        String loginLine = (String) session.getAttribute(USERS_FILTER_LOGIN);
+        String mailLine = (String) session.getAttribute(USERS_FILTER_MAIL);
+        String phoneNumberLine = (String) session.getAttribute(USERS_FILTER_PHONE_NUMBER);
+        String cardNumberLine = (String) session.getAttribute(USERS_FILTER_CARD_NUMBER);
 
         try {
             Long minPos = Long.valueOf(minPosLine);
             Long maxPos = Long.valueOf(maxPosLine);
+            String[] userStatusesLines = userStatusesList == null
+                    ? new String[0]
+                    : (String[]) userStatusesList.toArray();
+            String[] userRolesLines = userRolesList == null
+                    ? new String[0]
+                    : (String[]) userRolesList.toArray();
+            loginLine = loginLine == null ? "" : loginLine;
+            mailLine = mailLine == null ? "" : mailLine;
+            phoneNumberLine = phoneNumberLine == null ? "" : phoneNumberLine;
+            cardNumberLine = cardNumberLine == null ? "" : cardNumberLine;
 
             if (newTotalAmountLine != null) {
-                totalAmount = userService.countUsers();
+                totalAmount = userService.countUsers(loginLine, mailLine,
+                        phoneNumberLine, cardNumberLine, userStatusesLines, userRolesLines);
                 session.setAttribute(TOTAL_AMOUNT, totalAmount);
                 session.setAttribute(PAGE_ITEMS_AMOUNT, ORDERS_PAGE_ITEMS_AMOUNT);
             } else {
@@ -57,7 +74,8 @@ public class GoToUsersPageCommand implements Command {
             }
 
             maxPos = maxPos > totalAmount ? totalAmount : maxPos;
-            users = userService.findFilteredUsers(minPos, maxPos);
+            users = userService.findFilteredUsers(loginLine, mailLine, phoneNumberLine, cardNumberLine,
+                    userStatusesLines, userRolesLines, minPos, maxPos);
 
             session.setAttribute(USERS, users);
             session.setAttribute(MIN_POS, minPos);

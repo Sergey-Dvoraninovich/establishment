@@ -41,7 +41,7 @@ public final class CommandProvider {
         commands.put(REMOVE_DISH_INGREDIENT, new RemoveDishIngredientCommand());
         commands.put(VERIFY_CODE, new VerifyCodeCommand());
         commands.put(GO_TO_VERIFY_CODE_PAGE, new GoToVerifyCodePageCommand());
-        commands.put(GO_TO_CUSTOMER_PROFILE_PAGE, new GoToCustomerProfilePageCommand());
+        commands.put(GO_TO_USER_PAGE, new GoToUserPageCommand());
         commands.put(GO_TO_ORDERS_PAGE, new GoToOrdersPageCommand());
         commands.put(GO_TO_CUSTOMER_BASKET, new GoToCustomerBasketCommand());
         commands.put(GO_TO_ADMIN_PAGE, new GoToAdminProfileCommand());

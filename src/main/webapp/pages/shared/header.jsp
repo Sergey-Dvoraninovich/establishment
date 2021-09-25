@@ -56,22 +56,12 @@
     </c:if>
 
     <c:if test="${sessionScope.user != null}">
-      <c:if test="${sessionScope.user.role.name() == 'CUSTOMER'}">
-        <div class="header-block">
-          <c:url value="/ApiController?command=go_to_customer_profile_page&id=${sessionScope.user.id}" var="profile_page"/>
-          <a class="header-block-text" href="${profile_page}">
-              ${sessionScope.user.login} <fmt:message key="header.profile"/>
-          </a>
-        </div>
-      </c:if>
-      <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
-        <div class="header-block">
-           <c:url value="/ApiController?command=go_to_admin_page&id=${sessionScope.user.id}" var="admin_profile_page"/>
-           <a class="header-block-text" href="${admin_profile_page}">
-              ${sessionScope.user.login} <fmt:message key="header.profile"/>
-           </a>
-        </div>
-      </c:if>
+      <div class="header-block">
+        <c:url value="/ApiController?command=go_to_user_page&id=${sessionScope.user.id}" var="profile_page"/>
+        <a class="header-block-text" href="${profile_page}">
+            ${sessionScope.user.login} <fmt:message key="header.profile"/>
+        </a>
+      </div>
       <div class="header-block">
         <c:url value="/ApiController?command=sign_out" var="sign_out"/>
         <a class="header-block-text" href="${sign_out}">

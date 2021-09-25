@@ -310,7 +310,7 @@ public class UserDaoImpl implements UserDao {
         List<User> users = new ArrayList<>();
         try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
         ) {
-            String requestLine = addFilterParameters(COUNT_FILTERED_USERS, login, mail,
+            String requestLine = addFilterParameters(SELECT_FILTERED_USERS, login, mail,
                     phoneNumber, cardNumber, userStatuses, userRoles);
             //TODO remove it
             System.out.println(requestLine);
@@ -501,7 +501,7 @@ public class UserDaoImpl implements UserDao {
 
     private String addFilterParameters(String requestLine, String login, String mail, String phoneNumber,
                                        String cardNumber, String[] userStatuses, String[] userRoles){
-        StringBuilder filterString = new StringBuilder("");
+        StringBuilder filterString = new StringBuilder(" WHERE ");
         if (!login.equals("")){
             filterString.append(USER_LOGIN).append(" LIKE '%")
                     .append(login).append("%' AND ");
@@ -519,14 +519,22 @@ public class UserDaoImpl implements UserDao {
                     .append(cardNumber).append("%' AND ");
         }
         if (userStatuses.length != 0){
-            filterString.append(makeFilterGroup(ORDER_ORDER_STATUS, userStatuses)).append(" AND ");
+            filterString.append(makeFilterGroup(USER_STATUS, userStatuses)).append(" AND ");
         }
         if (userRoles.length != 0){
-            filterString.append(makeFilterGroup(ORDER_PAYMENT_TYPE, userRoles)).append(" AND ");
+            filterString.append(makeFilterGroup(USER_ROLE, userRoles)).append(" AND ");
+        }
+        if (!filterString.toString().equals(" WHERE ")) {
+            Integer lastAndPos = filterString.lastIndexOf(" AND ");
+            filterString.replace(lastAndPos, lastAndPos + 5, "");
+        }
+        else {
+            filterString.replace(0, filterString.length(), "");
         }
 
         String lineToFind = !requestLine.contains(LIMIT_LINE) ? ";" : LIMIT_LINE;
         Integer wherePos = requestLine.indexOf(lineToFind);
+        wherePos -= lineToFind.length() - 1;
         StringBuilder resultString = new StringBuilder(requestLine);
         resultString.insert(wherePos + lineToFind.length() - 1, filterString);
         return resultString.toString();

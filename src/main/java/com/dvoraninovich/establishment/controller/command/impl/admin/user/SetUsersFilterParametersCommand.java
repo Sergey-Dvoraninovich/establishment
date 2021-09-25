@@ -3,26 +3,21 @@ package com.dvoraninovich.establishment.controller.command.impl.admin.user;
 import com.dvoraninovich.establishment.controller.command.Command;
 import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.controller.command.impl.admin.order.SetOrdersFilterParametersCommand;
-import com.dvoraninovich.establishment.controller.command.validator.OrderValidator;
 import com.dvoraninovich.establishment.controller.command.validator.UserValidator;
 import com.dvoraninovich.establishment.exception.ServiceException;
-import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.User;
-import com.dvoraninovich.establishment.model.service.OrderService;
 import com.dvoraninovich.establishment.model.service.UserService;
-import com.dvoraninovich.establishment.model.service.impl.OrderServiceImpl;
 import com.dvoraninovich.establishment.model.service.impl.UserServiceImpl;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.util.*;
 
-import static com.dvoraninovich.establishment.controller.command.PagePath.*;
+import static com.dvoraninovich.establishment.controller.command.PagePath.ADMIN_PAGE;
+import static com.dvoraninovich.establishment.controller.command.PagePath.USERS_PAGE;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
-import static com.dvoraninovich.establishment.controller.command.RequestParameter.REQUEST_FILTER_MAX_PRICE;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
@@ -92,7 +87,7 @@ public class SetUsersFilterParametersCommand implements Command {
             session.setAttribute(USERS_FILTER_PHONE_NUMBER, phoneNumberLine.equals("") ? null : phoneNumberLine);
             session.setAttribute(USERS_FILTER_CARD_NUMBER, cardNumberLine.equals("") ? null : cardNumberLine);
 
-            router = new Router(ORDERS_PAGE, REDIRECT);
+            router = new Router(USERS_PAGE, REDIRECT);
         } catch (ServiceException e) {
             logger.info("Impossible to find user orders", e);
             router = new Router(ADMIN_PAGE, REDIRECT);

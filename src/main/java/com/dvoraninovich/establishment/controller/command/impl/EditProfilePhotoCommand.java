@@ -24,6 +24,7 @@ import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.ID;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
+import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
 import static com.dvoraninovich.establishment.model.entity.Role.CUSTOMER;
 
 public class EditProfilePhotoCommand implements Command {
@@ -58,39 +59,23 @@ public class EditProfilePhotoCommand implements Command {
                     session.setAttribute(IMPOSSIBLE_TO_UPLOAD_USER_PHOTO, true);
                 }
                 else {
-                    System.out.println(photoName);
                     targetUser.setPhoto(photoName);
-                    System.out.println(targetUser);
                     boolean updateResult = userService.updateUser(targetUser);
-                    System.out.println(updateResult);
                     if (!updateResult) {
                         session.setAttribute(CHANGE_PROFILE_PHOTO_ERROR, true);
                     } else {
-                        session.setAttribute(EDIT_USER, targetUser);
-                        if (user.getRole() == CUSTOMER) {
+                        session.setAttribute(USER_PROFILE, targetUser);
+                        if (user.getRole() == CUSTOMER
+                            || (user.getRole() == ADMIN && targetUser.getId() == user.getId())) {
                             session.setAttribute(USER, targetUser);
                         }
                     }
                 }
             }
         } catch (ServiceException | IOException | ServletException e) {
-            e.printStackTrace();
             logger.info("Impossible to upload dish photo", e);
             session.setAttribute(CHANGE_PROFILE_PHOTO_ERROR, true);
         }
-        switch (user.getRole()) {
-            case ADMIN: {
-                router = new Router(USER + "?id=" + userIdLine, REDIRECT);
-                break;
-            }
-            case CUSTOMER: {
-                router = new Router(CUSTOMER_PROFILE_PAGE, REDIRECT);
-                break;
-            }
-            default: {
-                router = new Router(INDEX, REDIRECT);
-            }
-        }
-        return router;
+        return new Router(USER_PAGE + "?id=" + userIdLine, REDIRECT);
     }
 }
