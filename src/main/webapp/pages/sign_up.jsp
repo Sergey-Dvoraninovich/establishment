@@ -62,11 +62,6 @@
                 <p><fmt:message key="registration.invalid_mail" /></p>
             </div>
         </c:if>
-        <c:if test="${sessionScope.not_unique_mail}">
-            <div class="local-error">
-                <p><fmt:message key="registration.not_unique_mail" /></p>
-            </div>
-        </c:if>
     </div>
     <div class="form-row">
         <label for="phone_num"><fmt:message key="registration.phone_num_placeholder" /></label>

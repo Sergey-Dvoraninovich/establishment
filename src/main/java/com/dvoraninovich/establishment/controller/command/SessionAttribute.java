@@ -79,6 +79,14 @@ public final class SessionAttribute {
     public static final String ORDERS_FILTER_MIN_PRICE = "orders_filter_min_price";
     public static final String ORDERS_FILTER_MAX_PRICE = "orders_filter_max_price";
 
+    public static final String DISHES_FILTER_NAME = "dishes_filter_name";
+    public static final String DISHES_FILTER_MIN_CALORIES_AMOUNT = "dishes_filter_min_calories_amount";
+    public static final String DISHES_FILTER_MAX_CALORIES_AMOUNT = "dishes_filter_max_calories_amount";
+    public static final String DISHES_FILTER_MIN_AMOUNT_GRAMS = "dishes_filter_min_amount_grams";
+    public static final String DISHES_FILTER_MAX_AMOUNT_GRAMS = "dishes_filter_max_amount_grams";
+    public static final String DISHES_FILTER_MIN_PRICE = "dishes_filter_min_price";
+    public static final String DISHES_FILTER_MAX_PRICE = "dishes_filter_max_price";
+
     public static final String USERS_FILTER_USER_STATUSES = "users_filter_user_statuses";
     public static final String USERS_FILTER_USER_ROLES = "users_filter_user_roles";
     public static final String USERS_FILTER_LOGIN = "users_filter_login";
@@ -90,6 +98,9 @@ public final class SessionAttribute {
     public static final String INVALID_USER_ROLE = "invalid_user_role";
     public static final String INVALID_ORDER_STATES = "invalid_order_states";
     public static final String INVALID_PAYMENT_TYPES = "invalid_payment_types";
+    public static final String INVALID_CALORIES_AMOUNT = "invalid_calories_amount";
+    public static final String INVALID_AMOUNT_GRAMS = "invalid_amount_grams";
+    public static final String INVALID_NAME = "invalid_name";
     public static final String INVALID_MIN_PRICE = "invalid_min_price";
     public static final String INVALID_MAX_PRICE = "invalid_max_price";
     public static final String INVALID_FILTER_PARAMETERS = "invalid_filter_parameters";

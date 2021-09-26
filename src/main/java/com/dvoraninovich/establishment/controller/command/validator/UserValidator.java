@@ -100,9 +100,6 @@ public class UserValidator {
         currentResult = service.isLoginUnique(login);
         validationMessages.put(NOT_UNIQUE_LOGIN, !currentResult);
 
-        currentResult = service.isMailUnique(mail);
-        validationMessages.put(NOT_UNIQUE_MAIL, !currentResult);
-
         return validationMessages;
     }
 

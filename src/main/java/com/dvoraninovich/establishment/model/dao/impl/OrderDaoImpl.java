@@ -292,12 +292,12 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Long countOrders(String minPriceLine, String maxPriceLine,
+    public Long countOrders(String userIdLine, String minPriceLine, String maxPriceLine,
                             String[] orderStates, String[] paymentTypes) throws DaoException {
         Long amount = Long.valueOf(0);
         try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
         ) {
-            String requestLine = addFilterParameters(COUNT_ORDERS, minPriceLine, maxPriceLine,
+            String requestLine = addFilterParameters(COUNT_ORDERS, userIdLine, minPriceLine, maxPriceLine,
                     orderStates, paymentTypes);
             PreparedStatement statement = connection.prepareStatement(requestLine);
             ResultSet resultSet = statement.executeQuery();
@@ -436,12 +436,12 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public HashMap<Order, User> findOrdersWithUsersLimit(String minPriceLine, String maxPriceLine, long minPos, long maxPos,
+    public HashMap<Order, User> findOrdersWithUsersLimit(String userIdLine, String minPriceLine, String maxPriceLine, long minPos, long maxPos,
                                                          String[] orderStates, String[] paymentTypes) throws DaoException {
         HashMap<Order, User> userHashMap = new HashMap<>();
         try (Connection connection = connectionPool.acquireConnection()) {
 
-            String requestLine = addFilterParameters(SELECT_ALL_ORDERS_WITH_USER_INFO, minPriceLine, maxPriceLine,
+            String requestLine = addFilterParameters(SELECT_ALL_ORDERS_WITH_USER_INFO, userIdLine, minPriceLine, maxPriceLine,
                                                      orderStates, paymentTypes);
             PreparedStatement statement = connection.prepareStatement(requestLine);
             statement.setLong(1, minPos-1);
@@ -490,9 +490,13 @@ public class OrderDaoImpl implements OrderDao {
         return orders;
     }
 
-    private String addFilterParameters(String requestLine, String minPriceLine, String maxPriceLine,
+    private String addFilterParameters(String requestLine, String userIdLine, String minPriceLine, String maxPriceLine,
                                        String[] orderStates, String[] paymentTypes){
         StringBuilder filterString = new StringBuilder("");
+        if (!userIdLine.equals("")){
+            filterString.append(ORDER_USER_ID).append(" = ")
+                    .append(minPriceLine).append(" AND ");
+        }
         if (!minPriceLine.equals("")){
             filterString.append(ORDER_FINAL_PRICE).append(" >= ")
                     .append(minPriceLine).append(" AND ");

@@ -39,6 +39,7 @@ public class SetOrdersFilterParametersCommand implements Command {
         session.setAttribute(INVALID_PAYMENT_TYPES, false);
         session.setAttribute(INVALID_FILTER_PARAMETERS, false);
 
+        String userIdLine = request.getParameter(USER_ID);
         String[] orderStatesLines = request.getParameterValues(REQUEST_FILTER_ORDER_STATES);
         orderStatesLines = orderStatesLines == null ? new String[0] : orderStatesLines;
         String[] paymentTypesLines = request.getParameterValues(REQUEST_FILTER_PAYMENT_TYPES);
@@ -47,7 +48,7 @@ public class SetOrdersFilterParametersCommand implements Command {
         String maxPriceLine = request.getParameter(REQUEST_FILTER_MAX_PRICE);
 
         HashMap<String, Boolean> validationResult = new HashMap<>();
-        validationResult = validator.validateFilterParameters(minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
+        validationResult = validator.validateFilterParameters(userIdLine, minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
 
         Set<String> validationMessages = validationResult.keySet();
         HashMap<String, Boolean> finalValidationResult = validationResult;
@@ -64,13 +65,13 @@ public class SetOrdersFilterParametersCommand implements Command {
             Long minPos = Long.valueOf(1);
             Long maxPos = ORDERS_PAGE_ITEMS_AMOUNT;
 
-            Long totalAmount = service.countFilteredOrders(minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
+            Long totalAmount = service.countFilteredOrders(userIdLine, minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
             maxPos = maxPos > totalAmount ? totalAmount : maxPos;
             session.setAttribute(TOTAL_AMOUNT, totalAmount);
             session.setAttribute(PAGE_ITEMS_AMOUNT, ORDERS_PAGE_ITEMS_AMOUNT);
 
             HashMap<Order, User> fullInfoHashMap = new HashMap<>();
-            fullInfoHashMap = service.findFilteredOrdersWithUsers(minPriceLine, maxPriceLine, minPos, maxPos, orderStatesLines, paymentTypesLines);
+            fullInfoHashMap = service.findFilteredOrdersWithUsers(userIdLine, minPriceLine, maxPriceLine, minPos, maxPos, orderStatesLines, paymentTypesLines);
             orders.addAll(fullInfoHashMap.keySet());
 
             session.setAttribute(ORDERS, orders);

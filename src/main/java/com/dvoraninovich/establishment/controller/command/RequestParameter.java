@@ -3,6 +3,7 @@ package com.dvoraninovich.establishment.controller.command;
 public final class RequestParameter {
     public static final String COMMAND = "command";
     public static final String ID = "id";
+    public static final String USER_ID = "user_id";
     public static final String SHOW_DISABLES_DISHES = "show_disabled_dishes";
     public static final String EDIT_FORM = "edit_form";
     public static final String NAME = "name";
@@ -38,6 +39,12 @@ public final class RequestParameter {
     public static final String REQUEST_FILTER_PHONE_NUMBER = "request_filter_phone_number";
     public static final String REQUEST_FILTER_MAIL = "request_filter_mail";
     public static final String REQUEST_FILTER_CARD_NUMBER = "request_filter_card_number";
+
+    public static final String REQUEST_FILTER_NAME = "request_filter_name";
+    public static final String REQUEST_FILTER_MIN_CALORIES_AMOUNT = "request_filter_min_calories_amount";
+    public static final String REQUEST_FILTER_MAX_CALORIES_AMOUNT = "request_filter_max_calories_amount";
+    public static final String REQUEST_FILTER_MIN_AMOUNT_GRAMS = "request_filter_min_amount_grams";
+    public static final String REQUEST_FILTER_MAX_AMOUNT_GRAMS = "request_filter_max_amount_grams";
 
     private RequestParameter() {
     }

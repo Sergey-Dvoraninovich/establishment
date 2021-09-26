@@ -23,7 +23,7 @@ public class OrderValidator {
     private static final Logger logger = LogManager.getLogger(OrderValidator.class);
     private static OrderValidator instance;
 
-    private static final String NAME_REGEXP = "^[A-za-z\\s]{2,30}$";
+    private static final String USER_ID_REGEXP = "^\\d{1,16}$";
 
     private OrderValidator() {
     }
@@ -59,11 +59,21 @@ public class OrderValidator {
         return result;
     }
 
-    public HashMap<String, Boolean> validateFilterParameters(String minPriceLine, String maxPriceLine,
+    public boolean validateUserId(String userIdLine) {
+        Boolean result = Pattern.matches(USER_ID_REGEXP, userIdLine);
+        return result;
+    }
+
+    public HashMap<String, Boolean> validateFilterParameters(String userIdLine, String minPriceLine, String maxPriceLine,
                                                              String[] orderStatesLines, String[] paymentTypesLine){
 
         HashMap<String, Boolean> validationMessages = new HashMap<>();
         boolean currentResult;
+
+        if (!userIdLine.equals("")) {
+            currentResult = Pattern.matches(USER_ID_REGEXP, userIdLine);
+            validationMessages.put(INVALID_MIN_PRICE, currentResult);
+        }
 
         if (!minPriceLine.equals("")) {
             BigDecimal minPrice = new BigDecimal(minPriceLine);

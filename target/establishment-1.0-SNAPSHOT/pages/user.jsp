@@ -123,7 +123,8 @@
             </div>
         </div>
         <div id="edit-block" class="block-item">
-            <form>
+            <c:url value="/ApiController?command=edit_user_data?id=${sessionScope.user_profile.id}" var="edit_user"/>
+            <form action="${edit_user}" method="post">
                 <div class="form-row">
                     <label for="phone_num"><fmt:message key="registration.phone_num_placeholder" /></label>
                     <input type="text" name="phone_num" id="phone_num" pattern="^\+\d{12}$" value="${phone_num}" placeholder="${phone_num}"/>
@@ -140,7 +141,7 @@
             <c:if test="${ sessionScope.user.role == 'CUSTOMER'
             || (sessionScope.user.role == 'ADMIN'
             && sessionScope.user.id != sessionScope.user_profile.id)}">
-            <form>
+            <form action="${edit_user}" method="post">
                 <div class="form-row">
                     <label for="card_num"><fmt:message key="registration.card_num_placeholder" /></label>
                     <input type="text" name="card_num" id="card_num" pattern="^\d{16}$" value="${card_num}" placeholder="${card_num}"/>
@@ -158,7 +159,7 @@
             <form>
                 <div class="form-row">
                     <label for="mail"><fmt:message key="registration.mail_placeholder" /></label>
-                    <div class="block-item-text">
+                    <div id="mail-info-text" class="block-item-text">
                         <a><fmt:message key="profile.change_mail_info"/></a>
                     </div>
                     <input type="text" name="mail" pattern = ^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$
@@ -284,6 +285,10 @@
         align-items: flex-start;
         justify-content: flex-start;
     }
+    #mail-info-text {
+        width: 350px;
+        margin-inline: auto;
+    }
     #edit-block {
         display: none;
     }
@@ -371,6 +376,7 @@
         font-size: 25px;
     }
     .block-item-text{
+        width: inherit;
         text-align: center;
     }
     .block-item-text>a{
