@@ -1,5 +1,6 @@
 package com.dvoraninovich.establishment.model.service;
 
+import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.exception.ServiceException;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 public interface UserService {
     Optional<User> authenticate(String login, String password) throws ServiceException;
     Optional<User> register(User user, String password) throws ServiceException;
+    boolean setPasswordById(Long id, String password) throws ServiceException;
 
     Optional<User> findById(long id) throws ServiceException;
     Optional<User> findByLogin(String login) throws ServiceException;

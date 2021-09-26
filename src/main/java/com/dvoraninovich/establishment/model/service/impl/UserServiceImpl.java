@@ -43,25 +43,27 @@ public class UserServiceImpl implements UserService {
     }
 
     public Optional<User> authenticate(String login, String password) throws ServiceException {
-        Optional<User> user = Optional.empty();
+        Optional<User> optionalUser = Optional.empty();
         try {
-            user = userDao.findUserByLogin(login);
-            if (user.isPresent()) {
-                User presentedUser = user.get();
+            optionalUser = userDao.findUserByLogin(login);
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                String salt = userDao.getSaltById(user.getId()).get();
                 String passwordHash = makePasswordHash(password);
-                String benchmarkPasswordHash = userDao.getPasswordById(presentedUser.getId()).get();
+                passwordHash = makePasswordHash(passwordHash + salt);
+                String benchmarkPasswordHash = userDao.getPasswordById(user.getId()).get();
                 if (passwordHash.equals(benchmarkPasswordHash)) {
-                    user = Optional.of(presentedUser);
+                    optionalUser = Optional.of(user);
                 }
                 else
-                    user = Optional.empty();
+                    optionalUser = Optional.empty();
             }
         } catch (DaoException e) {
             logger.warn("User authentication with login: " + login
                     + " and password" + password + " failed", e);
             throw new ServiceException(e);
         }
-        return user;
+        return optionalUser;
     }
 
     public Optional<User> register(User user, String password) throws ServiceException {
@@ -69,6 +71,7 @@ public class UserServiceImpl implements UserService {
         String code = codeGenerator.getCode(CODE_ITEMS, CODE_LENGTH);
         String salt = makeSalt(SALT_LENGTH);
         String passwordHash = makePasswordHash(password);
+        passwordHash = makePasswordHash(passwordHash + salt);
         try {
             registeredUser = userDao.findUserByLogin(user.getLogin());
             if (!registeredUser.isPresent()) {
@@ -88,6 +91,18 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return registeredUser;
+    }
+
+    @Override
+    public boolean setPasswordById(Long id, String password) throws ServiceException{
+        try {
+            String salt = userDao.getSaltById(id).get();
+            String passwordHash = makePasswordHash(password);
+            passwordHash = makePasswordHash(passwordHash + salt);
+            return userDao.setPasswordById(id, passwordHash);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override

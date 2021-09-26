@@ -31,23 +31,25 @@ public class EditUserDataCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router = new Router(INDEX, REDIRECT);
         HttpSession session = request.getSession();
+
+        session.setAttribute(INVALID_PHONE_NUM, false);
+        session.setAttribute(INVALID_CARD_NUM, false);
+
         String idParameter = request.getParameter(ID);
         String phoneNumberLine = request.getParameter(PHONE_NUM);
+        phoneNumberLine = phoneNumberLine == null ? "" : phoneNumberLine;
         String cardNumberLine = request.getParameter(CARD_NUM);
+        cardNumberLine = cardNumberLine == null ? "" : cardNumberLine;
         Long userId = Long.valueOf(idParameter);
         User user = (User) session.getAttribute(USER);
 
-        System.out.println(user);
-        System.out.println(userId);
-        System.out.println(phoneNumberLine);
-        System.out.println(cardNumberLine);
-
-        if (!user.getRole().equals(ADMIN) || user.getId() != userId) {
+        if (!user.getRole().equals(ADMIN) && !userId.equals(userId)) {
             return new Router(INDEX, REDIRECT);
         }
 
         if (!phoneNumberLine.equals("")){
             if (!userValidator.validatePhoneNum(phoneNumberLine)) {
+                  System.out.println("smth wrong");
                 session.setAttribute(INVALID_PHONE_NUM, true);
                 return new Router(USER_PAGE + "?id=" + idParameter + "&edit_form=true", REDIRECT);
             }
@@ -65,14 +67,14 @@ public class EditUserDataCommand implements Command {
             if (optionalProfileUser.isPresent()) {
                 User userProfile = optionalProfileUser.get();
                 if (!phoneNumberLine.equals("")) {
-                    user.setPhoneNumber(phoneNumberLine);
+                    userProfile.setPhoneNumber(phoneNumberLine);
                 }
                 if (!cardNumberLine.equals("")) {
-                    user.setCardNumber(cardNumberLine);
+                    userProfile.setCardNumber(cardNumberLine);
                 }
                 userService.updateUser(userProfile);
                 session.setAttribute(USER_PROFILE, userProfile);
-                if (user.getRole().equals(CUSTOMER)) {
+                if (user.getId() == userProfile.getId()) {
                     session.setAttribute(USER, userProfile);
                 }
                 router = new Router(USER_PAGE + "?id=" + idParameter + "&edit_form=true", REDIRECT);

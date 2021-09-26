@@ -16,8 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
-import static com.dvoraninovich.establishment.controller.command.RequestParameter.EDIT_FORM;
-import static com.dvoraninovich.establishment.controller.command.RequestParameter.ID;
+import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
@@ -30,10 +29,21 @@ public class GoToUserPageCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router = new Router(INDEX, REDIRECT);
         HttpSession session = request.getSession();
+
+        session.setAttribute(DIFFERENT_PASSWORDS, false);
+        session.setAttribute(CHANGE_PASSWORD_ERROR, false);
+        session.setAttribute(INVALID_CURRENT_PASSWORD, false);
+        session.setAttribute(INVALID_PASSWORD, false);
+        session.setAttribute(PASSWORD_SUCCESSFULLY_CHANGED, false);
+        session.setAttribute(INVALID_PHONE_NUM, false);
+        session.setAttribute(INVALID_CARD_NUM, false);
+
         String idParameter = request.getParameter(ID);
         String editFormLine = request.getParameter(EDIT_FORM);
+        String changePasswordFormLine = request.getParameter(CHANGE_PASSWORD_FORM);
         Long userId = Long.valueOf(idParameter);
         Boolean isEditForm = Boolean.valueOf(editFormLine);
+        Boolean isChangePasswordForm = Boolean.valueOf(changePasswordFormLine);
         User user = (User) session.getAttribute(USER);
 
         if (!user.getRole().equals(ADMIN) && user.getId() != userId) {
@@ -44,6 +54,7 @@ public class GoToUserPageCommand implements Command {
             Optional<User> optionalProfileUser = userService.findById(userId);
             if (optionalProfileUser.isPresent()) {
                 User userProfile = optionalProfileUser.get();
+                session.setAttribute(IS_CHANGING_PASSWORD, isChangePasswordForm);
                 session.setAttribute(IS_EDITING_PAGE, isEditForm);
                 session.setAttribute(USER_PROFILE, userProfile);
                 router = new Router(USER_PAGE + "?id=" + idParameter, REDIRECT);

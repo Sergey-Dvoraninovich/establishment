@@ -5,8 +5,11 @@ public final class SessionAttribute {
     public static final String USER_PROFILE = "user_profile";
     public static final String USERS = "users";
     public static final String AUTH_ERROR = "auth_error";
+    public static final String WRONG_PASSWORD = "wrong_password";
     public static final String REGISTRATION_ERROR = "registration_error";
     public static final String IS_EDITING_PAGE = "is_editing_page";
+    public static final String IS_CHANGING_PASSWORD = "is_changing_password";
+    public static final String PASSWORD_SUCCESSFULLY_CHANGED = "password_successfully_changed";
     public static final String EXCEPTION = "exception";
     public static final String USER_ALREADY_VERIFIED = "user_already_verified";
     public static final String USER_BLOCKED = "user_blocked";
@@ -29,8 +32,8 @@ public final class SessionAttribute {
     public static final String INVALID_LOGIN = "invalid_login";
     public static final String NOT_UNIQUE_LOGIN = "not_unique_login";
     public static final String INVALID_PASSWORD = "invalid_password";
+    public static final String INVALID_CURRENT_PASSWORD = "invalid_current_password";
     public static final String INVALID_MAIL = "invalid_mail";
-    public static final String NOT_UNIQUE_MAIL = "not_unique_mail";
     public static final String INVALID_PHONE_NUM = "invalid_phone_num";
     public static final String INVALID_CARD_NUM = "invalid_card_num";
 

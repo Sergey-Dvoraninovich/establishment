@@ -60,6 +60,7 @@ public final class CommandProvider {
         commands.put(EDIT_ORDER, new EditOrderCommand());
         commands.put(SET_USERS_FILTER_PARAMETERS, new SetUsersFilterParametersCommand());
         commands.put(EDIT_USER_DATA, new EditUserDataCommand());
+        commands.put(CHANGE_USER_PASSWORD, new ChangeUserPasswordCommand());
     }
 
     public static CommandProvider getInstance() {

@@ -124,7 +124,7 @@
             </div>
         </div>
         <div id="edit-block" class="block-item">
-            <c:url value="/ApiController?command=edit_user_data?id=${sessionScope.user_profile.id}&edit_form=true" var="edit_user_phone_num"/>
+            <c:url value="/ApiController?command=edit_user_data&id=${sessionScope.user_profile.id}&edit_form=true" var="edit_user_phone_num"/>
             <form action="${edit_user_phone_num}" method="post">
                 <div class="form-row">
                     <label for="phone_num"><fmt:message key="registration.phone_num_placeholder" /></label>
@@ -142,7 +142,7 @@
             <c:if test="${ sessionScope.user.role == 'CUSTOMER'
             || (sessionScope.user.role == 'ADMIN'
             && sessionScope.user.id != sessionScope.user_profile.id)}">
-            <c:url value="/ApiController?command=edit_user_data?id=${sessionScope.user_profile.id}&edit_form=true" var="edit_user_card_num"/>
+            <c:url value="/ApiController?command=edit_user_data&id=${sessionScope.user_profile.id}&edit_form=true" var="edit_user_card_num"/>
             <form action="${edit_user_card_num}" method="post">
                 <div class="form-row">
                     <label for="card_num"><fmt:message key="registration.card_num_placeholder" /></label>
@@ -219,6 +219,64 @@
                 </div>
             </div>
         </c:if>
+        <div class="block-item">
+            <div id="change-password-plug">
+                <div id="change-password-info" class="block-item-text">
+                    <a><fmt:message key="profile.show_change_password_form_info" /></a>
+                </div>
+                <div id="change-password-show" class="block-item-action">
+                    <a><fmt:message key="profile.show_change_password_form" /></a>
+                </div>
+            </div>
+            <c:url value="/ApiController?command=change_user_password&id=${sessionScope.user_profile.id}&change_password_form=true" var="edit_user_card_num"/>
+            <form action="${edit_user_card_num}" method="post" id="change-password-form">
+                <c:if test="${sessionScope.user.role == 'CUSTOMER'}">
+                    <div class="form-row">
+                        <label for="current_password"><fmt:message key="profile.current_password" /></label>
+                        <input type="password" name="current_password" id="current_password"
+                               pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$"/>
+                        <c:if test="${sessionScope.invalid_current_password}">
+                            <div class="local-error">
+                                <p><fmt:message key="profile.invalid_current_password" /></p>
+                            </div>
+                        </c:if>
+                    </div>
+                </c:if>
+                <div class="form-row">
+                    <label for="password"><fmt:message key="registration.password_placeholder" /></label>
+                    <input type="password" name="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$"
+                           id="password" />
+                    <c:if test="${sessionScope.invalid_password}">
+                        <div class="local-error">
+                            <p><fmt:message key="registration.invalid_password" /></p>
+                        </div>
+                    </c:if>
+                    <c:if test="${sessionScope.different_passwords}">
+                        <div class="local-error">
+                            <p><fmt:message key="registration.different_passwords" /></p>
+                        </div>
+                    </c:if>
+                </div>
+                <div class="form-row">
+                    <label for="repeat_password"><fmt:message key="registration.password_repeat_placeholder" /></label>
+                    <input type="password" name="repeat_password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$"
+                           id="repeat_password" />
+                    <c:if test="${sessionScope.different_passwords}">
+                        <div class="local-error">
+                            <p><fmt:message key="registration.different_passwords" /></p>
+                        </div>
+                    </c:if>
+                </div>
+                <div class="form-row">
+                    <input type="submit" value="${edit}"/>
+                </div>
+            </form>
+            <c:if test="${sessionScope.password_succussfully_changed}">
+            <div id="change-password-successful" class="block-item-text">
+                <a><fmt:message key="profile.password_successfully_changed" /></a>
+            </div>
+            </c:if>
+        </div>
     </div>
 </div>
 <script>
@@ -227,11 +285,31 @@
         document.getElementById("description-action").style.display = "none";
         document.getElementById("edit-block").style.display = "flex";
     }
+    else {
+        document.getElementById("description-action").style.display = "flex";
+        document.getElementById("edit-block").style.display = "none";
+    }
+
+    var isChangePasswordFormVisible = ${sessionScope.is_changing_password}
+    if (isChangePasswordFormVisible) {
+        document.getElementById("change-password-plug").style.display = "none";
+        document.getElementById("change-password-form").style.display = "flex";
+    }
+    else {
+        document.getElementById("change-password-plug").style.display = "flex";
+        document.getElementById("change-password-form").style.display = "none";
+    }
 
     var editButton = document.getElementById("description-action");
     editButton.onclick = function openEditBlock(){
         document.getElementById("description-action").style.display = "none";
         document.getElementById("edit-block").style.display = "flex";
+    }
+
+    var showChangePasswordForm = document.getElementById("change-password-show");
+    showChangePasswordForm.onclick = function openChangingPasswordForm(){
+        document.getElementById("change-password-plug").style.display = "none";
+        document.getElementById("change-password-form").style.display = "flex";
     }
 
     document.getElementById('placer').onclick = function(){
@@ -360,19 +438,65 @@
         -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
         box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
     }
-    #icon{
-        padding: 0px;
-    }
     .block-item:hover{
         -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
         -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
         box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    }
+    .form-row {
+        width: 100%;
+    }
+    #change-password-plug {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    #change-password-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    #icon{
+        padding: 0px;
     }
 
     .local-error {
         font-size: 15px;
         color: red;
         padding-bottom: 0px;
+    }
+    #change-password-successful {
+        color: #7ba05b;
+    }
+    input[type=password]{
+        width:100%;
+        border:2px solid #aaa;
+        border-radius:5px;
+        margin:8px 0;
+        outline:none;
+        padding:8px;
+        box-sizing:border-box;
+        transition:.3s;
+    }
+    input[type=password]:focus{
+        border-color:#a15566;
+        box-shadow:0 0 8px 0 #a15566;
+    }
+    input[type="submit"]{
+        font-size: 20px;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        margin-top: 15px;
+        padding: 5px;
+        text-align: center;
+        width: 100%;
+        background-color: #a15566;
+    }
+    input[type="submit"]:hover {
+        background-color: #804451;
     }
     .block-item-header{
         text-align: center;
@@ -444,6 +568,13 @@
     }
     #upload-photo-submit {
         width: 70%;
+    }
+
+    #change-password-plug {
+        display: flex;
+    }
+    #change-password-form {
+        display: none;
     }
 </style>
 </html>

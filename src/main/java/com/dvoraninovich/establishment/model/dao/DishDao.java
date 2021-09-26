@@ -43,7 +43,7 @@ public interface DishDao extends BaseDao<Long, Dish> {
      * @return the list of dishes for order with specified id
      * @throws DaoException the dao exception
      */
-    public List<Dish> findOrderDishes(long id) throws DaoException;
+    List<Dish> findOrderDishes(long id) throws DaoException;
 
     /**
      * Find dish ingredients.
