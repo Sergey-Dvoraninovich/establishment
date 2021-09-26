@@ -39,21 +39,26 @@ public class EditUserDataCommand implements Command {
 
         System.out.println(user);
         System.out.println(userId);
+        System.out.println(phoneNumberLine);
+        System.out.println(cardNumberLine);
+
         if (!user.getRole().equals(ADMIN) || user.getId() != userId) {
             return new Router(INDEX, REDIRECT);
         }
 
         if (!phoneNumberLine.equals("")){
-        if (!userValidator.validatePhoneNum(phoneNumberLine)) {
-            session.setAttribute(INVALID_PHONE_NUM, true);
-            return new Router(USER_PAGE + "?id=" + idParameter, REDIRECT);
-        }}
+            if (!userValidator.validatePhoneNum(phoneNumberLine)) {
+                session.setAttribute(INVALID_PHONE_NUM, true);
+                return new Router(USER_PAGE + "?id=" + idParameter + "&edit_form=true", REDIRECT);
+            }
+        }
 
         if (!cardNumberLine.equals("")){
-        if (!userValidator.validateCardNum(cardNumberLine)) {
-            session.setAttribute(INVALID_CARD_NUM, true);
-            return new Router(USER_PAGE + "?id=" + idParameter, REDIRECT);
-        }}
+            if (!userValidator.validateCardNum(cardNumberLine)) {
+                session.setAttribute(INVALID_CARD_NUM, true);
+                return new Router(USER_PAGE + "?id=" + idParameter + "&edit_form=true", REDIRECT);
+            }
+        }
 
         try {
             Optional<User> optionalProfileUser = userService.findById(userId);
@@ -70,7 +75,7 @@ public class EditUserDataCommand implements Command {
                 if (user.getRole().equals(CUSTOMER)) {
                     session.setAttribute(USER, userProfile);
                 }
-                router = new Router(USER_PAGE + "?id=" + idParameter, REDIRECT);
+                router = new Router(USER_PAGE + "?id=" + idParameter + "&edit_form=true", REDIRECT);
             }
         } catch (ServiceException e) {
             logger.info("Impossible to go to user page", e);

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
+import static com.dvoraninovich.establishment.controller.command.RequestParameter.EDIT_FORM;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.ID;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
@@ -30,7 +31,9 @@ public class GoToUserPageCommand implements Command {
         Router router = new Router(INDEX, REDIRECT);
         HttpSession session = request.getSession();
         String idParameter = request.getParameter(ID);
+        String editFormLine = request.getParameter(EDIT_FORM);
         Long userId = Long.valueOf(idParameter);
+        Boolean isEditForm = Boolean.valueOf(editFormLine);
         User user = (User) session.getAttribute(USER);
 
         if (!user.getRole().equals(ADMIN) && user.getId() != userId) {
@@ -41,6 +44,7 @@ public class GoToUserPageCommand implements Command {
             Optional<User> optionalProfileUser = userService.findById(userId);
             if (optionalProfileUser.isPresent()) {
                 User userProfile = optionalProfileUser.get();
+                session.setAttribute(IS_EDITING_PAGE, isEditForm);
                 session.setAttribute(USER_PROFILE, userProfile);
                 router = new Router(USER_PAGE + "?id=" + idParameter, REDIRECT);
             }

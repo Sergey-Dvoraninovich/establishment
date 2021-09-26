@@ -40,6 +40,7 @@ public class SetOrdersFilterParametersCommand implements Command {
         session.setAttribute(INVALID_FILTER_PARAMETERS, false);
 
         String userIdLine = request.getParameter(USER_ID);
+        userIdLine = userIdLine == null ? "" : userIdLine;
         String[] orderStatesLines = request.getParameterValues(REQUEST_FILTER_ORDER_STATES);
         orderStatesLines = orderStatesLines == null ? new String[0] : orderStatesLines;
         String[] paymentTypesLines = request.getParameterValues(REQUEST_FILTER_PAYMENT_TYPES);

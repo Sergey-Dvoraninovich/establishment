@@ -1,6 +1,5 @@
 package com.dvoraninovich.establishment.controller.command.validator;
 
-import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.model.entity.OrderState;
 import com.dvoraninovich.establishment.model.entity.PaymentType;
 import org.apache.log4j.LogManager;
@@ -8,22 +7,16 @@ import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
-import static com.dvoraninovich.establishment.controller.command.PagePath.ORDERS_PAGE;
-import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.INVALID_FILTER_PARAMETERS;
 
 public class OrderValidator {
     private static final Logger logger = LogManager.getLogger(OrderValidator.class);
     private static OrderValidator instance;
 
-    private static final String USER_ID_REGEXP = "^\\d{1,16}$";
+    private static final String USER_ID_REGEXP = "^\\d+$";
 
     private OrderValidator() {
     }
@@ -60,7 +53,10 @@ public class OrderValidator {
     }
 
     public boolean validateUserId(String userIdLine) {
-        Boolean result = Pattern.matches(USER_ID_REGEXP, userIdLine);
+        Boolean result = true;
+        if (!userIdLine.equals("")) {
+            result = Pattern.matches(USER_ID_REGEXP, userIdLine);
+        }
         return result;
     }
 

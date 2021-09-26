@@ -259,7 +259,7 @@
         margin: 0px 10px;
     }
     input {
-        font-size: 20px;
+        font-size: 15px;
     }
     input[type=text]{
         width:100%;

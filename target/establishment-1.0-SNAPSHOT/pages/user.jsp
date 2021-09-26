@@ -10,6 +10,7 @@
 <c:set var="phone_num">${sessionScope.user_profile.phoneNumber}</c:set>
 <c:set var="card_num">${sessionScope.user.cardNumber}</c:set>
 <c:set var="mail">${sessionScope.user.mail}</c:set>
+<c:set var="isEditPage">${sessionScope.is_editing_page}</c:set>
 
 <html>
 <head>
@@ -123,8 +124,8 @@
             </div>
         </div>
         <div id="edit-block" class="block-item">
-            <c:url value="/ApiController?command=edit_user_data?id=${sessionScope.user_profile.id}" var="edit_user"/>
-            <form action="${edit_user}" method="post">
+            <c:url value="/ApiController?command=edit_user_data?id=${sessionScope.user_profile.id}&edit_form=true" var="edit_user_phone_num"/>
+            <form action="${edit_user_phone_num}" method="post">
                 <div class="form-row">
                     <label for="phone_num"><fmt:message key="registration.phone_num_placeholder" /></label>
                     <input type="text" name="phone_num" id="phone_num" pattern="^\+\d{12}$" value="${phone_num}" placeholder="${phone_num}"/>
@@ -141,7 +142,8 @@
             <c:if test="${ sessionScope.user.role == 'CUSTOMER'
             || (sessionScope.user.role == 'ADMIN'
             && sessionScope.user.id != sessionScope.user_profile.id)}">
-            <form action="${edit_user}" method="post">
+            <c:url value="/ApiController?command=edit_user_data?id=${sessionScope.user_profile.id}&edit_form=true" var="edit_user_card_num"/>
+            <form action="${edit_user_card_num}" method="post">
                 <div class="form-row">
                     <label for="card_num"><fmt:message key="registration.card_num_placeholder" /></label>
                     <input type="text" name="card_num" id="card_num" pattern="^\d{16}$" value="${card_num}" placeholder="${card_num}"/>
@@ -220,6 +222,12 @@
     </div>
 </div>
 <script>
+    var isEditPage = ${sessionScope.is_editing_page}
+    if (isEditPage) {
+        document.getElementById("description-action").style.display = "none";
+        document.getElementById("edit-block").style.display = "flex";
+    }
+
     var editButton = document.getElementById("description-action");
     editButton.onclick = function openEditBlock(){
         document.getElementById("description-action").style.display = "none";
@@ -306,6 +314,9 @@
         padding:8px;
         box-sizing:border-box;
         transition:.3s;
+    }
+    input {
+        font-size: 18px;
     }
     input[type=text]:focus{
         border-color:#a15566;

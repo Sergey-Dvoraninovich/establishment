@@ -47,7 +47,6 @@ public final class CommandProvider {
         commands.put(GO_TO_ADMIN_PAGE, new GoToAdminProfileCommand());
         commands.put(SIGN_OUT, new SignOutCommand());
         commands.put(UPLOAD_DISH_PHOTO, new EditDishPhoto());
-        commands.put(EDIT_USER_DATA, new EditUserDataCommand());
         commands.put(ADD_TO_BASKET, new AddDishToBasketCommand());
         commands.put(INCREMENT_ORDER_DISH, new IncrementOrderDishCommand());
         commands.put(DECREMENT_ORDER_DISH, new DecrementOrderDishCommand());
@@ -60,6 +59,7 @@ public final class CommandProvider {
         commands.put(SET_ORDERS_FILTER_PARAMETERS, new SetOrdersFilterParametersCommand());
         commands.put(EDIT_ORDER, new EditOrderCommand());
         commands.put(SET_USERS_FILTER_PARAMETERS, new SetUsersFilterParametersCommand());
+        commands.put(EDIT_USER_DATA, new EditUserDataCommand());
     }
 
     public static CommandProvider getInstance() {

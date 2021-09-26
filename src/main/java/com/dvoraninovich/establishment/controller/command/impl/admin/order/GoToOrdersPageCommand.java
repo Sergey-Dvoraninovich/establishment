@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,20 +38,21 @@ public class GoToOrdersPageCommand implements Command {
         List<Order> orders = new ArrayList<>();
         HashMap<Long, User> ordersUsersMap = new HashMap<>();
         String userIdLine = request.getParameter(USER_ID);
+        userIdLine = userIdLine == null ? "" : userIdLine;
         String minPosLine = request.getParameter(NEXT_MIN_POS);
         String maxPosLine = request.getParameter(NEXT_MAX_POS);
         String newTotalAmountLine = request.getParameter(NEW_TOTAL_AMOUNT);
         Long totalAmount;
 
-        if (orderValidator.validateUserId(userIdLine)) {
+        if (!orderValidator.validateUserId(userIdLine)) {
             router = new Router(INDEX, REDIRECT);
             return router;
         }
 
         List<String> orderStatesList = (List<String>) session.getAttribute(ORDERS_FILTER_ORDER_STATES);
         List<String> paymentTypesList = (List<String>) session.getAttribute(ORDERS_FILTER_PAYMENT_TYPES);
-        String minPriceLine = (String) session.getAttribute(ORDERS_FILTER_MIN_PRICE);
-        String maxPriceLine = (String) session.getAttribute(ORDERS_FILTER_MAX_PRICE);
+        BigDecimal minPrice = (BigDecimal) session.getAttribute(ORDERS_FILTER_MIN_PRICE);
+        BigDecimal maxPrice = (BigDecimal) session.getAttribute(ORDERS_FILTER_MAX_PRICE);
 
         try {
             Long minPos = Long.valueOf(minPosLine);
@@ -61,14 +63,13 @@ public class GoToOrdersPageCommand implements Command {
             String[] paymentTypesLines = paymentTypesList == null
                     ? new String[0]
                     : (String[]) paymentTypesList.toArray();
-            minPriceLine = minPriceLine == null ? "" : minPriceLine;
-            maxPriceLine = maxPriceLine == null ? "" : maxPriceLine;
+            String minPriceLine = minPrice == null ? "" : minPrice.toString();
+            String maxPriceLine = maxPrice == null ? "" : maxPrice.toString();
 
             if (newTotalAmountLine != null){
                 totalAmount = orderService.countFilteredOrders(userIdLine,
                         minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
                 session.setAttribute(TOTAL_AMOUNT, totalAmount);
-                session.setAttribute(PAGE_ITEMS_AMOUNT, ORDERS_PAGE_ITEMS_AMOUNT);
             }
             else {
                 totalAmount = (Long) session.getAttribute(TOTAL_AMOUNT);
@@ -83,10 +84,8 @@ public class GoToOrdersPageCommand implements Command {
             session.setAttribute(ORDERS_USERS_MAP, fullInfoHashMap);
             session.setAttribute(MIN_POS, minPos);
             session.setAttribute(MAX_POS, maxPos);
-//            session.setAttribute(ORDERS_FILTER_ORDER_STATES, Arrays.asList(orderStatesLines));
-//            session.setAttribute(ORDERS_FILTER_MIN_PRICE, minPriceLine.equals("") ? null : new BigDecimal(minPriceLine));
-//            session.setAttribute(ORDERS_FILTER_MAX_PRICE, maxPriceLine.equals("") ? null : new BigDecimal(maxPriceLine));
-//            session.setAttribute(ORDERS_FILTER_PAYMENT_TYPES, Arrays.asList(paymentTypesLines));
+            session.setAttribute(PAGE_ITEMS_AMOUNT, ORDERS_PAGE_ITEMS_AMOUNT);
+
             router = new Router(ORDERS_PAGE, REDIRECT);
         } catch (ServiceException e) {
             logger.info("Impossible to find user orders", e);
