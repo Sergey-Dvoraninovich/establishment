@@ -1,5 +1,7 @@
 package com.dvoraninovich.establishment.controller.command.validator;
 
+import com.dvoraninovich.establishment.model.entity.OrderState;
+import com.dvoraninovich.establishment.model.entity.PaymentType;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -14,6 +16,8 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 
 public class DishValidator {
     private static final Logger logger = LogManager.getLogger(DishValidator.class);
+    private static final String DISH_AVAILABLE = "AVAILABLE";
+    private static final String DISH_DISABLED = "DISABLED";
     private static DishValidator instance;
 
     private static final String NAME_REGEXP = "^[A-za-z\\s]{2,50}$";
@@ -74,7 +78,6 @@ public class DishValidator {
         boolean currentResult;
 
         try {
-
             currentResult = Pattern.matches(NAME_REGEXP, name);
             validationMessages.put(INVALID_DISH_NAME, !currentResult);
 
@@ -108,6 +111,91 @@ public class DishValidator {
         return validationMessages;
     }
 
+    public HashMap<String, Boolean> validateFilterParameters(String name, String minPriceLine, String maxPriceLine,
+                                                             String minCaloriesAmountLine, String maxCaloriesAmountLine,
+                                                             String minAmountGramsLine, String maxAmountGramsLine,
+                                                             String[] dishStates){
+
+        HashMap<String, Boolean> validationMessages = new HashMap<>();
+        boolean currentResult;
+
+        try {
+
+            currentResult = Pattern.matches(NAME_REGEXP, name);
+            validationMessages.put(INVALID_DISH_NAME, !currentResult);
+
+            if (!minPriceLine.equals("")) {
+                BigDecimal minPrice = new BigDecimal(minPriceLine);
+                currentResult = minPrice.compareTo(new BigDecimal("0.00")) < 0;
+                validationMessages.put(INVALID_MIN_PRICE, currentResult);
+            }
+
+            if (!maxPriceLine.equals("")) {
+                BigDecimal maxPrice = new BigDecimal(maxPriceLine);
+                currentResult = maxPrice.compareTo(new BigDecimal("0.00")) < 0;
+                validationMessages.put(INVALID_MAX_PRICE, currentResult);
+            }
+
+            if (!maxPriceLine.equals("") && !minPriceLine.equals("")) {
+                BigDecimal minPrice = new BigDecimal(minPriceLine);
+                BigDecimal maxPrice = new BigDecimal(maxPriceLine);
+                currentResult = maxPrice.compareTo(minPrice) < 0;
+                validationMessages.put(INVALID_FILTER_PARAMETERS, currentResult);
+            }
+
+            if (!minCaloriesAmountLine.equals("")) {
+                BigDecimal minPrice = new BigDecimal(minCaloriesAmountLine);
+                currentResult = minPrice.compareTo(new BigDecimal("0.00")) < 0;
+                validationMessages.put(INVALID_MIN_PRICE, currentResult);
+            }
+
+            if (!maxCaloriesAmountLine.equals("")) {
+                BigDecimal maxPrice = new BigDecimal(maxCaloriesAmountLine);
+                currentResult = maxPrice.compareTo(new BigDecimal("0.00")) < 0;
+                validationMessages.put(INVALID_MAX_PRICE, currentResult);
+            }
+
+            if (!maxCaloriesAmountLine.equals("") && !minCaloriesAmountLine.equals("")) {
+                BigDecimal minPrice = new BigDecimal(minCaloriesAmountLine);
+                BigDecimal maxPrice = new BigDecimal(maxCaloriesAmountLine);
+                currentResult = maxPrice.compareTo(minPrice) < 0;
+                validationMessages.put(INVALID_FILTER_PARAMETERS, currentResult);
+            }
+
+            if (!minAmountGramsLine.equals("")) {
+                BigDecimal minPrice = new BigDecimal(minAmountGramsLine);
+                currentResult = minPrice.compareTo(new BigDecimal("0.00")) < 0;
+                validationMessages.put(INVALID_MIN_PRICE, currentResult);
+            }
+
+            if (!maxAmountGramsLine.equals("")) {
+                BigDecimal maxPrice = new BigDecimal(maxAmountGramsLine);
+                currentResult = maxPrice.compareTo(new BigDecimal("0.00")) < 0;
+                validationMessages.put(INVALID_MAX_PRICE, currentResult);
+            }
+
+            if (!maxAmountGramsLine.equals("") && !minAmountGramsLine.equals("")) {
+                BigDecimal minPrice = new BigDecimal(minAmountGramsLine);
+                BigDecimal maxPrice = new BigDecimal(maxAmountGramsLine);
+                currentResult = maxPrice.compareTo(minPrice) < 0;
+                validationMessages.put(INVALID_FILTER_PARAMETERS, currentResult);
+            }
+
+            currentResult = false;
+            for (String line : dishStates) {
+                if (!line.equals(DISH_AVAILABLE) && !line.equals(DISH_DISABLED)) {
+                    currentResult = true;
+                }
+            }
+            validationMessages.put(INVALID_DISH_STATES, currentResult);
+
+        } catch (Exception e) {
+            logger.info("dish filter validation error: " + e);
+            validationMessages.put(DISH_VALIDATION_ERROR, true);
+        }
+
+        return validationMessages;
+    }
 //    public List<String> validateOrderData(String name, String priceLine,
 //                                         String amountGramsLine, String caloriesAmountLine){
 //

@@ -48,6 +48,7 @@ public final class RequestParameter {
     public static final String REQUEST_FILTER_MAX_CALORIES_AMOUNT = "request_filter_max_calories_amount";
     public static final String REQUEST_FILTER_MIN_AMOUNT_GRAMS = "request_filter_min_amount_grams";
     public static final String REQUEST_FILTER_MAX_AMOUNT_GRAMS = "request_filter_max_amount_grams";
+    public static final String REQUEST_FILTER_DISH_STATES = "request_filter_dish_states";
 
     private RequestParameter() {
     }

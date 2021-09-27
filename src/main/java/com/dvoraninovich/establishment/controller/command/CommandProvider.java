@@ -58,6 +58,7 @@ public final class CommandProvider {
         commands.put(GO_TO_ORDER_PAGE, new GoToOrderPageCommand());
         commands.put(UPLOAD_USER_PHOTO, new EditProfilePhotoCommand());
         commands.put(SET_ORDERS_FILTER_PARAMETERS, new SetOrdersFilterParametersCommand());
+        commands.put(SET_DISHES_FILTER_PARAMETERS, new SetDishesFilterParametersCommand());
         commands.put(EDIT_ORDER, new EditOrderCommand());
         commands.put(SET_USERS_FILTER_PARAMETERS, new SetUsersFilterParametersCommand());
         commands.put(EDIT_USER_DATA, new EditUserDataCommand());

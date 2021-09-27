@@ -10,6 +10,15 @@
 <c:set var="add_to_basket_text"><fmt:message key="dishes.add_to_basket" /></c:set>
 <c:set var="more_information"><fmt:message key="more_information" /></c:set>
 <c:set var="create_dish_message"><fmt:message key="admin.dishes.create_dish"/></c:set>
+<c:set var="find"><fmt:message key="filter.find"/></c:set>
+
+<c:set var="request_filter_name">${sessionScope.dishes_filter_name}</c:set>
+<c:set var="request_filter_min_calories_amount">${sessionScope.dishes_filter_min_calories_amount}</c:set>
+<c:set var="request_filter_max_calories_amount">${sessionScope.dishes_filter_max_calories_amount}</c:set>
+<c:set var="request_filter_min_amount_grams">${sessionScope.dishes_filter_min_amount_grams}</c:set>
+<c:set var="request_filter_max_amount_grams">${sessionScope.dishes_filter_max_amount_grams}</c:set>
+<c:set var="request_filter_min_price">${sessionScope.dishes_filter_min_price}</c:set>
+<c:set var="request_filter_max_price">${sessionScope.dishes_filter_max_price}</c:set>
 
 <html>
 <head>
@@ -18,6 +27,113 @@
 </head>
 <body>
 <jsp:include page="shared/header.jsp" />
+<div class="filter-line">
+    <c:url value="/ApiController?command=set_dises_filter_parameters" var="dishes_filter"/>
+    <form action="${dishes_filter}" method="post">
+        <div id="order-states" class="form-row">
+            <div class="checkbox-container">
+                <div><fmt:message key="filter.dish_states"/></div>
+                <div>
+                    <div class="form-checkbox-btn">
+                        <c:if test="${sessionScope.dishes_filter_states.contains('AVAILABLE')}">
+                            <input id="check-available" type="checkbox" name="request_filter_dish_states" value="AVAILABLE" checked>
+                        </c:if>
+                        <c:if test="${not sessionScope.orders_filter_order_states.contains('AVAILABLE')}">
+                            <input id="check-available" type="checkbox" name="request_filter_dish_states" value="AVAILABLE">
+                        </c:if>
+                        <label for="check-available"><fmt:message key="filter.available"/></label>
+                    </div>
+                    <div class="form-checkbox-btn">
+                        <c:if test="${sessionScope.dishes_filter_states.contains('DISABLED')}">
+                            <input id="check-disabled" type="checkbox" name="request_filter_dish_states" value="DISABLED" checked>
+                        </c:if>
+                        <c:if test="${not sessionScope.orders_filter_order_states.contains('DISABLED')}">
+                            <input id="check-disabled" type="checkbox" name="request_filter_dish_states" value="DISABLED">
+                        </c:if>
+                        <label for="check-disabled"><fmt:message key="filter.disabled"/></label>
+                    </div>
+                </div>
+                <c:if test="${sessionScope.invalid_dish_states}">
+                    <div class="local-error">
+                        <p><fmt:message key="filter.invalid_dish_states"/></p>
+                    </div>
+                </c:if>
+            </div>
+        </div>
+        <div id="price" class="form-row">
+            <label for="request_filter_min_price"><fmt:message key="filter.min_price" /></label>
+            <input type="number" name="request_filter_min_price" id="request_filter_min_price"
+                   step="0.01" min="0" value="${request_filter_min_price}" placeholder="${request_filter_min_price}"/>
+            <c:if test="${sessionScope.invalid_min_price}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_min_price"/></p>
+                </div>
+            </c:if>
+            <label for="request_filter_max_price"><fmt:message key="filter.max_price" /></label>
+            <input type="number" name="request_filter_max_price" id="request_filter_max_price"
+                   step="0.01" min="0" value="${request_filter_max_price}" placeholder="${request_filter_max_price}"/>
+            <c:if test="${sessionScope.invalid_max_price}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_max_price"/></p>
+                </div>
+            </c:if>
+        </div>
+        <div id="calories-amount" class="form-row">
+            <label for="request_filter_min_calories_amount"><fmt:message key="filter.min_calories_amount" /></label>
+            <input type="number" name="request_filter_min_calories_amount" id="request_filter_min_calories_amount"
+                   step="0.01" min="0" value="${request_filter_min_calories_amount}" placeholder="${request_filter_min_calories_amount}"/>
+            <c:if test="${sessionScope.invalid_min_calories_amount}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_min_calories_amount"/></p>
+                </div>
+            </c:if>
+            <label for="request_filter_max_calories_amount"><fmt:message key="filter.max_calories_amount" /></label>
+            <input type="number" name="request_filter_max_calories_amount" id="request_filter_max_calories_amount"
+                   step="0.01" min="0" value="${request_filter_max_calories_amount}" placeholder="${request_filter_max_calories_amount}"/>
+            <c:if test="${sessionScope.invalid_max_calories_amount}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_max_calories_amount"/></p>
+                </div>
+            </c:if>
+        </div>
+        <div id="amount-grams" class="form-row">
+            <label for="request_filter_min_amount_grams"><fmt:message key="filter.min_amount_grams" /></label>
+            <input type="number" name="request_filter_min_amount_grams" id="request_filter_min_amount_grams"
+                   step="0.01" min="0" value="${request_filter_min_amount_grams}" placeholder="${request_filter_min_amount_grams}"/>
+            <c:if test="${sessionScope.invalid_min_amount_grams}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_min_amount_grams"/></p>
+                </div>
+            </c:if>
+            <label for="request_filter_max_amount_grams"><fmt:message key="filter.max_amount_grams" /></label>
+            <input type="number" name="request_filter_max_amount_grams" id="request_filter_max_amount_grams"
+                   step="0.01" min="0" value="${request_filter_max_amount_grams}" placeholder="${request_filter_max_amount_grams}"/>
+            <c:if test="${sessionScope.invalid_max_amount_grams}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_max_amount_grams"/></p>
+                </div>
+            </c:if>
+        </div>
+        <div id="name" class="form-row">
+            <label for="request_filter_name"><fmt:message key="admin.dishes.dish_name" /></label>
+            <input type="text" name="request_filter_name" id="request_filter_name" pattern=^[A-za-z\\s]{2,50}$"
+                   value="${request_filter_name}" placeholder="${request_filter_name}"/>
+            <c:if test="${sessionScope.invalid_name}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_name"/></p>
+                </div>
+            </c:if>
+        </div>
+        <div id="find-action">
+            <input type="submit" value="${find}"/>
+            <c:if test="${sessionScope.invalid_filter_parameters}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_filter_params"/></p>
+                </div>
+            </c:if>
+        </div>
+    </form>
+</div>
 <div class="workspace">
     <div class="workspace-flex-container">
         <c:forEach var="dish" items="${sessionScope.dishes}">
@@ -123,6 +239,97 @@
         -webkit-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
         -moz-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
         box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+    }
+
+
+    #order-states {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .checkbox-container>div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .filter-line {
+        margin-top: 75px;
+    }
+    .filter-line>form {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    .filter-line>form>div {
+        width: 15%;
+        margin: 0px 20px;
+    }
+    input[type=text]{
+        width:100%;
+        border:2px solid #aaa;
+        border-radius:5px;
+        margin:8px 0;
+        outline:none;
+        padding:8px;
+        box-sizing:border-box;
+        transition:.3s;
+    }
+    input[type=text]:focus{
+        border-color:#a15566;
+        box-shadow:0 0 8px 0 #a15566;
+    }
+    input[type=number]{
+        width:100%;
+        border:2px solid #aaa;
+        border-radius:5px;
+        margin:8px 0;
+        outline:none;
+        padding:8px;
+        box-sizing:border-box;
+        transition:.3s;
+    }
+    input[type=number]:focus{
+        border-color:#a15566;
+        box-shadow:0 0 8px 0 #a15566;
+    }
+    .checkbox-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .form-checkbox-btn {
+        display: inline-block;
+        margin: 8px 10px;
+        border-radius: 5px;
+        width: -moz-available;
+    }
+    .form-checkbox-btn:hover {
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    }
+    .form-checkbox-btn input[type=checkbox] {
+        display: none;
+    }
+    .form-checkbox-btn label {
+        width: available;
+        display: inline-block;
+        cursor: pointer;
+        padding: 0px 15px;
+        line-height: 34px;
+        border:2px solid #aaa;
+        border-radius: 5px;
+        user-select: none;
+    }
+
+    .form-checkbox-btn input[type=checkbox]:checked + label {
+        color: #ffffff;
+        border: 2px solid #804451;
+        background-color: #804451;
     }
 </style>
 </html>
