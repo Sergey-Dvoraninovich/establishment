@@ -291,8 +291,6 @@ public class UserDaoImpl implements UserDao {
         ) {
             String requestLine = addFilterParameters(COUNT_FILTERED_USERS, login, mail,
                     phoneNumber, cardNumber, userStatuses, userRoles);
-            //TODO remove it
-            System.out.println(requestLine);
             PreparedStatement statement = connection.prepareStatement(requestLine);
             ResultSet resultSet = statement.executeQuery();
 
@@ -312,8 +310,6 @@ public class UserDaoImpl implements UserDao {
         ) {
             String requestLine = addFilterParameters(SELECT_FILTERED_USERS, login, mail,
                     phoneNumber, cardNumber, userStatuses, userRoles);
-            //TODO remove it
-            System.out.println(requestLine);
             PreparedStatement statement = connection.prepareStatement(requestLine);
             statement.setLong(1, minPos-1);
             statement.setLong(2, maxPos);
@@ -389,7 +385,8 @@ public class UserDaoImpl implements UserDao {
             PreparedStatement statement = connection.prepareStatement(SET_PASSWORD_BY_ID);
             statement.setString(1, password);
             statement.setLong(2, id);
-            successfulOperation = statement.execute();
+            Integer rowsNum = statement.executeUpdate();
+            successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
             throw new DaoException("Error while inserting password for user with id: " + id, e);
         }
@@ -404,7 +401,8 @@ public class UserDaoImpl implements UserDao {
             PreparedStatement statement = connection.prepareStatement(SET_SALT_BY_ID);
             statement.setString(1, salt);
             statement.setLong(2, id);
-            successfulOperation = statement.execute();
+            Integer rowsNum = statement.executeUpdate();
+            successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
             throw new DaoException("Error while inserting salt for user with id: " + id, e);
         }
@@ -419,7 +417,8 @@ public class UserDaoImpl implements UserDao {
             PreparedStatement statement = connection.prepareStatement(SET_VERIFICATION_CODE_BY_ID);
             statement.setString(1, code);
             statement.setLong(2, id);
-            successfulOperation = statement.execute();
+            Integer rowsNum = statement.executeUpdate();
+            successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
             throw new DaoException("Error while setting code for user with id: " + id, e);
         }

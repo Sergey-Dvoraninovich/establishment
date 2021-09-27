@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dvoraninovich.establishment.controller.command.PagePath.CUSTOMER_BASKET;
+import static com.dvoraninovich.establishment.controller.command.PagePath.CUSTOMER_BASKET_PAGE;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
@@ -61,6 +61,6 @@ public class GoToCustomerBasketCommand implements Command {
         session.setAttribute(ORDER_DISH_LIST_ITEMS, dishListItems);
         session.setAttribute(ORDER_DISHES_MAP, dishesHashMap);
         session.setAttribute(DISHES_IN_BASKET, dishesAmount);
-        return new Router(CUSTOMER_BASKET, REDIRECT);
+        return new Router(CUSTOMER_BASKET_PAGE, REDIRECT);
     }
 }

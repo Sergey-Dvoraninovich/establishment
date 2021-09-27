@@ -451,13 +451,14 @@ public class OrderDaoImpl implements OrderDao {
             while (resultSet.next()) {
                 Order order = createOrderFromResultSet(resultSet);
 
-
+                long id = resultSet.getLong(ORDER_USER_ID);
                 String login = resultSet.getString(USER_LOGIN);
                 String mail = resultSet.getString(USER_MAIL);
                 String phone_number = resultSet.getString(USER_PHONE_NUMBER);
                 String photo = resultSet.getString(USER_PHOTO);
 
                 User user = User.builder()
+                        .setId(id)
                         .setLogin(login)
                         .setMail(mail)
                         .setPhoto(photo)
@@ -495,7 +496,7 @@ public class OrderDaoImpl implements OrderDao {
         StringBuilder filterString = new StringBuilder("");
         if (!userIdLine.equals("")){
             filterString.append(ORDER_USER_ID).append(" = ")
-                    .append(minPriceLine).append(" AND ");
+                    .append(userIdLine).append(" AND ");
         }
         if (!minPriceLine.equals("")){
             filterString.append(ORDER_FINAL_PRICE).append(" >= ")
@@ -514,6 +515,7 @@ public class OrderDaoImpl implements OrderDao {
         Integer wherePos = requestLine.indexOf(WHERE_LINE);
         StringBuilder resultString = new StringBuilder(requestLine);
         resultString.insert(wherePos + WHERE_LINE.length(), filterString);
+        System.out.println(resultString.toString());
         return resultString.toString();
     }
 

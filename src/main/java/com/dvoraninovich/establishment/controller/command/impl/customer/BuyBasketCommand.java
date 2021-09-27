@@ -60,7 +60,7 @@ public class BuyBasketCommand implements Command {
                 List<DishListItem> dishListItems = dishListItemService.findAllByOrderId(basket.getId());
                 if (dishListItems.isEmpty()) {
                     session.setAttribute(YOU_SHOULD_CHOOSE_SOMETHING, true);
-                    return new Router(CUSTOMER_BASKET, REDIRECT);
+                    return new Router(CUSTOMER_BASKET_PAGE, REDIRECT);
                 }
 
                 basket.setPaymentType(paymentType);
@@ -83,7 +83,7 @@ public class BuyBasketCommand implements Command {
                     session.setAttribute(DISHES_IN_BASKET, Long.valueOf(0));
                 }
             }
-            router = new Router(CUSTOMER_BASKET, REDIRECT);
+            router = new Router(CUSTOMER_BASKET_PAGE, REDIRECT);
         } catch (ServiceException e) {
             e.printStackTrace();
             session.setAttribute(EXCEPTION, e);

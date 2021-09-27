@@ -49,7 +49,7 @@ public class EditProfilePhotoCommand implements Command {
             if (optionalUser.isPresent()) {
                 User targetUser = optionalUser.get();
                 if (user.getRole().equals(CUSTOMER) && user.getId() != targetUser.getId()) {
-                    return new Router(CUSTOMER_ORDERS + "?id=" + user.getId(), REDIRECT);
+                    return new Router(CUSTOMER_ORDERS_PAGE + "?id=" + user.getId(), REDIRECT);
                 }
 
                 String applicationDir = request.getServletContext().getRealPath("");

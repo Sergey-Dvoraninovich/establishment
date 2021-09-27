@@ -26,6 +26,7 @@ public final class SessionAttribute {
     public static final String CHANGE_PROFILE_PHOTO_ERROR = "change_profile_photo_error";
     public static final String USER_VALIDATION_ERROR = "user_validation_error";
     public static final String IMPOSSIBLE_TO_UPLOAD_USER_PHOTO = "impossible_to_upload_user_photo";
+    public static final String USER_PROFILE_ID = "user_profile_id";
 
     public static final String DIFFERENT_PASSWORDS = "different_passwords";
     public static final String USER_ALREADY_AUTHENTICATED = "user_already_authenticated";

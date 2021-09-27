@@ -9,8 +9,8 @@ public final class PagePath {
 
     public static final String USER_PAGE = "/establishment_war_exploded/pages/user.jsp";
     public static final String EDIT_CUSTOMER_PAGE = "/establishment_war_exploded/pages/customer/customer_edit_data.jsp";
-    public static final String CUSTOMER_BASKET = "/establishment_war_exploded/pages/customer/customer_basket.jsp";
-    public static final String CUSTOMER_ORDERS = "/establishment_war_exploded/pages/customer/customer_orders.jsp";
+    public static final String CUSTOMER_BASKET_PAGE = "/establishment_war_exploded/pages/customer/customer_basket.jsp";
+    public static final String CUSTOMER_ORDERS_PAGE = "/establishment_war_exploded/pages/customer/customer_orders.jsp";
 
     public static final String USERS_PAGE = "/establishment_war_exploded/pages/admin/users/users.jsp";
 

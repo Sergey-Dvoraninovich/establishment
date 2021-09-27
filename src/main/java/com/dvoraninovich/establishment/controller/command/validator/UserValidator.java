@@ -76,6 +76,18 @@ public class UserValidator {
         return result;
     }
 
+    public boolean validateUserStatus(String status) {
+        boolean currentResult = false;
+        ArrayList<String> userStatusesValues = new ArrayList<>();
+        for (UserStatus state: UserStatus.values()){
+            userStatusesValues.add(state.name());
+        }
+        if (userStatusesValues.contains(status)) {
+            currentResult = true;
+        }
+        return currentResult;
+    }
+
     public HashMap<String, Boolean> validateUserData(String login, String password, String mail,
                                     String phoneNum, String cardNum){
 

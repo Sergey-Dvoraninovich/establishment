@@ -74,6 +74,65 @@
         </div>
     </div>
     <div class="workspace-column">
+        <c:if test="${sessionScope.user_profile.status == 'IN_REGISTRATION'}">
+            <div id="base-state" class="block-item">
+                <div><fmt:message key="user_statuses.in_registration"/></div>
+            </div>
+        </c:if>
+        <c:if test="${sessionScope.user_profile.status == 'CONFIRMED'}">
+            <div id="green-state" class="block-item">
+                <div><fmt:message key="user_statuses.confirmed"/></div>
+            </div>
+        </c:if>
+        <c:if test="${sessionScope.user_profile.status == 'BLOCKED'}">
+            <div id="red-state" class="block-item">
+                <div><fmt:message key="user_statuses.blocked"/></div>
+            </div>
+        </c:if>
+        <c:if test="${sessionScope.user.role == 'ADMIN'
+                      && sessionScope.user.id != sessionScope.user_profile.id}">
+        <div class="block-item">
+        <div class="block-item-header">
+            <h2><fmt:message key="status"/></h2>
+        </div>
+        <c:url value="/ApiController?command=change_user_status" var="change_status"/>
+        <form id="status-form" action="${change_status}" method="post">
+            <input type="hidden" name="id" value="${sessionScope.user_profile.id}">
+            <div class="form-row">
+                <div class="radio-container">
+                    <div id="confirmed" class="form_radio_btn">
+                        <c:if test="${sessionScope.user_profile.status == 'CONFIRMED'}">
+                            <input id="radio-confirmed" type="radio" name="user_status" value="CONFIRMED" checked>
+                            <label for="radio-confirmed"><fmt:message key="user_statuses.confirmed"/></label>
+                        </c:if>
+                        <c:if test="${sessionScope.user_profile.status != 'CONFIRMED'}">
+                            <input id="radio-confirmed" type="radio" name="user_status" value="CONFIRMED">
+                            <label for="radio-confirmed"><fmt:message key="user_statuses.confirmed"/></label>
+                        </c:if>
+                    </div>
+                    <div id="blocked" class="form_radio_btn">
+                        <c:if test="${sessionScope.user_profile.status == 'BLOCKED'}">
+                            <input id="radio-blocked" type="radio" name="user_status" value="BLOCKED" checked>
+                            <label for="radio-blocked"><fmt:message key="user_statuses.blocked"/></label>
+                        </c:if>
+                        <c:if test="${sessionScope.user_profile.status != 'BLOCKED'}">
+                            <input id="radio-blocked" type="radio" name="user_status" value="BLOCKED">
+                            <label for="radio-blocked"><fmt:message key="user_statuses.blocked"/></label>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <input type="submit" value="${edit}"/>
+            </div>
+            <c:if test="${sessionScope.invalid_user_status}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_user_status" /><p>
+                </div>
+            </c:if>
+        </form>
+        </div>
+        </c:if>
         <div id="description" class="block-item">
             <div class="row-item-flexbox">
                 <div class="row-item-flexbox-item">
@@ -189,7 +248,7 @@
                     <a><fmt:message key="profile.orders_info"/></a>
                 </div>
                 <div class="block-item-action">
-                    <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=1&next_max_pos=5&new_total_amount=true" var="orders_page"/>
+                    <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=1&next_max_pos=10&new_total_amount=true&user_id=${sessionScope.user_profile.id}" var="orders_page"/>
                     <a href="${orders_page}"><fmt:message key="profile.orders"/></a>
                 </div>
             </div>
@@ -200,7 +259,7 @@
                     <a><fmt:message key="profile.orders_info"/></a>
                 </div>
                 <div class="block-item-action">
-                    <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=1&next_max_pos=5&new_total_amount=true" var="orders_page"/>
+                    <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=1&next_max_pos=10&new_total_amount=true&user_id=${sessionScope.user.id}" var="orders_page"/>
                     <a href="${orders_page}"><fmt:message key="profile.orders"/></a>
                 </div>
             </div>
@@ -271,7 +330,7 @@
                     <input type="submit" value="${edit}"/>
                 </div>
             </form>
-            <c:if test="${sessionScope.password_succussfully_changed}">
+            <c:if test="${sessionScope.password_successfully_changed}">
             <div id="change-password-successful" class="block-item-text">
                 <a><fmt:message key="profile.password_successfully_changed" /></a>
             </div>
@@ -280,25 +339,6 @@
     </div>
 </div>
 <script>
-    var isEditPage = ${sessionScope.is_editing_page}
-    if (isEditPage) {
-        document.getElementById("description-action").style.display = "none";
-        document.getElementById("edit-block").style.display = "flex";
-    }
-    else {
-        document.getElementById("description-action").style.display = "flex";
-        document.getElementById("edit-block").style.display = "none";
-    }
-
-    var isChangePasswordFormVisible = ${sessionScope.is_changing_password}
-    if (isChangePasswordFormVisible) {
-        document.getElementById("change-password-plug").style.display = "none";
-        document.getElementById("change-password-form").style.display = "flex";
-    }
-    else {
-        document.getElementById("change-password-plug").style.display = "flex";
-        document.getElementById("change-password-form").style.display = "none";
-    }
 
     var editButton = document.getElementById("description-action");
     editButton.onclick = function openEditBlock(){
@@ -364,7 +404,6 @@
         font-size: 15px;
         text-decoration: none;
     }
-
     #description{
         display: flex;
         flex-direction: column;
@@ -382,6 +421,8 @@
     form {
         width: 100%;
         font-size: 20px;
+        margin-top: 10px;
+        margin-bottom: 0px;
     }
     input[type=text]{
         width:100%;
@@ -458,6 +499,12 @@
         align-items: center;
         justify-content: center;
     }
+    #change-password-successful {
+        margin-top: 5px;
+    }
+    #change-password-successful>a {
+        color: #7ba05b;
+    }
     #icon{
         padding: 0px;
     }
@@ -466,9 +513,6 @@
         font-size: 15px;
         color: red;
         padding-bottom: 0px;
-    }
-    #change-password-successful {
-        color: #7ba05b;
     }
     input[type=password]{
         width:100%;
@@ -524,6 +568,7 @@
         border-radius: 10px;
         margin-top: 15px;
         padding: 5px;
+        justify-content: center;
         text-align: center;
         width: 70%;
         background-color: #a15566;
@@ -575,6 +620,68 @@
     }
     #change-password-form {
         display: none;
+    }
+    #base-state {
+        color: #ffffff;
+        background-color: #a15566;
+    }
+    #green-state {
+        color: #ffffff;
+        background-color: #7ba05b;
+    }
+    #red-state {
+        color: #ffffff;
+        background-color: #cf361b;
+    }
+    .radio-container {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+    }
+    .form_radio_btn {
+        display: inline-block;
+        margin-right: 10px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        width: -moz-available;
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+    }
+    .form_radio_btn:hover {
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    }
+    .form_radio_btn input[type=radio] {
+        display: none;
+    }
+    .form_radio_btn label {
+        width: available;
+        display: inline-block;
+        cursor: pointer;
+        padding: 0px 15px;
+        line-height: 34px;
+        border:2px solid #aaa;
+        border-radius: 5px;
+        user-select: none;
+    }
+
+    .form_radio_btn input[type=radio]:checked + label {
+        color: #ffffff;
+        border:2px solid #804451;
+        background-color: #804451;
+    }
+    #confirmed input[type=radio]:checked + label {
+        color: #ffffff;
+        border:2px solid #7ba05b;
+        background-color: #7ba05b;
+    }
+    #blocked input[type=radio]:checked + label {
+        color: #ffffff;
+        border:2px solid #cf361b;
+        background-color: #cf361b;
     }
 </style>
 </html>

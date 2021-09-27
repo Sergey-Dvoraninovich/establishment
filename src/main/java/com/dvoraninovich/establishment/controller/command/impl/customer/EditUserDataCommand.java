@@ -23,7 +23,7 @@ import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
 import static com.dvoraninovich.establishment.model.entity.Role.CUSTOMER;
 
 public class EditUserDataCommand implements Command {
-    private static final Logger logger = LogManager.getLogger(GoToUserPageCommand.class);
+    private static final Logger logger = LogManager.getLogger(EditUserDataCommand.class);
     UserService userService = UserServiceImpl.getInstance();
     UserValidator userValidator = UserValidator.getInstance();
 

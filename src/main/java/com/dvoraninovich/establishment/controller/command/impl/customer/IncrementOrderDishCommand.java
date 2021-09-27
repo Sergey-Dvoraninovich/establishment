@@ -5,13 +5,10 @@ import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.DishListItem;
 import com.dvoraninovich.establishment.model.entity.Order;
-import com.dvoraninovich.establishment.model.entity.Role;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.model.service.DishListItemService;
-import com.dvoraninovich.establishment.model.service.DishService;
 import com.dvoraninovich.establishment.model.service.OrderService;
 import com.dvoraninovich.establishment.model.service.impl.DishListItemServiceImpl;
-import com.dvoraninovich.establishment.model.service.impl.DishServiceImpl;
 import com.dvoraninovich.establishment.model.service.impl.OrderServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +22,6 @@ import static com.dvoraninovich.establishment.controller.command.Router.RouterTy
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.EXCEPTION;
-import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
-import static com.dvoraninovich.establishment.model.entity.Role.CUSTOMER;
 
 public class IncrementOrderDishCommand implements Command {
     private DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
@@ -75,7 +70,7 @@ public class IncrementOrderDishCommand implements Command {
                 }
                 case CUSTOMER: {
                     session.setAttribute(DISHES_IN_BASKET, dishesAmount);
-                    router = new Router(CUSTOMER_BASKET, REDIRECT);
+                    router = new Router(CUSTOMER_BASKET_PAGE, REDIRECT);
                     break;
                 }
                 default: {

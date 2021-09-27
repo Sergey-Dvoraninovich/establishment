@@ -45,5 +45,6 @@ public enum CommandType {
     EDIT_ORDER,
     SET_USERS_FILTER_PARAMETERS,
     CHANGE_USER_PASSWORD,
+    CHANGE_USER_STATUS,
 
 }

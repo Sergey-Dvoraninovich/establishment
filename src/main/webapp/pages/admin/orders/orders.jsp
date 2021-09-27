@@ -160,7 +160,8 @@
             <div class="line-item">
                 <div class="user-info">
                     <div>
-                        <a>
+                        <c:url value="/ApiController?command=go_to_user_page&id=${sessionScope.orders_users_map.get(order).id}" var="user_page"/>
+                        <a href="${user_page}">
                             <img class="profile-picture"
                                  src="../../../images/user/${sessionScope.orders_users_map.get(order).photo}"
                                  onerror="this.src='../../../images/default_profile.png';">
@@ -168,10 +169,16 @@
                     </div>
                     <div class="orders-user-actions">
                         <div>
-                            <a>${sessionScope.orders_users_map.get(order).login}</a>
+                            <c:url value="/ApiController?command=go_to_user_page&id=${sessionScope.orders_users_map.get(order).id}" var="user_page"/>
+                            <a href="${user_page}">
+                                ${sessionScope.orders_users_map.get(order).login}
+                            </a>
                         </div>
                         <div class="action">
-                            <a><fmt:message key="orders.orders"/></a>
+                            <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=1&next_max_pos=10&new_total_amount=true&user_id=${sessionScope.orders_users_map.get(order).id}" var="customer_orders"/>
+                            <a href="${customer_orders}">
+                                <fmt:message key="orders.orders"/>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -197,13 +204,13 @@
     <div class="pagination">
         <c:if test="${sessionScope.min_pos != 1}">
             <div class="block-item-action">
-                <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=${sessionScope.min_pos-sessionScope.page_items_amount}&next_max_pos=${sessionScope.min_pos-1}" var="prev_order_page"/>
+                <c:url value="/ApiController?command=go_to_orders_page&next_min_pos=${sessionScope.min_pos-sessionScope.page_items_amount}&next_max_pos=${sessionScope.min_pos-1}" var="prev_order_page"/>
                 <a href="${prev_order_page}"><fmt:message key="previous"/></a>
             </div>
         </c:if>
         <c:if test="${sessionScope.max_pos != sessionScope.total_amount}">
             <div class="block-item-action">
-                <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=${sessionScope.max_pos+1}&next_max_pos=${sessionScope.max_pos+sessionScope.page_items_amount}" var="next_order_page"/>
+                <c:url value="/ApiController?command=go_to_orders_page&next_min_pos=${sessionScope.max_pos+1}&next_max_pos=${sessionScope.max_pos+sessionScope.page_items_amount}" var="next_order_page"/>
                 <a href="${next_order_page}"><fmt:message key="next"/></a>
             </div>
         </c:if>
@@ -436,6 +443,11 @@
         color: #ffffff;
         border:2px solid #804451;
         background-color: #804451;
+    }
+    .local-error {
+        font-size: 15px;
+        color: red;
+        padding-bottom: 0px;
     }
 </style>
 </html>

@@ -42,7 +42,7 @@ public class RecalculateOrderPriceCommand implements Command {
 
         if (newBonusesAmount.compareTo(user.getBonusesAmount()) > 0){
             session.setAttribute(NOT_ENOUGH_BONUSES, true);
-            return new Router(CUSTOMER_BASKET, REDIRECT);
+            return new Router(CUSTOMER_BASKET_PAGE, REDIRECT);
         }
 
         try {
@@ -69,7 +69,7 @@ public class RecalculateOrderPriceCommand implements Command {
                     break;
                 }
                 case CUSTOMER: {
-                    router = new Router(CUSTOMER_BASKET, REDIRECT);
+                    router = new Router(CUSTOMER_BASKET_PAGE, REDIRECT);
                     break;
                 }
                 default: {

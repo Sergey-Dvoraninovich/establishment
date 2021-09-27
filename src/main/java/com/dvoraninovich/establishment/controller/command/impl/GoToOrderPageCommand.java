@@ -2,7 +2,6 @@ package com.dvoraninovich.establishment.controller.command.impl;
 
 import com.dvoraninovich.establishment.controller.command.Command;
 import com.dvoraninovich.establishment.controller.command.Router;
-import com.dvoraninovich.establishment.controller.command.SessionAttribute;
 import com.dvoraninovich.establishment.controller.command.impl.customer.GoToCustomerBasketCommand;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.*;
@@ -53,7 +52,7 @@ public class GoToOrderPageCommand implements Command {
             if (optionalOrder.isPresent()){
                 Order order = optionalOrder.get();
                 if (user.getRole().equals(CUSTOMER) && user.getId() != order.getUserId()) {
-                    return new Router(CUSTOMER_ORDERS + "?id=" + user.getId(), REDIRECT);
+                    return new Router(CUSTOMER_ORDERS_PAGE + "?id=" + user.getId(), REDIRECT);
                 }
                 dishListItems = dishListItemService.findAllByOrderId(order.getId());
                 List<Dish> dishes = dishService.findOrderDishes(order.getId());

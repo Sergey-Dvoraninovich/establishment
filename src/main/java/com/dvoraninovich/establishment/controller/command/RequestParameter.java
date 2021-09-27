@@ -16,6 +16,7 @@ public final class RequestParameter {
     public static final String MAIL = "mail";
     public static final String PHONE_NUM = "phone_num";
     public static final String CARD_NUM = "card_num";
+    public static final String USER_STATUS = "user_status";
     public static final String DISH_ID = "dish_id";
     public static final String PRICE = "price";
     public static final String AMOUNT_GRAMS = "amount_grams";

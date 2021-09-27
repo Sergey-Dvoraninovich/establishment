@@ -64,7 +64,7 @@
                     </form>
                   </c:if>
                   <c:if test="${sessionScope.user.role.name() == 'CUSTOMER'}">
-                      <c:if test="${dish.isAvailable}">
+                      <c:if test="${dish.isAvailable && sessionScope.user.status.name() == 'CONFIRMED'}">
                           <c:url value="/ApiController?command=add_to_basket&id=${dish.id}" var="add_to_basket"/>
                           <form action="${add_to_basket}" method="post">
                              <input type="hidden" name="dish_id" value="${dish.id}">
