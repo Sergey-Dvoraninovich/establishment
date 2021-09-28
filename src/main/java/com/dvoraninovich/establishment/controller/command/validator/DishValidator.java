@@ -1,27 +1,22 @@
 package com.dvoraninovich.establishment.controller.command.validator;
 
-import com.dvoraninovich.establishment.model.entity.OrderState;
-import com.dvoraninovich.establishment.model.entity.PaymentType;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.NOT_UNIQUE_LOGIN;
 
 public class DishValidator {
     private static final Logger logger = LogManager.getLogger(DishValidator.class);
-    private static final String DISH_AVAILABLE = "AVAILABLE";
-    private static final String DISH_DISABLED = "DISABLED";
     private static DishValidator instance;
 
+    private static final String DISH_AVAILABLE = "AVAILABLE";
+    private static final String DISH_DISABLED = "DISABLED";
     private static final String NAME_REGEXP = "^[A-za-z\\s]{1,50}$";
-    private static final String PRICE_REGEXP = "^[0-9]*[.,]?[0-9]{0,2}$";
+    private static final String PRICE_REGEXP = "^[+-]?([0-9]+([.][0-9]{0,2})?|[.][0-9]{1,2})$";
     private static final String AMOUNT_GRAMS_REGEXP = "^[0-9]+$";
     private static final String CALORIES_AMOUNT_REGEXP = "^[0-9]+$";
     private static final BigDecimal MIN_PRICE = new BigDecimal("0.00");
@@ -36,39 +31,6 @@ public class DishValidator {
             instance = new DishValidator();
         }
         return instance;
-    }
-
-    public boolean validateName(String name){
-        boolean result;
-        result = Pattern.matches(NAME_REGEXP, name);
-        return result;
-    }
-
-    public boolean validatePrice(String priceLine){
-        boolean result = Pattern.matches(PRICE_REGEXP, priceLine);
-        if (result) {
-            BigDecimal price = new BigDecimal(priceLine);
-            result = price.compareTo(MIN_PRICE) == 1;
-        }
-        return result;
-    }
-
-    public boolean validateAmountGrams(String amountGramsLine){
-        boolean result = Pattern.matches(AMOUNT_GRAMS_REGEXP, amountGramsLine);
-        if (result) {
-            Integer amountGrams = new Integer(amountGramsLine);
-            result = amountGrams > MIN_AMOUNT_GRAMS;
-        }
-        return result;
-    }
-
-    public boolean validateCaloriesAmount(String caloriesAmountLine){
-        boolean result = Pattern.matches(CALORIES_AMOUNT_REGEXP, caloriesAmountLine);
-        if (result) {
-            Integer caloriesAmount = new Integer(caloriesAmountLine);
-            result = caloriesAmount > MIN_CALORIES_AMOUNT;
-        }
-        return result;
     }
 
     public HashMap<String, Boolean> validateDishData(String name, String priceLine,
@@ -86,7 +48,7 @@ public class DishValidator {
             validationMessages.put(INVALID_DISH_PRICE, !currentResult);
             if (currentResult) {
                 BigDecimal price = new BigDecimal(priceLine);
-                currentResult = price.compareTo(MIN_PRICE) == 1;
+                currentResult = price.compareTo(MIN_PRICE) >= 0;
             }
             validationMessages.put(INVALID_DISH_PRICE, !currentResult);
 
@@ -128,60 +90,81 @@ public class DishValidator {
             }
 
             if (!minPriceLine.equals("")) {
-                BigDecimal minPrice = new BigDecimal(minPriceLine);
-                currentResult = minPrice.compareTo(new BigDecimal("0.00")) < 0;
-                validationMessages.put(INVALID_MIN_PRICE, currentResult);
+                currentResult = Pattern.matches(PRICE_REGEXP, minPriceLine);
+                if (currentResult) {
+                    BigDecimal minPrice = new BigDecimal(minPriceLine);
+                    currentResult = minPrice.compareTo(MIN_PRICE) >= 0;
+                }
+                validationMessages.put(INVALID_MIN_PRICE, !currentResult);
             }
 
             if (!maxPriceLine.equals("")) {
-                BigDecimal maxPrice = new BigDecimal(maxPriceLine);
-                currentResult = maxPrice.compareTo(new BigDecimal("0.00")) < 0;
-                validationMessages.put(INVALID_MAX_PRICE, currentResult);
+                currentResult = Pattern.matches(PRICE_REGEXP, maxPriceLine);
+                if (currentResult) {
+                    BigDecimal maxPrice = new BigDecimal(maxPriceLine);
+                    currentResult = maxPrice.compareTo(MIN_PRICE) >= 0;
+                }
+                validationMessages.put(INVALID_MAX_PRICE, !currentResult);
             }
 
-            if (!maxPriceLine.equals("") && !minPriceLine.equals("")) {
+            if (Pattern.matches(PRICE_REGEXP, minPriceLine)
+                    && Pattern.matches(PRICE_REGEXP, maxPriceLine)) {
                 BigDecimal minPrice = new BigDecimal(minPriceLine);
                 BigDecimal maxPrice = new BigDecimal(maxPriceLine);
-                currentResult = maxPrice.compareTo(minPrice) < 0;
-                validationMessages.put(INVALID_FILTER_PARAMETERS, currentResult);
+                currentResult = minPrice.compareTo(maxPrice) <= 0;
+                validationMessages.put(INVALID_FILTER_PARAMETERS, !currentResult);
             }
 
             if (!minCaloriesAmountLine.equals("")) {
-                BigDecimal minPrice = new BigDecimal(minCaloriesAmountLine);
-                currentResult = minPrice.compareTo(new BigDecimal("0.00")) < 0;
-                validationMessages.put(INVALID_MIN_CALORIES_AMOUNT, currentResult);
+                currentResult = Pattern.matches(CALORIES_AMOUNT_REGEXP, minCaloriesAmountLine);
+                if (currentResult) {
+                    Integer minCaloriesAmount = Integer.valueOf(minCaloriesAmountLine);
+                    currentResult = minCaloriesAmount.compareTo(MIN_CALORIES_AMOUNT) >= 0;
+                }
+                validationMessages.put(INVALID_MIN_CALORIES_AMOUNT, !currentResult);
             }
 
             if (!maxCaloriesAmountLine.equals("")) {
-                BigDecimal maxPrice = new BigDecimal(maxCaloriesAmountLine);
-                currentResult = maxPrice.compareTo(new BigDecimal("0.00")) < 0;
-                validationMessages.put(INVALID_MAX_CALORIES_AMOUNT, currentResult);
+                currentResult = Pattern.matches(CALORIES_AMOUNT_REGEXP, maxCaloriesAmountLine);
+                if (currentResult) {
+                    Integer maxCaloriesAmount = Integer.valueOf(maxCaloriesAmountLine);
+                    currentResult = maxCaloriesAmount.compareTo(MIN_CALORIES_AMOUNT) >= 0;
+                }
+                validationMessages.put(INVALID_MAX_CALORIES_AMOUNT, !currentResult);
             }
 
-            if (!maxCaloriesAmountLine.equals("") && !minCaloriesAmountLine.equals("")) {
-                BigDecimal minPrice = new BigDecimal(minCaloriesAmountLine);
-                BigDecimal maxPrice = new BigDecimal(maxCaloriesAmountLine);
-                currentResult = maxPrice.compareTo(minPrice) < 0;
-                validationMessages.put(INVALID_FILTER_PARAMETERS, currentResult);
+            if (Pattern.matches(CALORIES_AMOUNT_REGEXP, minCaloriesAmountLine)
+                    && Pattern.matches(CALORIES_AMOUNT_REGEXP, maxCaloriesAmountLine)) {
+                Integer minPrice = Integer.valueOf(minCaloriesAmountLine);
+                Integer maxPrice = Integer.valueOf(maxCaloriesAmountLine);
+                currentResult = minPrice.compareTo(maxPrice) <= 0;
+                validationMessages.put(INVALID_FILTER_PARAMETERS, !currentResult);
             }
 
             if (!minAmountGramsLine.equals("")) {
-                BigDecimal minPrice = new BigDecimal(minAmountGramsLine);
-                currentResult = minPrice.compareTo(new BigDecimal("0.00")) < 0;
-                validationMessages.put(INVALID_MIN_AMOUNT_GRAMS, currentResult);
+                currentResult = Pattern.matches(AMOUNT_GRAMS_REGEXP, minAmountGramsLine);
+                if (currentResult) {
+                    Integer minAmountGrams = Integer.valueOf(minAmountGramsLine);
+                    currentResult = minAmountGrams.compareTo(MIN_AMOUNT_GRAMS) >= 0;
+                }
+                validationMessages.put(INVALID_MIN_AMOUNT_GRAMS, !currentResult);
             }
 
             if (!maxAmountGramsLine.equals("")) {
-                BigDecimal maxPrice = new BigDecimal(maxAmountGramsLine);
-                currentResult = maxPrice.compareTo(new BigDecimal("0.00")) < 0;
-                validationMessages.put(INVALID_MAX_AMOUNT_GRAMS, currentResult);
+                currentResult = Pattern.matches(AMOUNT_GRAMS_REGEXP, maxAmountGramsLine);
+                if (currentResult) {
+                    Integer maxAmountGrams = Integer.valueOf(maxAmountGramsLine);
+                    currentResult = maxAmountGrams.compareTo(MIN_AMOUNT_GRAMS) >= 0;
+                }
+                validationMessages.put(INVALID_MAX_AMOUNT_GRAMS, !currentResult);
             }
 
-            if (!maxAmountGramsLine.equals("") && !minAmountGramsLine.equals("")) {
-                BigDecimal minPrice = new BigDecimal(minAmountGramsLine);
-                BigDecimal maxPrice = new BigDecimal(maxAmountGramsLine);
-                currentResult = maxPrice.compareTo(minPrice) < 0;
-                validationMessages.put(INVALID_FILTER_PARAMETERS, currentResult);
+            if (Pattern.matches(AMOUNT_GRAMS_REGEXP, minAmountGramsLine)
+                    && Pattern.matches(AMOUNT_GRAMS_REGEXP, maxAmountGramsLine)) {
+                Integer minAmountGrams = Integer.valueOf(minAmountGramsLine);
+                Integer maxAmountGrams = Integer.valueOf(maxAmountGramsLine);
+                currentResult = minAmountGrams.compareTo(maxAmountGrams) <= 0;
+                validationMessages.put(INVALID_FILTER_PARAMETERS, !currentResult);
             }
 
             if (dishStates.length != 0) {
@@ -201,44 +184,4 @@ public class DishValidator {
 
         return validationMessages;
     }
-//    public List<String> validateOrderData(String name, String priceLine,
-//                                         String amountGramsLine, String caloriesAmountLine){
-//
-//        List<String> validationMessages = new ArrayList<>();
-//        boolean currentResult;
-//
-//        currentResult = Pattern.matches(NAME_REGEXP, name);
-//        if (!currentResult) {
-//            validationMessages.add(INVALID_DISH_NAME);
-//        }
-//
-//        currentResult = Pattern.matches(PRICE_REGEXP, priceLine);
-//        if (currentResult) {
-//            BigDecimal price = new BigDecimal(priceLine);
-//            currentResult = price.compareTo(MIN_PRICE) == 1;
-//        }
-//        if (!currentResult) {
-//            validationMessages.add(INVALID_DISH_PRICE);
-//        }
-//
-//        currentResult = Pattern.matches(AMOUNT_GRAMS_REGEXP, amountGramsLine);
-//        if (currentResult) {
-//            Integer amountGrams = new Integer(amountGramsLine);
-//            currentResult = amountGrams > MIN_AMOUNT_GRAMS;
-//        }
-//        if (!currentResult) {
-//            validationMessages.add(INVALID_DISH_AMOUNT_GRAMS);
-//        }
-//
-//        currentResult = Pattern.matches(CALORIES_AMOUNT_REGEXP, caloriesAmountLine);
-//        if (currentResult) {
-//            Integer caloriesAmount = new Integer(caloriesAmountLine);
-//            currentResult = caloriesAmount > MIN_CALORIES_AMOUNT;
-//        }
-//        if (!currentResult) {
-//            validationMessages.add(INVALID_DISH_CALORIES_AMOUNT);
-//        }
-//
-//        return validationMessages;
-//    }
 }

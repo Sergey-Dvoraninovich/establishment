@@ -83,7 +83,7 @@
         <div id="calories-amount" class="form-row">
             <label for="request_filter_min_calories_amount"><fmt:message key="filter.min_calories_amount" /></label>
             <input type="number" name="request_filter_min_calories_amount" id="request_filter_min_calories_amount"
-                   step="0.01" min="0" value="${request_filter_min_calories_amount}" placeholder="${request_filter_min_calories_amount}"/>
+                   step="1" min="0" value="${request_filter_min_calories_amount}" placeholder="${request_filter_min_calories_amount}"/>
             <c:if test="${sessionScope.invalid_min_calories_amount}">
                 <div class="local-error">
                     <p><fmt:message key="filter.invalid_min_calories_amount"/></p>
@@ -91,7 +91,7 @@
             </c:if>
             <label for="request_filter_max_calories_amount"><fmt:message key="filter.max_calories_amount" /></label>
             <input type="number" name="request_filter_max_calories_amount" id="request_filter_max_calories_amount"
-                   step="0.01" min="0" value="${request_filter_max_calories_amount}" placeholder="${request_filter_max_calories_amount}"/>
+                   step="1" min="0" value="${request_filter_max_calories_amount}" placeholder="${request_filter_max_calories_amount}"/>
             <c:if test="${sessionScope.invalid_max_calories_amount}">
                 <div class="local-error">
                     <p><fmt:message key="filter.invalid_max_calories_amount"/></p>
@@ -101,7 +101,7 @@
         <div id="amount-grams" class="form-row">
             <label for="request_filter_min_amount_grams"><fmt:message key="filter.min_amount_grams" /></label>
             <input type="number" name="request_filter_min_amount_grams" id="request_filter_min_amount_grams"
-                   step="0.01" min="0" value="${request_filter_min_amount_grams}" placeholder="${request_filter_min_amount_grams}"/>
+                   step="1" min="0" value="${request_filter_min_amount_grams}" placeholder="${request_filter_min_amount_grams}"/>
             <c:if test="${sessionScope.invalid_min_amount_grams}">
                 <div class="local-error">
                     <p><fmt:message key="filter.invalid_min_amount_grams"/></p>
@@ -109,7 +109,7 @@
             </c:if>
             <label for="request_filter_max_amount_grams"><fmt:message key="filter.max_amount_grams" /></label>
             <input type="number" name="request_filter_max_amount_grams" id="request_filter_max_amount_grams"
-                   step="0.01" min="0" value="${request_filter_max_amount_grams}" placeholder="${request_filter_max_amount_grams}"/>
+                   step="1" min="0" value="${request_filter_max_amount_grams}" placeholder="${request_filter_max_amount_grams}"/>
             <c:if test="${sessionScope.invalid_max_amount_grams}">
                 <div class="local-error">
                     <p><fmt:message key="filter.invalid_max_amount_grams"/></p>
@@ -364,6 +364,10 @@
         -webkit-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
         -moz-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
         box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+    }
+    .local-error {
+        margin-top: 0px;
+        color: #cf361b;
     }
 
 

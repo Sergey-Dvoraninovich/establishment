@@ -13,6 +13,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import javax.swing.text.html.Option;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,6 +187,62 @@ public class DishServiceImpl implements DishService {
                 }
                 pos += 1;
             }
+            return dishDao.findFilteredDishes(name, minPriceLine, maxPriceLine, minCaloriesAmountLine, maxCaloriesAmountLine,
+                    minAmountGramsLine, maxAmountGramsLine, states, minPos, maxPos);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Long countFilteredDishes(String name, BigDecimal minPrice, BigDecimal maxPrice, Integer minCaloriesAmount, Integer maxCaloriesAmount, Integer minAmountGrams, Integer maxAmountGrams, String[] dishStates) throws ServiceException {
+        name = name == null ? "" : name;
+        String minPriceLine = minPrice == null ? "" : minPrice.toString();
+        String maxPriceLine = maxPrice == null ? "" : maxPrice.toString();
+        String minCaloriesAmountLine = minCaloriesAmount == null ? "" : minCaloriesAmount.toString();
+        String maxCaloriesAmountLine = maxCaloriesAmount == null ? "" : maxCaloriesAmount.toString();
+        String minAmountGramsLine = minAmountGrams == null ? "" : minAmountGrams.toString();
+        String maxAmountGramsLine = maxAmountGrams == null ? "" : maxAmountGrams.toString();
+        Boolean[] states = new Boolean[dishStates.length];
+        Integer pos = 0;
+        for (String line : dishStates) {
+            if (line.equals(DISH_AVAILABLE)) {
+                states[pos] = true;
+            }
+            if (line.equals(DISH_DISABLED)){
+                states[pos] = false;
+            }
+            pos += 1;
+        }
+        try {
+            return dishDao.countFilteredDishes(name, minPriceLine, maxPriceLine, minCaloriesAmountLine, maxCaloriesAmountLine,
+                    minAmountGramsLine, maxAmountGramsLine, states);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Dish> findFilteredDishes(String name, BigDecimal minPrice, BigDecimal maxPrice, Integer minCaloriesAmount, Integer maxCaloriesAmount, Integer minAmountGrams, Integer maxAmountGrams, String[] dishStates, long minPos, long maxPos) throws ServiceException {
+        name = name == null ? "" : name;
+        String minPriceLine = minPrice == null ? "" : minPrice.toString();
+        String maxPriceLine = maxPrice == null ? "" : maxPrice.toString();
+        String minCaloriesAmountLine = minCaloriesAmount == null ? "" : minCaloriesAmount.toString();
+        String maxCaloriesAmountLine = maxCaloriesAmount == null ? "" : maxCaloriesAmount.toString();
+        String minAmountGramsLine = minAmountGrams == null ? "" : minAmountGrams.toString();
+        String maxAmountGramsLine = maxAmountGrams == null ? "" : maxAmountGrams.toString();
+        Boolean[] states = new Boolean[dishStates.length];
+        Integer pos = 0;
+        for (String line : dishStates) {
+            if (line.equals(DISH_AVAILABLE)) {
+                states[pos] = true;
+            }
+            if (line.equals(DISH_DISABLED)){
+                states[pos] = false;
+            }
+            pos += 1;
+        }
+        try {
             return dishDao.findFilteredDishes(name, minPriceLine, maxPriceLine, minCaloriesAmountLine, maxCaloriesAmountLine,
                     minAmountGramsLine, maxAmountGramsLine, states, minPos, maxPos);
         } catch (DaoException e) {

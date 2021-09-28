@@ -5,6 +5,7 @@ import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.Dish;
 import com.dvoraninovich.establishment.model.entity.Ingredient;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,5 +32,14 @@ public interface DishService {
     List<Dish> findFilteredDishes(String name, String minPriceLine, String maxPriceLine,
                                   String minCaloriesAmountLine, String maxCaloriesAmountLine,
                                   String minAmountGramsLine, String maxAmountGramsLine,
+                                  String[] dishStates, long minPos, long maxPos) throws ServiceException;
+
+    Long countFilteredDishes(String name, BigDecimal minPriceLine, BigDecimal maxPriceLine,
+                             Integer minCaloriesAmountLine, Integer maxCaloriesAmountLine,
+                             Integer minAmountGramsLine, Integer maxAmountGramsLine,
+                             String[] dishStates) throws ServiceException;
+    List<Dish> findFilteredDishes(String name, BigDecimal minPriceLine, BigDecimal maxPriceLine,
+                                  Integer minCaloriesAmountLine, Integer maxCaloriesAmountLine,
+                                  Integer minAmountGramsLine, Integer maxAmountGramsLine,
                                   String[] dishStates, long minPos, long maxPos) throws ServiceException;
 }

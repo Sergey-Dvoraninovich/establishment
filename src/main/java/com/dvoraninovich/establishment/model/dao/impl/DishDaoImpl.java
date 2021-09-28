@@ -22,7 +22,7 @@ public class DishDaoImpl implements DishDao {
             = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
             + "FROM dishes;";
     private static final String COUNT_DISHES
-            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
+            = "SELECT COUNT(dishes.id)"
             + "FROM dishes;";
     private static final String SELECT_LIMITED_DISHES
             = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
@@ -308,13 +308,12 @@ public class DishDaoImpl implements DishDao {
         ) {
             String requestLine = addFilterParameters(SELECT_LIMITED_DISHES, name, minPriceLine, maxPriceLine,
                     minCaloriesAmountLine, maxCaloriesAmountLine, minAmountGramsLine, maxAmountGramsLine, dishStates);
-            System.out.println(requestLine);
             PreparedStatement statement = connection.prepareStatement(requestLine);
             statement.setLong(1, minPos-1);
             statement.setLong(2, maxPos);
             ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 dishes.add(createDishFromResultSet(resultSet));
             }
         } catch (DatabaseException | SQLException e) {
@@ -371,6 +370,7 @@ public class DishDaoImpl implements DishDao {
         wherePos -= lineToFind.length() - 1;
         StringBuilder resultString = new StringBuilder(requestLine);
         resultString.insert(wherePos + lineToFind.length() - 1, filterString + " ");
+System.out.println(resultString.toString());
         return resultString.toString();
     }
 
