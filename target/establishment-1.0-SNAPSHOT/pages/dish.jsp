@@ -10,6 +10,7 @@
 <c:set var="set"><fmt:message key="set" /></c:set>
 <c:set var="more_information"><fmt:message key="more_information" /></c:set>
 <c:set var="create_dish_message"><fmt:message key="admin.dishes.create_dish"/></c:set>
+<c:set var="add_to_basket_text"><fmt:message key="dishes.add_to_basket" /></c:set>
 
 <html>
 <head>
@@ -70,6 +71,17 @@
                         <input type="submit" value="${edit}">
                     </form>
                 </div>
+            </c:if>
+        </div>
+        <div>
+            <c:if test="${sessionScope.user.role.name() == 'CUSTOMER'}">
+                <c:if test="${sessionScope.dish.isAvailable && sessionScope.user.status.name() == 'CONFIRMED'}">
+                    <c:url value="/ApiController?command=add_to_basket&id=${sessionScope.dish.id}" var="add_to_basket"/>
+                    <form id="add-to-basket" action="${add_to_basket}" method="post">
+                        <input type="hidden" name="dish_id" value="${sessionScope.dish.id}">
+                        <input type="submit" value="${add_to_basket_text}">
+                    </form>
+                </c:if>
             </c:if>
         </div>
         <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
@@ -198,6 +210,12 @@
     }
     #upload-photo-submit {
         width: 70%;
+    }
+    #add-to-basket {
+        width: inherit;
+        height: inherit;
+        border-radius: 10px;
+        margin: 10px;
     }
 
     a {

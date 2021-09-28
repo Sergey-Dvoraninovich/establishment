@@ -55,7 +55,7 @@
       </div>
     </c:if>
 
-    <c:if test="${sessionScope.user != null}">
+    <c:if test="${sessionScope.user.role != 'GUEST'}">
       <div class="header-block">
         <c:url value="/ApiController?command=go_to_user_page&id=${sessionScope.user.id}" var="profile_page"/>
         <a class="header-block-text" href="${profile_page}">
