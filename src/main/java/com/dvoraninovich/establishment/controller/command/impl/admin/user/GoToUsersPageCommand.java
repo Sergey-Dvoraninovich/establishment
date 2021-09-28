@@ -31,17 +31,16 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 public class GoToUsersPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToUsersPageCommand.class);
     private static final Long ORDERS_PAGE_ITEMS_AMOUNT = Long.valueOf(10);
-    UserService userService = UserServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
-        List<User> users = new ArrayList<>();
+        List<User> users;
         String minPosLine = request.getParameter(NEXT_MIN_POS);
         String maxPosLine = request.getParameter(NEXT_MAX_POS);
-        String newTotalAmountLine = request.getParameter(NEW_TOTAL_AMOUNT);
-        Long totalAmount;
+        Long totalAmount = (Long) session.getAttribute(TOTAL_AMOUNT);
 
         List<String> userStatusesList = (List<String>) session.getAttribute(USERS_FILTER_USER_STATUSES);
         List<String> userRolesList = (List<String>) session.getAttribute(USERS_FILTER_USER_ROLES);
@@ -50,23 +49,21 @@ public class GoToUsersPageCommand implements Command {
         String phoneNumberLine = (String) session.getAttribute(USERS_FILTER_PHONE_NUMBER);
         String cardNumberLine = (String) session.getAttribute(USERS_FILTER_CARD_NUMBER);
 
-        try {
-            Long minPos = Long.valueOf(minPosLine);
-            Long maxPos = Long.valueOf(maxPosLine);
-            String[] userStatusesLines = userStatusesList == null
-                    ? new String[0]
-                    : (String[]) userStatusesList.toArray();
-            String[] userRolesLines = userRolesList == null
-                    ? new String[0]
-                    : (String[]) userRolesList.toArray();
-            loginLine = loginLine == null ? "" : loginLine;
-            mailLine = mailLine == null ? "" : mailLine;
-            phoneNumberLine = phoneNumberLine == null ? "" : phoneNumberLine;
-            cardNumberLine = cardNumberLine == null ? "" : cardNumberLine;
+        Long minPos;
+        Long maxPos;
+        if (minPosLine == null || maxPosLine == null) {
+            minPos = 1L;
+            maxPos = ORDERS_PAGE_ITEMS_AMOUNT;
+        }
+        else {
+            minPos = Long.valueOf(minPosLine);
+            maxPos = Long.valueOf(maxPosLine);
+        }
 
-            if (newTotalAmountLine != null) {
+        try {
+            if (minPos.equals(1L) || totalAmount != null) {
                 totalAmount = userService.countUsers(loginLine, mailLine,
-                        phoneNumberLine, cardNumberLine, userStatusesLines, userRolesLines);
+                        phoneNumberLine, cardNumberLine, userStatusesList, userRolesList);
                 session.setAttribute(TOTAL_AMOUNT, totalAmount);
                 session.setAttribute(PAGE_ITEMS_AMOUNT, ORDERS_PAGE_ITEMS_AMOUNT);
             } else {
@@ -75,14 +72,14 @@ public class GoToUsersPageCommand implements Command {
 
             maxPos = maxPos > totalAmount ? totalAmount : maxPos;
             users = userService.findFilteredUsers(loginLine, mailLine, phoneNumberLine, cardNumberLine,
-                    userStatusesLines, userRolesLines, minPos, maxPos);
+                    userStatusesList, userRolesList, minPos, maxPos);
 
             session.setAttribute(USERS, users);
             session.setAttribute(MIN_POS, minPos);
             session.setAttribute(MAX_POS, maxPos);
             router = new Router(USERS_PAGE, REDIRECT);
         } catch (ServiceException e) {
-            logger.info("Impossible to find user orders", e);
+            logger.info("Impossible to find users", e);
             router = new Router(ADMIN_PAGE, REDIRECT);
         }
         return router;

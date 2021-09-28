@@ -118,8 +118,32 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public HashMap<Order, User> findFilteredOrdersWithUsers(String userIdLine, String minPriceLine, String maxPriceLine, long minPos, long maxPos,
-                                                            String[] orderStates, String[] paymentTypes) throws ServiceException {
+    public Long countFilteredOrders(String userIdLine, BigDecimal minPrice, BigDecimal maxPrice, List<String> orderStatesList, List<String> paymentTypesList) throws ServiceException {
+        String[] orderStates = orderStatesList == null
+                ? new String[0]
+                : (String[]) orderStatesList.toArray();
+        String[] paymentTypes = paymentTypesList == null
+                ? new String[0]
+                : (String[]) paymentTypesList.toArray();
+        String minPriceLine = minPrice == null ? "" : minPrice.toString();
+        String maxPriceLine = maxPrice == null ? "" : maxPrice.toString();
+        try {
+            return orderDao.countOrders(userIdLine, minPriceLine, maxPriceLine, orderStates, paymentTypes);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public HashMap<Order, User> findFilteredOrdersWithUsers(String userIdLine, BigDecimal minPrice, BigDecimal maxPrice, List<String> orderStatesList, List<String> paymentTypesList, long minPos, long maxPos) throws ServiceException {
+        String[] orderStates = orderStatesList == null
+                ? new String[0]
+                : (String[]) orderStatesList.toArray();
+        String[] paymentTypes = paymentTypesList == null
+                ? new String[0]
+                : (String[]) paymentTypesList.toArray();
+        String minPriceLine = minPrice == null ? "" : minPrice.toString();
+        String maxPriceLine = maxPrice == null ? "" : maxPrice.toString();
         try {
             return orderDao.findOrdersWithUsersLimit(userIdLine, minPriceLine, maxPriceLine, minPos, maxPos, orderStates, paymentTypes);
         } catch (DaoException e) {
@@ -128,13 +152,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long countFilteredOrders(Long userId, BigDecimal minPrice, BigDecimal maxPrice, String[] orderStates, String[] paymentTypes) throws ServiceException {
-        return null;
-    }
-
-    @Override
-    public HashMap<Order, User> findFilteredOrdersWithUsers(Long userId, BigDecimal minPrice, BigDecimal maxPrice, long minPos, long maxPos, String[] orderStates, String[] paymentTypes) throws ServiceException {
-        return null;
+    public HashMap<Order, User> findFilteredOrdersWithUsers(String userIdLine, String minPriceLine, String maxPriceLine, String[] orderStates,
+                                                            String[] paymentTypes, long minPos, long maxPos) throws ServiceException {
+        try {
+            return orderDao.findOrdersWithUsersLimit(userIdLine, minPriceLine, maxPriceLine, minPos, maxPos, orderStates, paymentTypes);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override

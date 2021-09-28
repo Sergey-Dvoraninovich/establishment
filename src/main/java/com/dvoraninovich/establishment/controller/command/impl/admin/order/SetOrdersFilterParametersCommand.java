@@ -5,7 +5,6 @@ import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.controller.command.validator.OrderValidator;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.Order;
-import com.dvoraninovich.establishment.model.entity.Role;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.model.service.OrderService;
 import com.dvoraninovich.establishment.model.service.impl.OrderServiceImpl;
@@ -62,7 +61,7 @@ public class SetOrdersFilterParametersCommand implements Command {
             router = new Router(CUSTOMER_ORDERS_PAGE, REDIRECT);
         }
 
-        HashMap<String, Boolean> validationResult = new HashMap<>();
+        HashMap<String, Boolean> validationResult;
         validationResult = validator.validateFilterParameters(userIdLine, minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
 
         Set<String> validationMessages = validationResult.keySet();
@@ -84,8 +83,8 @@ public class SetOrdersFilterParametersCommand implements Command {
             session.setAttribute(TOTAL_AMOUNT, totalAmount);
             session.setAttribute(PAGE_ITEMS_AMOUNT, ORDERS_PAGE_ITEMS_AMOUNT);
 
-            HashMap<Order, User> fullInfoHashMap = new HashMap<>();
-            fullInfoHashMap = service.findFilteredOrdersWithUsers(userIdLine, minPriceLine, maxPriceLine, minPos, maxPos, orderStatesLines, paymentTypesLines);
+            HashMap<Order, User> fullInfoHashMap;
+            fullInfoHashMap = service.findFilteredOrdersWithUsers(userIdLine, minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines, minPos, maxPos);
             orders.addAll(fullInfoHashMap.keySet());
 
             session.setAttribute(ORDERS, orders);
@@ -96,6 +95,7 @@ public class SetOrdersFilterParametersCommand implements Command {
             session.setAttribute(ORDERS_FILTER_MIN_PRICE, minPriceLine.equals("") ? null : new BigDecimal(minPriceLine));
             session.setAttribute(ORDERS_FILTER_MAX_PRICE, maxPriceLine.equals("") ? null : new BigDecimal(maxPriceLine));
             session.setAttribute(ORDERS_FILTER_PAYMENT_TYPES, Arrays.asList(paymentTypesLines));
+
         } catch (ServiceException e) {
             logger.info("Impossible to find user orders", e);
             router = new Router(ADMIN_PAGE, REDIRECT);

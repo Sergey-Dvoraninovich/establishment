@@ -71,6 +71,7 @@ public class GoToDishesPageCommand implements Command {
                 totalAmount = dishService.countFilteredDishes(dishName, minPrice, maxPrice,
                         minCaloriesAmount, maxCaloriesAmount, minAmountGrams, maxAmountGrams, dishStatesLines);
                 session.setAttribute(TOTAL_AMOUNT, totalAmount);
+                session.setAttribute(PAGE_ITEMS_AMOUNT, DISHES_PAGE_ITEMS_AMOUNT);
             }
             maxPos = maxPos > totalAmount ? totalAmount : maxPos;
 
@@ -81,7 +82,7 @@ public class GoToDishesPageCommand implements Command {
             session.setAttribute(DISHES, dishes);
             session.setAttribute(MIN_POS, minPos);
             session.setAttribute(MAX_POS, maxPos);
-            session.setAttribute(PAGE_ITEMS_AMOUNT, DISHES_PAGE_ITEMS_AMOUNT);
+
         } catch (ServiceException e) {
             logger.info("Impossible to find dishes", e);
         }

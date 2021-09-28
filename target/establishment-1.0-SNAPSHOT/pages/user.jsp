@@ -91,7 +91,7 @@
         </c:if>
         <c:if test="${sessionScope.user.role == 'ADMIN'
                       && sessionScope.user.id != sessionScope.user_profile.id}">
-        <div class="block-item">
+        <div id="edit-user-status" class="block-item">
         <div class="block-item-header">
             <h2><fmt:message key="status"/></h2>
         </div>
@@ -344,12 +344,14 @@
     editButton.onclick = function openEditBlock(){
         document.getElementById("description-action").style.display = "none";
         document.getElementById("edit-block").style.display = "flex";
+        document.getElementById("edit-user-status").style.display = "flex";
     }
 
     var showChangePasswordForm = document.getElementById("change-password-show");
     showChangePasswordForm.onclick = function openChangingPasswordForm(){
         document.getElementById("change-password-plug").style.display = "none";
         document.getElementById("change-password-form").style.display = "flex";
+        document.getElementById("edit-user-status").style.display = "none"
     }
 
     document.getElementById('placer').onclick = function(){

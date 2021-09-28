@@ -49,7 +49,7 @@ public class SetUsersFilterParametersCommand implements Command {
         String phoneNumberLine = request.getParameter(REQUEST_FILTER_PHONE_NUMBER);
         String cardNumberLine = request.getParameter(REQUEST_FILTER_CARD_NUMBER);
 
-        HashMap<String, Boolean> validationResult = new HashMap<>();
+        HashMap<String, Boolean> validationResult;
         validationResult = validator.validateFilterParameters(loginLine, mailLine,
                 phoneNumberLine, cardNumberLine, userStatusesLines, userRolesLines);
 
@@ -64,7 +64,7 @@ public class SetUsersFilterParametersCommand implements Command {
         }
 
         try {
-            List<User> users = new ArrayList<>();
+            List<User> users;
             Long minPos = Long.valueOf(1);
             Long maxPos = ORDERS_PAGE_ITEMS_AMOUNT;
 

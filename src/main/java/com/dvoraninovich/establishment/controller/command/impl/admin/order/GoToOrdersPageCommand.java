@@ -37,7 +37,7 @@ public class GoToOrdersPageCommand implements Command {
         session.setAttribute(USER_PROFILE_ID, null);
         String minPosLine = request.getParameter(NEXT_MIN_POS);
         String maxPosLine = request.getParameter(NEXT_MAX_POS);
-        Long totalAmount;
+        Long totalAmount = (Long) session.getAttribute(TOTAL_AMOUNT);
 
         Long minPos;
         Long maxPos;
@@ -56,28 +56,16 @@ public class GoToOrdersPageCommand implements Command {
         BigDecimal maxPrice = (BigDecimal) session.getAttribute(ORDERS_FILTER_MAX_PRICE);
 
         try {
-            String[] orderStatesLines = orderStatesList == null
-                    ? new String[0]
-                    : (String[]) orderStatesList.toArray();
-            String[] paymentTypesLines = paymentTypesList == null
-                    ? new String[0]
-                    : (String[]) paymentTypesList.toArray();
-            String minPriceLine = minPrice == null ? "" : minPrice.toString();
-            String maxPriceLine = maxPrice == null ? "" : maxPrice.toString();
-
-            if (minPos.equals(1L)){
+            if (minPos.equals(1L) || totalAmount == null){
                 totalAmount = orderService.countFilteredOrders(userIdLine,
-                        minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
+                        minPrice, maxPrice, orderStatesList, paymentTypesList);
                 session.setAttribute(TOTAL_AMOUNT, totalAmount);
                 session.setAttribute(PAGE_ITEMS_AMOUNT, ORDERS_PAGE_ITEMS_AMOUNT);
             }
-            else {
-                totalAmount = (Long) session.getAttribute(TOTAL_AMOUNT);
-            }
-
             maxPos = maxPos > totalAmount ? totalAmount : maxPos;
+
             HashMap<Order, User> fullInfoHashMap;
-            fullInfoHashMap = orderService.findFilteredOrdersWithUsers(userIdLine, minPriceLine, maxPriceLine, minPos, maxPos, orderStatesLines, paymentTypesLines);
+            fullInfoHashMap = orderService.findFilteredOrdersWithUsers(userIdLine, minPrice, maxPrice, orderStatesList, paymentTypesList, minPos, maxPos);
             orders.addAll(fullInfoHashMap.keySet());
 
             session.setAttribute(ORDERS, orders);

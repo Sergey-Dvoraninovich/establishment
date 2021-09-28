@@ -185,6 +185,7 @@
                             <a>${user.login}</a>
                         </div>
                         <div class="action">
+                            <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=1&next_max_pos=10&new_total_amount=true&user_id=${user.id}" var="customer_orders"/>
                             <a><fmt:message key="orders.orders"/></a>
                         </div>
                     </div>

@@ -1,7 +1,5 @@
 package com.dvoraninovich.establishment.model.service.impl;
 
-import com.dvoraninovich.establishment.controller.command.validator.UserValidator;
-import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.exception.ServiceException;
@@ -13,14 +11,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.ORDER;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.TOO_MANY_BONUSES;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
@@ -114,33 +108,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByLogin(String login) throws ServiceException {
-        try {
-            return userDao.findUserByLogin(login);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public Optional<User> findByMail(String mail) throws ServiceException {
-        try {
-            return userDao.findUserByEmail(mail);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public Optional<String> getPassword(long id) throws ServiceException {
-        try {
-            return userDao.getPasswordById(id);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
     public Optional<String> getCode(long id) throws ServiceException {
         try {
             return userDao.getCodeById(id);
@@ -153,24 +120,6 @@ public class UserServiceImpl implements UserService {
     public Optional<LocalDateTime> getCodeExpirationTime(long id) throws ServiceException {
         try {
             return userDao.getCodeExpirationTimeById(id);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public Long countUsers() throws ServiceException {
-        try {
-            return userDao.countUsers();
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public List<User> findFilteredUsers(long minPos, long maxPos) throws ServiceException {
-        try {
-            return userDao.findFilteredUsers(minPos, maxPos);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
@@ -194,6 +143,45 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public Long countUsers(String login, String mail, String phoneNumber, String cardNumber, List<String> userStatusesList, List<String> userRolesList) throws ServiceException {
+        String[] userStatuses = userStatusesList == null
+                ? new String[0]
+                : (String[]) userStatusesList.toArray();
+        String[] userRoles = userRolesList == null
+                ? new String[0]
+                : (String[]) userRolesList.toArray();
+        login = login == null ? "" : login;
+        mail = mail == null ? "" : mail;
+        phoneNumber = phoneNumber == null ? "" : phoneNumber;
+        cardNumber = cardNumber == null ? "" : cardNumber;
+        try {
+            return userDao.countUsers(login, mail, phoneNumber, cardNumber, userStatuses, userRoles);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<User> findFilteredUsers(String login, String mail, String phoneNumber, String cardNumber, List<String> userStatusesList, List<String> userRolesList, long minPos, long maxPos) throws ServiceException {
+        String[] userStatuses = userStatusesList == null
+                ? new String[0]
+                : (String[]) userStatusesList.toArray();
+        String[] userRoles = userRolesList == null
+                ? new String[0]
+                : (String[]) userRolesList.toArray();
+        login = login == null ? "" : login;
+        mail = mail == null ? "" : mail;
+        phoneNumber = phoneNumber == null ? "" : phoneNumber;
+        cardNumber = cardNumber == null ? "" : cardNumber;
+        try {
+            return userDao.findFilteredUsers(login, mail, phoneNumber, cardNumber, userStatuses, userRoles, minPos, maxPos);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public boolean isLoginUnique(String login){
         Optional<User> user;
 
@@ -203,19 +191,6 @@ public class UserServiceImpl implements UserService {
             logger.error("Can't handle UserService.isLoginUnique", e);
             return false;
         }
-        return !user.isPresent();
-    }
-
-    public boolean isMailUnique(String mail){
-        Optional<User> user;
-
-        try {
-            user = userDao.findUserByEmail(mail);
-        } catch (DaoException e) {
-            logger.error("Can't handle UserService.isMailUnique", e);
-            return false;
-        }
-
         return !user.isPresent();
     }
 
@@ -233,11 +208,11 @@ public class UserServiceImpl implements UserService {
         return passwordHash;
     }
 
-    private String makeSalt(Integer len) {
+    private String makeSalt(Integer length) {
         Random random = new Random();
         int symbolsAmount = SALT_ITEMS.length();
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < length; i++) {
             int symbolPosition = random.nextInt(symbolsAmount);
             char symbol = SALT_ITEMS.charAt(symbolPosition);
             stringBuilder.append(symbol);
