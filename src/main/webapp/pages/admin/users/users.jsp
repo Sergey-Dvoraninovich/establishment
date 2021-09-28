@@ -209,7 +209,7 @@
     <div class="pagination">
         <c:if test="${sessionScope.min_pos != 1}">
             <div class="block-item-action">
-                <c:url value="/ApiController?command=go_to_userss&next_min_pos=${sessionScope.min_pos-sessionScope.page_items_amount}&next_max_pos=${sessionScope.min_pos-1}" var="prev_order_page"/>
+                <c:url value="/ApiController?command=go_to_users&next_min_pos=${sessionScope.min_pos-sessionScope.page_items_amount}&next_max_pos=${sessionScope.min_pos-1}" var="prev_order_page"/>
                 <a href="${prev_order_page}"><fmt:message key="previous"/></a>
             </div>
         </c:if>

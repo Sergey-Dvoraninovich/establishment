@@ -28,8 +28,9 @@
 <body>
 <jsp:include page="shared/header.jsp" />
 <div class="filter-line">
-    <c:url value="/ApiController?command=set_dises_filter_parameters" var="dishes_filter"/>
+    <c:url value="/ApiController?command=set_dishes_filter_parameters" var="dishes_filter"/>
     <form action="${dishes_filter}" method="post">
+        <c:if test="${sessionScope.user.role.name() == 'ADMIN'}">
         <div id="order-states" class="form-row">
             <div class="checkbox-container">
                 <div><fmt:message key="filter.dish_states"/></div>
@@ -38,7 +39,7 @@
                         <c:if test="${sessionScope.dishes_filter_states.contains('AVAILABLE')}">
                             <input id="check-available" type="checkbox" name="request_filter_dish_states" value="AVAILABLE" checked>
                         </c:if>
-                        <c:if test="${not sessionScope.orders_filter_order_states.contains('AVAILABLE')}">
+                        <c:if test="${not sessionScope.dishes_filter_states.contains('AVAILABLE')}">
                             <input id="check-available" type="checkbox" name="request_filter_dish_states" value="AVAILABLE">
                         </c:if>
                         <label for="check-available"><fmt:message key="filter.available"/></label>
@@ -47,7 +48,7 @@
                         <c:if test="${sessionScope.dishes_filter_states.contains('DISABLED')}">
                             <input id="check-disabled" type="checkbox" name="request_filter_dish_states" value="DISABLED" checked>
                         </c:if>
-                        <c:if test="${not sessionScope.orders_filter_order_states.contains('DISABLED')}">
+                        <c:if test="${not sessionScope.dishes_filter_states.contains('DISABLED')}">
                             <input id="check-disabled" type="checkbox" name="request_filter_dish_states" value="DISABLED">
                         </c:if>
                         <label for="check-disabled"><fmt:message key="filter.disabled"/></label>
@@ -60,6 +61,7 @@
                 </c:if>
             </div>
         </div>
+        </c:if>
         <div id="price" class="form-row">
             <label for="request_filter_min_price"><fmt:message key="filter.min_price" /></label>
             <input type="number" name="request_filter_min_price" id="request_filter_min_price"
@@ -116,9 +118,9 @@
         </div>
         <div id="name" class="form-row">
             <label for="request_filter_name"><fmt:message key="admin.dishes.dish_name" /></label>
-            <input type="text" name="request_filter_name" id="request_filter_name" pattern=^[A-za-z\\s]{2,50}$"
+            <input type="text" name="request_filter_name" id="request_filter_name" pattern="^[A-za-z\\s]{2,50}$"
                    value="${request_filter_name}" placeholder="${request_filter_name}"/>
-            <c:if test="${sessionScope.invalid_name}">
+            <c:if test="${sessionScope.invalid_dish_name}">
                 <div class="local-error">
                     <p><fmt:message key="filter.invalid_name"/></p>
                 </div>
@@ -129,6 +131,11 @@
             <c:if test="${sessionScope.invalid_filter_parameters}">
                 <div class="local-error">
                     <p><fmt:message key="filter.invalid_filter_params"/></p>
+                </div>
+            </c:if>
+            <c:if test="${sessionScope.filter_error}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.filter_error"/></p>
                 </div>
             </c:if>
         </div>
@@ -221,9 +228,127 @@
             </div>
         </c:if>
     </div>
+    <div class="pagination">
+        <c:if test="${sessionScope.min_pos != 1}">
+            <div class="block-item-action">
+                <c:url value="/ApiController?command=go_to_dishes_page&next_min_pos=${sessionScope.min_pos-sessionScope.page_items_amount}&next_max_pos=${sessionScope.min_pos-1}" var="prev_dish_page"/>
+                <a href="${prev_dish_page}"><fmt:message key="previous"/></a>
+            </div>
+        </c:if>
+        <c:if test="${sessionScope.max_pos != sessionScope.total_amount}">
+            <div class="block-item-action">
+                <c:url value="/ApiController?command=go_to_dishes_page&next_min_pos=${sessionScope.max_pos+1}&next_max_pos=${sessionScope.max_pos+sessionScope.page_items_amount}" var="next_dish_page"/>
+                <a href="${next_dish_page}"><fmt:message key="next"/></a>
+            </div>
+        </c:if>
+    </div>
 </div>
 </body>
 <style>
+    body {
+        font: 15px 'Roboto', Arial, Helvetica, sans-serif;
+    }
+    a {
+        font-size: 25px;
+        text-decoration: none;
+    }
+    .workspace-flex-container {
+        margin-top: 35px;
+        display: flex;
+        flex-flow: row wrap;
+        align-content: space-around;
+    }
+    .flex-block {
+        flex-flow: row nowrap;
+        align-content: space-around;
+        color: white;
+        font-size: 15px;
+        margin: 15px;
+        padding: 10px;
+        width: min-content;
+        border-radius: 5px;
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
+    }
+    .flex-block:hover {
+        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
+    }
+    #dish-picture {
+        height: 200px;
+        width: 350px;
+    }
+    .dish-picture {
+        height: 100%;
+        width: auto;
+    }
+    #dish-add-picture {
+        height: 205px;
+        width: 350px;
+    }
+    #add-icon {
+        height: 90px;
+        width: 90px;
+    }
+    h3 {
+        font-size: 30px;
+        color: #000000;
+    }
+    .block-item {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        border: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+    .block-item:hover {
+        border: 0px;
+        -webkit-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+        -moz-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+        box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+    }
+    #description{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+    .row-item-flexbox{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    .row-item-flexbox>a{
+        font-size: 20px;
+        color: #4d4d4d;
+        margin: 5px 0px;
+    }
+    input[type="submit"]{
+        font-size: 20px;
+        position: center;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        margin: 5px 0px 0px 15px;
+        padding: 5px 5px 5px 20px;
+        text-align: center;
+        width: 90%;
+        background-color: #a15566;
+    }
+    input[type="submit"]:hover {
+        background-color: #804451;
+    }
+
+
+
+
+
     .block-item {
         margin-top: 0px;
         margin-bottom: 0px;
@@ -330,6 +455,18 @@
         color: #ffffff;
         border: 2px solid #804451;
         background-color: #804451;
+    }
+    .pagination {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+    .pagination>div {
+        width: min-content;
+    }
+    .pagination>div>a {
+        font-size: 20px;
     }
 </style>
 </html>

@@ -24,6 +24,7 @@ import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.*;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
+import static com.dvoraninovich.establishment.model.entity.Role.GUEST;
 
 public class LogInPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(LogInPageCommand.class);
@@ -38,7 +39,7 @@ public class LogInPageCommand implements Command {
         HttpSession session = request.getSession();
         User sessionUser = (User) session.getAttribute(SessionAttribute.USER);
 
-        if (sessionUser != null) {
+        if (!sessionUser.getRole().equals(GUEST)) {
             session.setAttribute(USER_ALREADY_AUTHENTICATED, true);
             router = new Router(LOGIN_PAGE, REDIRECT);
             return router;

@@ -27,6 +27,7 @@ public final class SessionAttribute {
     public static final String USER_VALIDATION_ERROR = "user_validation_error";
     public static final String IMPOSSIBLE_TO_UPLOAD_USER_PHOTO = "impossible_to_upload_user_photo";
     public static final String USER_PROFILE_ID = "user_profile_id";
+    public final static String LOCALE = "locale";
 
     public static final String DIFFERENT_PASSWORDS = "different_passwords";
     public static final String USER_ALREADY_AUTHENTICATED = "user_already_authenticated";
@@ -112,6 +113,7 @@ public final class SessionAttribute {
     public static final String INVALID_MIN_PRICE = "invalid_min_price";
     public static final String INVALID_MAX_PRICE = "invalid_max_price";
     public static final String INVALID_FILTER_PARAMETERS = "invalid_filter_parameters";
+    public static final String FILTER_ERROR = "filter_error";
 
     private SessionAttribute() {
     }

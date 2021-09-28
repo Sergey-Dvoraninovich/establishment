@@ -24,13 +24,12 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
-    private UserDao userDao = UserDaoImpl.getInstance();
-    private static UserServiceImpl instance;
-    private CodeGenerator codeGenerator = CodeGenerator.getInstance();
     private static final String SALT_ITEMS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private static final String CODE_ITEMS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final Integer SALT_LENGTH = 16;
     private static final Integer CODE_LENGTH = 16;
+    private static UserServiceImpl instance;
+    private UserDao userDao = UserDaoImpl.getInstance();
+    private CodeGenerator codeGenerator = CodeGenerator.getInstance();
 
     private UserServiceImpl() {
     }
@@ -68,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
     public Optional<User> register(User user, String password) throws ServiceException {
         Optional<User> registeredUser = Optional.empty();
-        String code = codeGenerator.getCode(CODE_ITEMS, CODE_LENGTH);
+        String code = codeGenerator.getCode(CODE_LENGTH);
         String salt = makeSalt(SALT_LENGTH);
         String passwordHash = makePasswordHash(password);
         passwordHash = makePasswordHash(passwordHash + salt);

@@ -38,6 +38,11 @@
                 <fmt:message key="login.auth_error" />
             </div>
         </c:if>
+        <c:if test="${sessionScope.user_already_authenticated}">
+            <div class="alert alert-danger" role="alert">
+                <fmt:message key="registration.user_already_authenticated" />
+            </div>
+        </c:if>
         <div class="action"><input type="submit" value="${login_submit}"/></div>
     </form>
     <div class="block-item">

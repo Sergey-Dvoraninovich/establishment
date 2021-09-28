@@ -21,6 +21,13 @@ public class DishDaoImpl implements DishDao {
     private static final String SELECT_ALL_DISHES
             = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
             + "FROM dishes;";
+    private static final String COUNT_DISHES
+            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
+            + "FROM dishes;";
+    private static final String SELECT_LIMITED_DISHES
+            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
+            + "FROM dishes"
+            + "LIMIT ?, ?;";
     private static final String SELECT_ORDER_DISHES
             = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, "
             + "dishes.is_available, dishes.photo  "
@@ -65,6 +72,7 @@ public class DishDaoImpl implements DishDao {
     private static final String DELETE_DISH_INGREDIENT
             = "DELETE FROM dishes_ingredients "
             + "WHERE id_dish = ? AND id_ingredient = ?;";
+    private static final String LIMIT_LINE = "LIMIT";
 
     public static DishDao getInstance(){
         return instance;
@@ -272,6 +280,112 @@ public class DishDaoImpl implements DishDao {
                     + "to dish with id: " + dishId, e);
         }
         return successfulOperation;
+    }
+
+    @Override
+    public Long countFilteredDishes(String name, String minPriceLine, String maxPriceLine, String minCaloriesAmountLine, String maxCaloriesAmountLine, String minAmountGramsLine, String maxAmountGramsLine, Boolean[] dishStates) throws DaoException{
+        Long dishesAmount = Long.valueOf(0);
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            String requestLine = addFilterParameters(COUNT_DISHES, name, minPriceLine, maxPriceLine,
+                    minCaloriesAmountLine, maxCaloriesAmountLine, minAmountGramsLine, maxAmountGramsLine, dishStates);
+            PreparedStatement statement = connection.prepareStatement(requestLine);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                dishesAmount = resultSet.getLong(1);
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Error while counting orders", e);
+        }
+        return dishesAmount;
+    }
+
+    @Override
+    public List<Dish> findFilteredDishes(String name, String minPriceLine, String maxPriceLine, String minCaloriesAmountLine, String maxCaloriesAmountLine, String minAmountGramsLine, String maxAmountGramsLine, Boolean[] dishStates, long minPos, long maxPos) throws DaoException {
+        List<Dish> dishes = new ArrayList<>();
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            String requestLine = addFilterParameters(SELECT_LIMITED_DISHES, name, minPriceLine, maxPriceLine,
+                    minCaloriesAmountLine, maxCaloriesAmountLine, minAmountGramsLine, maxAmountGramsLine, dishStates);
+            System.out.println(requestLine);
+            PreparedStatement statement = connection.prepareStatement(requestLine);
+            statement.setLong(1, minPos-1);
+            statement.setLong(2, maxPos);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                dishes.add(createDishFromResultSet(resultSet));
+            }
+        } catch (DatabaseException | SQLException e) {
+            throw new DaoException("Error while counting orders", e);
+        }
+        return dishes;
+    }
+
+    private String addFilterParameters(String requestLine, String name, String minPriceLine, String maxPriceLine,
+                                       String minCaloriesAmountLine, String maxCaloriesAmountLine,
+                                       String minAmountGramsLine, String maxAmountGramsLine, Boolean[] dishStates){
+        StringBuilder filterString = new StringBuilder(" WHERE ");
+        if (!name.equals("")){
+            filterString.append(DISH_NAME).append(" LIKE '%")
+                    .append(name).append("%' AND ");
+        }
+        if (!minPriceLine.equals("")){
+            filterString.append(DISH_PRICE).append(" >= ")
+                    .append(minPriceLine).append(" AND ");
+        }
+        if (!maxPriceLine.equals("")){
+            filterString.append(DISH_PRICE).append(" <= ")
+                    .append(maxPriceLine).append(" AND ");
+        }
+        if (!minCaloriesAmountLine.equals("")){
+            filterString.append(DISH_CALORIES).append(" >= ")
+                    .append(minCaloriesAmountLine).append(" AND ");
+        }
+        if (!maxCaloriesAmountLine.equals("")){
+            filterString.append(DISH_CALORIES).append(" <= ")
+                    .append(maxCaloriesAmountLine).append(" AND ");
+        }
+        if (!minAmountGramsLine.equals("")){
+            filterString.append(DISH_AMOUNT_GRAMS).append(" >= ")
+                    .append(minAmountGramsLine).append(" AND ");
+        }
+        if (!maxAmountGramsLine.equals("")){
+            filterString.append(DISH_AMOUNT_GRAMS).append(" <= ")
+                    .append(maxAmountGramsLine).append(" AND ");
+        }
+        if (dishStates.length != 0){
+            filterString.append(makeFilterGroup(IS_DISH_AVAILABLE, dishStates)).append(" AND ");
+        }
+        if (!filterString.toString().equals(" WHERE ")) {
+            Integer lastAndPos = filterString.lastIndexOf(" AND ");
+            filterString.replace(lastAndPos, lastAndPos + 5, "");
+        }
+        else {
+            filterString.replace(0, filterString.length(), "");
+        }
+
+        String lineToFind = !requestLine.contains(LIMIT_LINE) ? ";" : LIMIT_LINE;
+        Integer wherePos = requestLine.indexOf(lineToFind);
+        wherePos -= lineToFind.length() - 1;
+        StringBuilder resultString = new StringBuilder(requestLine);
+        resultString.insert(wherePos + lineToFind.length() - 1, filterString + " ");
+        return resultString.toString();
+    }
+
+    private String makeFilterGroup(String DBLine, Boolean[] parameters) {
+        StringBuilder itemsString = new StringBuilder(" (");
+        for (Boolean value : parameters) {
+            itemsString.append(" ")
+                    .append(DBLine)
+                    .append(" = ")
+                    .append(value)
+                    .append(" OR");
+        }
+        itemsString.replace(itemsString.lastIndexOf("OR"), itemsString.length(), "");
+        itemsString.append(") ");
+        return itemsString.toString();
     }
 
     private Dish createDishFromResultSet(ResultSet resultSet) throws SQLException {

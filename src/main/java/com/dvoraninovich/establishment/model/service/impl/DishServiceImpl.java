@@ -20,6 +20,8 @@ import java.util.Optional;
 
 public class DishServiceImpl implements DishService {
     private static final Logger logger = LogManager.getLogger(DishServiceImpl.class);
+    private static final String DISH_AVAILABLE = "AVAILABLE";
+    private static final String DISH_DISABLED = "DISABLED";
     private DishDao dishDao = DishDaoImpl.getInstance();
     private IngredientDao ingredientDao = IngredientDaoImpl.getInstance();
     private static DishServiceImpl instance;
@@ -144,6 +146,48 @@ public class DishServiceImpl implements DishService {
     public boolean removeDishIngredient(Long dishId, Long ingredientId) throws ServiceException {
         try {
             return dishDao.removeDishIngredient(dishId, ingredientId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Long countFilteredDishes(String name, String minPriceLine, String maxPriceLine, String minCaloriesAmountLine, String maxCaloriesAmountLine, String minAmountGramsLine, String maxAmountGramsLine, String[] dishStates) throws ServiceException {
+        try {
+            Boolean[] states = new Boolean[dishStates.length];
+            Integer pos = 0;
+            for (String line : dishStates) {
+                if (line.equals(DISH_AVAILABLE)) {
+                    states[pos] = true;
+                }
+                if (line.equals(DISH_DISABLED)){
+                    states[pos] = false;
+                }
+                pos += 1;
+            }
+            return dishDao.countFilteredDishes(name, minPriceLine, maxPriceLine, minCaloriesAmountLine, maxCaloriesAmountLine,
+                    minAmountGramsLine, maxAmountGramsLine, states);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Dish> findFilteredDishes(String name, String minPriceLine, String maxPriceLine, String minCaloriesAmountLine, String maxCaloriesAmountLine, String minAmountGramsLine, String maxAmountGramsLine, String[] dishStates, long minPos, long maxPos) throws ServiceException {
+        try {
+            Boolean[] states = new Boolean[dishStates.length];
+            Integer pos = 0;
+            for (String line : dishStates) {
+                if (line.equals(DISH_AVAILABLE)) {
+                    states[pos] = true;
+                }
+                if (line.equals(DISH_DISABLED)){
+                    states[pos] = false;
+                }
+                pos += 1;
+            }
+            return dishDao.findFilteredDishes(name, minPriceLine, maxPriceLine, minCaloriesAmountLine, maxCaloriesAmountLine,
+                    minAmountGramsLine, maxAmountGramsLine, states, minPos, maxPos);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

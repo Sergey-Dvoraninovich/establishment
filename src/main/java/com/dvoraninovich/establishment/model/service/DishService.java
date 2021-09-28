@@ -23,4 +23,13 @@ public interface DishService {
     List<Ingredient> findUnusedDishIngredients(Long id) throws ServiceException;
     boolean addDishIngredient(Long dishId, Long ingredientId) throws ServiceException;
     boolean removeDishIngredient(Long dishId, Long ingredientId) throws ServiceException;
+
+    Long countFilteredDishes(String name, String minPriceLine, String maxPriceLine,
+                             String minCaloriesAmountLine, String maxCaloriesAmountLine,
+                             String minAmountGramsLine, String maxAmountGramsLine,
+                             String[] dishStates) throws ServiceException;
+    List<Dish> findFilteredDishes(String name, String minPriceLine, String maxPriceLine,
+                                  String minCaloriesAmountLine, String maxCaloriesAmountLine,
+                                  String minAmountGramsLine, String maxAmountGramsLine,
+                                  String[] dishStates, long minPos, long maxPos) throws ServiceException;
 }

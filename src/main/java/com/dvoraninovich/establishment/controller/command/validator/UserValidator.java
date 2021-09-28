@@ -72,7 +72,7 @@ public class UserValidator {
 
     public boolean validateCode(String code){
         boolean result;
-        result =Pattern.matches(CODE_REGEXP, code);
+        result = Pattern.matches(CODE_REGEXP, code);
         return result;
     }
 
