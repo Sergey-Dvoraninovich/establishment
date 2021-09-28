@@ -37,9 +37,18 @@ public class GoToOrdersPageCommand implements Command {
         session.setAttribute(USER_PROFILE_ID, null);
         String minPosLine = request.getParameter(NEXT_MIN_POS);
         String maxPosLine = request.getParameter(NEXT_MAX_POS);
-        String newTotalAmountLine = request.getParameter(NEW_TOTAL_AMOUNT);
         Long totalAmount;
 
+        Long minPos;
+        Long maxPos;
+        if (minPosLine == null || maxPosLine == null) {
+            minPos = 1L;
+            maxPos = ORDERS_PAGE_ITEMS_AMOUNT;
+        }
+        else {
+            minPos = Long.valueOf(minPosLine);
+            maxPos = Long.valueOf(maxPosLine);
+        }
 
         List<String> orderStatesList = (List<String>) session.getAttribute(ORDERS_FILTER_ORDER_STATES);
         List<String> paymentTypesList = (List<String>) session.getAttribute(ORDERS_FILTER_PAYMENT_TYPES);
@@ -47,8 +56,6 @@ public class GoToOrdersPageCommand implements Command {
         BigDecimal maxPrice = (BigDecimal) session.getAttribute(ORDERS_FILTER_MAX_PRICE);
 
         try {
-            Long minPos = Long.valueOf(minPosLine);
-            Long maxPos = Long.valueOf(maxPosLine);
             String[] orderStatesLines = orderStatesList == null
                     ? new String[0]
                     : (String[]) orderStatesList.toArray();
@@ -58,17 +65,18 @@ public class GoToOrdersPageCommand implements Command {
             String minPriceLine = minPrice == null ? "" : minPrice.toString();
             String maxPriceLine = maxPrice == null ? "" : maxPrice.toString();
 
-            if (newTotalAmountLine != null){
+            if (minPos.equals(1L)){
                 totalAmount = orderService.countFilteredOrders(userIdLine,
                         minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);
                 session.setAttribute(TOTAL_AMOUNT, totalAmount);
+                session.setAttribute(PAGE_ITEMS_AMOUNT, ORDERS_PAGE_ITEMS_AMOUNT);
             }
             else {
                 totalAmount = (Long) session.getAttribute(TOTAL_AMOUNT);
             }
 
             maxPos = maxPos > totalAmount ? totalAmount : maxPos;
-            HashMap<Order, User> fullInfoHashMap = new HashMap<>();
+            HashMap<Order, User> fullInfoHashMap;
             fullInfoHashMap = orderService.findFilteredOrdersWithUsers(userIdLine, minPriceLine, maxPriceLine, minPos, maxPos, orderStatesLines, paymentTypesLines);
             orders.addAll(fullInfoHashMap.keySet());
 
@@ -76,7 +84,6 @@ public class GoToOrdersPageCommand implements Command {
             session.setAttribute(ORDERS_USERS_MAP, fullInfoHashMap);
             session.setAttribute(MIN_POS, minPos);
             session.setAttribute(MAX_POS, maxPos);
-            session.setAttribute(PAGE_ITEMS_AMOUNT, ORDERS_PAGE_ITEMS_AMOUNT);
 
             router = new Router(ORDERS_PAGE, REDIRECT);
         } catch (ServiceException e) {

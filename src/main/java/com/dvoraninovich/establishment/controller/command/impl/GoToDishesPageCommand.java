@@ -33,7 +33,7 @@ public class GoToDishesPageCommand implements Command {
         User user = (User) session.getAttribute(USER);
         String minPosLine = request.getParameter(NEXT_MIN_POS);
         String maxPosLine = request.getParameter(NEXT_MAX_POS);
-        Long totalAmount;
+        Long totalAmount = (Long) session.getAttribute(TOTAL_AMOUNT);
 
         String dishName = (String) session.getAttribute(DISHES_FILTER_NAME);
         List<String> dishStatesList = (List<String>) session.getAttribute(DISHES_FILTER_STATES);
@@ -67,25 +67,21 @@ public class GoToDishesPageCommand implements Command {
         }
 
         try {
-            if (minPos.equals(1L)) {
+            if (minPos.equals(1L) || totalAmount == null) {
                 totalAmount = dishService.countFilteredDishes(dishName, minPrice, maxPrice,
                         minCaloriesAmount, maxCaloriesAmount, minAmountGrams, maxAmountGrams, dishStatesLines);
-                maxPos = maxPos > totalAmount ? totalAmount : maxPos;
                 session.setAttribute(TOTAL_AMOUNT, totalAmount);
-                session.setAttribute(PAGE_ITEMS_AMOUNT, DISHES_PAGE_ITEMS_AMOUNT);
-System.out.println(totalAmount);
             }
+            maxPos = maxPos > totalAmount ? totalAmount : maxPos;
 
-System.out.println(maxPos);
             List<Dish> dishes;
             dishes = dishService.findFilteredDishes(dishName, minPrice, maxPrice, minCaloriesAmount, maxCaloriesAmount,
                     minAmountGrams, maxAmountGrams, dishStatesLines, minPos, maxPos);
 
-System.out.println(dishes);
-
             session.setAttribute(DISHES, dishes);
             session.setAttribute(MIN_POS, minPos);
             session.setAttribute(MAX_POS, maxPos);
+            session.setAttribute(PAGE_ITEMS_AMOUNT, DISHES_PAGE_ITEMS_AMOUNT);
         } catch (ServiceException e) {
             logger.info("Impossible to find dishes", e);
         }

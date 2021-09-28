@@ -17,6 +17,8 @@ public class OrderValidator {
     private static OrderValidator instance;
 
     private static final String USER_ID_REGEXP = "^\\d+$";
+    private static final String PRICE_REGEXP = "^[+-]?([0-9]+([.][0-9]{0,2})?|[.][0-9]{1,2})$";
+    private static final BigDecimal MIN_PRICE = new BigDecimal("0.00");
 
     private OrderValidator() {
     }
@@ -66,54 +68,67 @@ public class OrderValidator {
         HashMap<String, Boolean> validationMessages = new HashMap<>();
         boolean currentResult;
 
-        if (!userIdLine.equals("")) {
-            currentResult = Pattern.matches(USER_ID_REGEXP, userIdLine);
-            validationMessages.put(INVALID_MIN_PRICE, currentResult);
-        }
+        try {
 
-        if (!minPriceLine.equals("")) {
-            BigDecimal minPrice = new BigDecimal(minPriceLine);
-            currentResult = minPrice.compareTo(new BigDecimal("0.00")) < 0;
-            validationMessages.put(INVALID_MIN_PRICE, currentResult);
-        }
-
-        if (!maxPriceLine.equals("")) {
-            BigDecimal maxPrice = new BigDecimal(maxPriceLine);
-            currentResult = maxPrice.compareTo(new BigDecimal("0.00")) < 0;
-            validationMessages.put(INVALID_MAX_PRICE, currentResult);
-        }
-
-        if (!maxPriceLine.equals("") && !minPriceLine.equals("")) {
-            BigDecimal minPrice = new BigDecimal(minPriceLine);
-            BigDecimal maxPrice = new BigDecimal(maxPriceLine);
-            currentResult = maxPrice.compareTo(minPrice) < 0;
-            validationMessages.put(INVALID_FILTER_PARAMETERS, currentResult);
-        }
-
-
-        currentResult = false;
-        ArrayList<String> orderStateValues = new ArrayList<>();
-        for (OrderState state: OrderState.values()){
-            orderStateValues.add(state.name());
-        }
-        for (String line : orderStatesLines) {
-            if (!orderStateValues.contains(line)) {
-                currentResult = true;
+            if (!userIdLine.equals("")) {
+                currentResult = Pattern.matches(USER_ID_REGEXP, userIdLine);
+                validationMessages.put(INVALID_MIN_PRICE, currentResult);
             }
-        }
-        validationMessages.put(INVALID_ORDER_STATES, currentResult);
 
-        currentResult = false;
-        ArrayList<String> paymentTypesValues = new ArrayList<>();
-        for (PaymentType type: PaymentType.values()){
-            paymentTypesValues.add(type.name());
-        }
-        for (String line : paymentTypesLine) {
-            if (!paymentTypesValues.contains(line)) {
-                currentResult = true;
+            if (!minPriceLine.equals("")) {
+                currentResult = Pattern.matches(PRICE_REGEXP, minPriceLine);
+                if (currentResult) {
+                    BigDecimal minPrice = new BigDecimal(minPriceLine);
+                    currentResult = minPrice.compareTo(MIN_PRICE) >= 0;
+                }
+                validationMessages.put(INVALID_MIN_PRICE, !currentResult);
             }
+
+            if (!maxPriceLine.equals("")) {
+                currentResult = Pattern.matches(PRICE_REGEXP, maxPriceLine);
+                if (currentResult) {
+                    BigDecimal maxPrice = new BigDecimal(maxPriceLine);
+                    currentResult = maxPrice.compareTo(MIN_PRICE) >= 0;
+                }
+                validationMessages.put(INVALID_MAX_PRICE, !currentResult);
+            }
+
+            if (Pattern.matches(PRICE_REGEXP, minPriceLine)
+                    && Pattern.matches(PRICE_REGEXP, maxPriceLine)) {
+                BigDecimal minPrice = new BigDecimal(minPriceLine);
+                BigDecimal maxPrice = new BigDecimal(maxPriceLine);
+                currentResult = minPrice.compareTo(maxPrice) >= 0;
+                validationMessages.put(INVALID_FILTER_PARAMETERS, currentResult);
+            }
+
+
+            currentResult = false;
+            ArrayList<String> orderStateValues = new ArrayList<>();
+            for (OrderState state : OrderState.values()) {
+                orderStateValues.add(state.name());
+            }
+            for (String line : orderStatesLines) {
+                if (!orderStateValues.contains(line)) {
+                    currentResult = true;
+                }
+            }
+            validationMessages.put(INVALID_ORDER_STATES, currentResult);
+
+            currentResult = false;
+            ArrayList<String> paymentTypesValues = new ArrayList<>();
+            for (PaymentType type : PaymentType.values()) {
+                paymentTypesValues.add(type.name());
+            }
+            for (String line : paymentTypesLine) {
+                if (!paymentTypesValues.contains(line)) {
+                    currentResult = true;
+                }
+            }
+            validationMessages.put(INVALID_PAYMENT_TYPES, currentResult);
         }
-        validationMessages.put(INVALID_PAYMENT_TYPES, currentResult);
+        catch (Exception e) {
+            logger.info("order filter validation error: " + e);
+        }
 
         return validationMessages;
     }

@@ -10,19 +10,13 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.ORDER;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.TOO_MANY_BONUSES;
 import static com.dvoraninovich.establishment.model.entity.OrderState.IN_CREATION;
 import static com.dvoraninovich.establishment.model.entity.PaymentType.CASH;
-import static java.time.Instant.MAX;
-import static java.time.Instant.MIN;
 
 public class OrderServiceImpl implements OrderService {
     private static final Logger logger = LogManager.getLogger(OrderServiceImpl.class);
@@ -113,16 +107,6 @@ public class OrderServiceImpl implements OrderService {
         return resultPrice;
     }
 
-
-    @Override
-    public HashMap<Order, User> findOrdersWithUsersLimit(long minPos, long maxPos) throws ServiceException {
-        try {
-            return orderDao.findOrdersWithUsersLimit(minPos, maxPos);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
     @Override
     public Long countFilteredOrders(String userIdLine, String minPriceLine, String maxPriceLine,
                                     String[] orderStates, String[] paymentTypes) throws ServiceException {
@@ -144,6 +128,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Long countFilteredOrders(Long userId, BigDecimal minPrice, BigDecimal maxPrice, String[] orderStates, String[] paymentTypes) throws ServiceException {
+        return null;
+    }
+
+    @Override
+    public HashMap<Order, User> findFilteredOrdersWithUsers(Long userId, BigDecimal minPrice, BigDecimal maxPrice, long minPos, long maxPos, String[] orderStates, String[] paymentTypes) throws ServiceException {
+        return null;
+    }
+
+    @Override
     public Long countDishesAmount(long orderId) throws ServiceException {
         try {
             return orderDao.countOrderDishesAmount(orderId);
@@ -162,45 +156,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findAllUserOrders(long userId) throws ServiceException {
-        try {
-            return orderDao.findAllUserOrders(userId);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public List<Order> findUserOrders(long userId, long minPos, long maxPos) throws ServiceException {
-        try {
-            return orderDao.findUserOrders(userId, minPos, maxPos);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public Long countUserOrders(long userId) throws ServiceException {
-        try {
-            return orderDao.countUserOrders(userId);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
     public Boolean updateOrderFinalPrice(long id) throws ServiceException {
         try {
             return orderDao.updateOrderFinalPrice(id);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public Long countOrders() throws ServiceException {
-        try {
-            return orderDao.countOrders();
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

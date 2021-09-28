@@ -26,19 +26,12 @@ public class IngredientValidator {
         return instance;
     }
 
-    public boolean validateName(String name){
-        boolean result;
-        result = Pattern.matches(NAME_REGEXP, name);
-        return result;
-    }
-
     public List<String> validateIngredient(String name){
 
         List<String> validationMessages = new ArrayList<>();
         boolean currentResult;
 
         try {
-
             name = name != null ? name : "";
             currentResult = Pattern.matches(NAME_REGEXP, name);
             if (!currentResult) {

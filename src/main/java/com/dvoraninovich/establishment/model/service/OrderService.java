@@ -21,15 +21,13 @@ public interface OrderService {
     BigDecimal countOrderFinalPrice(long id) throws ServiceException;
     Boolean updateOrderFinalPrice(long id) throws ServiceException;
 
-    Long countOrders() throws ServiceException;
-    HashMap<Order, User> findOrdersWithUsersLimit(long minPos, long maxPos) throws ServiceException;
-
     Long countFilteredOrders(String userIdLine, String minPriceLine, String maxPriceLine,
                              String[] orderStates, String[] paymentTypes) throws ServiceException;
     HashMap<Order, User> findFilteredOrdersWithUsers(String userIdLine, String minPriceLine, String maxPriceLine, long minPos, long maxPos,
                                                      String[] orderStates, String[] paymentTypes) throws ServiceException;
 
-    Long countUserOrders(long userId) throws ServiceException;
-    List<Order> findAllUserOrders(long userId) throws ServiceException;
-    List<Order> findUserOrders(long userId, long minPos, long maxPos) throws ServiceException;
+    Long countFilteredOrders(Long userId, BigDecimal minPrice, BigDecimal maxPrice,
+                             String[] orderStates, String[] paymentTypes) throws ServiceException;
+    HashMap<Order, User> findFilteredOrdersWithUsers(Long userId, BigDecimal minPrice, BigDecimal maxPrice, long minPos, long maxPos,
+                                                     String[] orderStates, String[] paymentTypes) throws ServiceException;
 }
