@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean setPasswordById(Long id, String password) throws ServiceException{
+    public boolean setPasswordById(long id, String password) throws ServiceException{
         try {
             String salt = userDao.getSaltById(id).get();
             String passwordHash = makePasswordHash(password);

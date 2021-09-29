@@ -47,15 +47,6 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public List<Dish> findAllAvailable() throws ServiceException {
-        try {
-            return dishDao.findAllAvailable();
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
     public List<Dish> findOrderDishes(long id) throws ServiceException {
         try {
             return dishDao.findOrderDishes(id);
@@ -65,7 +56,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public Optional<Dish> findDishById(Long id) throws ServiceException{
+    public Optional<Dish> findDishById(long id) throws ServiceException{
         try {
             return dishDao.findById(id);
         } catch (DaoException e) {
@@ -92,7 +83,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public boolean invalidateDish(Long id) throws ServiceException {
+    public boolean invalidateDish(long id) throws ServiceException {
         try {
             return dishDao.disable(id);
         } catch (DaoException e) {
@@ -101,7 +92,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public boolean makeValidDish(Long id) throws ServiceException {
+    public boolean makeValidDish(long id) throws ServiceException {
         try {
             return dishDao.makeAvailable(id);
         } catch (DaoException e) {
@@ -110,7 +101,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public List<Ingredient> findDishIngredients(Long id) throws ServiceException {
+    public List<Ingredient> findDishIngredients(long id) throws ServiceException {
         try {
             return dishDao.findDishIngredients(id);
         } catch (DaoException e) {
@@ -119,7 +110,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public List<Ingredient> findUnusedDishIngredients(Long id) throws ServiceException {
+    public List<Ingredient> findUnusedDishIngredients(long id) throws ServiceException {
         try {
             List<Ingredient> dishIngredients = dishDao.findDishIngredients(id);
             List<Ingredient> ingredients = ingredientDao.findAll();
@@ -135,7 +126,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public boolean addDishIngredient(Long dishId, Long ingredientId) throws ServiceException {
+    public boolean addDishIngredient(long dishId, long ingredientId) throws ServiceException {
         try {
             return dishDao.addDishIngredient(dishId, ingredientId);
         } catch (DaoException e) {
@@ -144,7 +135,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public boolean removeDishIngredient(Long dishId, Long ingredientId) throws ServiceException {
+    public boolean removeDishIngredient(long dishId, long ingredientId) throws ServiceException {
         try {
             return dishDao.removeDishIngredient(dishId, ingredientId);
         } catch (DaoException e) {

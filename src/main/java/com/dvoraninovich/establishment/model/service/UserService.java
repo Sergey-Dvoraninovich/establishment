@@ -34,39 +34,39 @@ public interface UserService {
     /**
      * Sets password by specified User id.
      *
-     * @param id       the id of User
+     * @param userId      the id of User
      * @param password the password
      * @return the the result of setting password
      * @throws ServiceException the service exception
      */
-    boolean setPasswordById(Long id, String password) throws ServiceException;
+    boolean setPasswordById(long userId, String password) throws ServiceException;
 
     /**
      * Find by id.
      *
-     * @param id the id of User
+     * @param userId the id of User
      * @return the optional User. User is empty if there is no such user
      * @throws ServiceException the service exception
      */
-    Optional<User> findById(long id) throws ServiceException;
+    Optional<User> findById(long userId) throws ServiceException;
 
     /**
      * Gets code for User with specified id.
      *
-     * @param id the id of User
+     * @param userId the id of User
      * @return the code. Empty if there is no such user
      * @throws ServiceException the service exception
      */
-    Optional<String> getCode(long id) throws ServiceException;
+    Optional<String> getCode(long userId) throws ServiceException;
 
     /**
      * Gets code expiration time for User with specified id.
      *
-     * @param id the id of User
+     * @param userId the id of User
      * @return the code expiration time. Empty if there is no such user
      * @throws ServiceException the service exception
      */
-    Optional<LocalDateTime> getCodeExpirationTime(long id) throws ServiceException;
+    Optional<LocalDateTime> getCodeExpirationTime(long userId) throws ServiceException;
 
     /**
      * Count users long.
@@ -102,7 +102,7 @@ public interface UserService {
 
     /**
      * Count users long.
-     * Specified for counting users with specified data form session
+     * Specified for counting users with specified filter data form session
      *
      * @param login        the login
      * @param mail         the mail
@@ -118,7 +118,7 @@ public interface UserService {
 
     /**
      * Find filtered users list.
-     * Specified for counting users with specified data form session
+     * Specified for counting users with specified filter data form session
      *
      * @param login        the login
      * @param mail         the mail
@@ -146,7 +146,7 @@ public interface UserService {
      * Update user boolean.
      *
      * @param user the user
-     * @return the boolean
+     * @return the boolean result of updating
      * @throws ServiceException the service exception
      */
     boolean updateUser(User user) throws ServiceException;
