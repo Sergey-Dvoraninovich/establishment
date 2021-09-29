@@ -19,7 +19,6 @@ import java.util.Optional;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.CODE;
-import static com.dvoraninovich.establishment.controller.command.RequestParameter.MAIL;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
@@ -92,6 +91,6 @@ public class VerifyCodeCommand implements Command {
         }
 
         logger.info("User " + user.getLogin() + " successfully verified!");
-        return new Router(INDEX, REDIRECT);
+        return new Router(INDEX_PAGE, REDIRECT);
     }
 }

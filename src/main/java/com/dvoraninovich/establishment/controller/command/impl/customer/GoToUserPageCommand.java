@@ -3,7 +3,6 @@ package com.dvoraninovich.establishment.controller.command.impl.customer;
 import com.dvoraninovich.establishment.controller.command.Command;
 import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.exception.ServiceException;
-import com.dvoraninovich.establishment.model.entity.Role;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.model.service.UserService;
 import com.dvoraninovich.establishment.model.service.impl.UserServiceImpl;
@@ -27,7 +26,7 @@ public class GoToUserPageCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        Router router = new Router(INDEX, REDIRECT);
+        Router router = new Router(INDEX_PAGE, REDIRECT);
         HttpSession session = request.getSession();
 
         session.setAttribute(DIFFERENT_PASSWORDS, false);
@@ -47,7 +46,7 @@ public class GoToUserPageCommand implements Command {
         User user = (User) session.getAttribute(USER);
 
         if (!user.getRole().equals(ADMIN) && user.getId() != userId) {
-            return new Router(INDEX, REDIRECT);
+            return new Router(INDEX_PAGE, REDIRECT);
         }
 
         try {

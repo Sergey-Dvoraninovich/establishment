@@ -1,7 +1,7 @@
 package com.dvoraninovich.establishment.controller.command;
 
 public final class PagePath {
-    public static final String INDEX = "/establishment_war_exploded/index.jsp";
+    public static final String INDEX_PAGE = "/establishment_war_exploded/index.jsp";
     public static final String GO_TO_START_PAGE = "/establishment_war_exploded/index.jsp";
     public static final String LOGIN_PAGE = "/establishment_war_exploded/pages/login.jsp";
     public static final String SIGN_UP_PAGE = "/establishment_war_exploded/pages/sign_up.jsp";

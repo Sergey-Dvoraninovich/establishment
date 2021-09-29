@@ -14,13 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
-import static com.dvoraninovich.establishment.controller.command.PagePath.INDEX;
+import static com.dvoraninovich.establishment.controller.command.PagePath.INDEX_PAGE;
 import static com.dvoraninovich.establishment.controller.command.PagePath.USER_PAGE;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
-import static com.dvoraninovich.establishment.model.entity.Role.CUSTOMER;
 
 public class EditUserDataCommand implements Command {
     private static final Logger logger = LogManager.getLogger(EditUserDataCommand.class);
@@ -29,7 +28,7 @@ public class EditUserDataCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        Router router = new Router(INDEX, REDIRECT);
+        Router router = new Router(INDEX_PAGE, REDIRECT);
         HttpSession session = request.getSession();
 
         session.setAttribute(INVALID_PHONE_NUM, false);
@@ -44,7 +43,7 @@ public class EditUserDataCommand implements Command {
         User user = (User) session.getAttribute(USER);
 
         if (!user.getRole().equals(ADMIN) && !userId.equals(userId)) {
-            return new Router(INDEX, REDIRECT);
+            return new Router(INDEX_PAGE, REDIRECT);
         }
 
         if (!phoneNumberLine.equals("")){

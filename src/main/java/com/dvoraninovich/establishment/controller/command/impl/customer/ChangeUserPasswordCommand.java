@@ -14,13 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
-import static com.dvoraninovich.establishment.controller.command.PagePath.INDEX;
 import static com.dvoraninovich.establishment.controller.command.PagePath.USER_PAGE;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
-import static com.dvoraninovich.establishment.model.entity.Role.CUSTOMER;
 
 public class ChangeUserPasswordCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ChangeUserPasswordCommand.class);

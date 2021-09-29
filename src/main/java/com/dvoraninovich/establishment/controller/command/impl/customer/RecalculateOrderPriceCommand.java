@@ -73,7 +73,7 @@ public class RecalculateOrderPriceCommand implements Command {
                     break;
                 }
                 default: {
-                    router = new Router(INDEX, REDIRECT);
+                    router = new Router(INDEX_PAGE, REDIRECT);
                 }
             }
         } catch (ServiceException e) {

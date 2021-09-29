@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.ERROR_PAGE;
-import static com.dvoraninovich.establishment.controller.command.PagePath.INDEX;
+import static com.dvoraninovich.establishment.controller.command.PagePath.INDEX_PAGE;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
 
 @WebServlet("/ApiController")
@@ -45,7 +45,7 @@ public class Controller extends HttpServlet {
         Command command = COMMAND_PROVIDER.getCommand(commandName);
         if (command == null) {
             logger.error("incorrect command " + command);
-            response.sendRedirect(INDEX);
+            response.sendRedirect(INDEX_PAGE);
         }
         Router router = command.execute(request);
         switch (router.getRouterType()) {

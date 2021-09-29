@@ -3,7 +3,6 @@ package com.dvoraninovich.establishment.controller.command.impl;
 import com.dvoraninovich.establishment.controller.command.Command;
 import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.controller.command.SessionAttribute;
-import com.dvoraninovich.establishment.controller.command.validator.IngredientValidator;
 import com.dvoraninovich.establishment.controller.command.validator.UserValidator;
 import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.Role;
@@ -78,7 +77,7 @@ public class LogInPageCommand implements Command {
                         Order basket = orderService.getCustomerBasket(user.getId()).get();
                         Long dishesAmount = orderService.countDishesAmount(basket.getId());
                         session.setAttribute(DISHES_IN_BASKET, dishesAmount);
-                        router = new Router(INDEX, REDIRECT);
+                        router = new Router(INDEX_PAGE, REDIRECT);
                         break;
                     }
                     default: {
