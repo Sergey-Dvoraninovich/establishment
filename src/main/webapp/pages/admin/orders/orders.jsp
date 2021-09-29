@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctg" uri="establishment-tags" %>
 
 <fmt:setBundle basename="locale" />
 
@@ -155,7 +156,9 @@
             </c:if>
             <div id="time-info" class="line-item">
                 <div><fmt:message key="basket.order_time"/></div>
-                <div>${order.orderTime}</div>
+                <div>
+                    <ctg:localDateTime time="${order.orderTime}"/>
+                </div>
             </div>
             <div class="line-item">
                 <div class="user-info">

@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctg" uri="establishment-tags" %>
 
 <fmt:setBundle basename="locale" />
 
@@ -46,12 +47,16 @@
         </c:if>
         <div class="line-item">
             <div><fmt:message key="basket.order_time"/></div>
-            <div>${sessionScope.order.orderTime}</div>
+            <div>
+                <ctg:localDateTime time="${sessionScope.order.orderTime}"/>
+            </div>
         </div>
         <c:if test="${sessionScope.order.orderState == 'COMPLETED' || sessionScope.order.orderState == 'EXPIRED'}">
             <div class="line-item">
                 <div><fmt:message key="basket.finish_time"/></div>
-                <div>${sessionScope.order.finishTime}</div>
+                <div>
+                    <ctg:localDateTime time="${sessionScope.order.finishTime}"/>
+                </div>
             </div>
         </c:if>
         <div class="block-item-text">

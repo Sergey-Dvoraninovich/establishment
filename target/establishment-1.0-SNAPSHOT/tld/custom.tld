@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>1.0</short-name>
+    <uri>establishment-tags</uri>
+
+    <tag>
+        <name>localDateTime</name>
+        <tag-class>com.dvoraninovich.establishment.controller.tag.TimeTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>time</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+</taglib>
