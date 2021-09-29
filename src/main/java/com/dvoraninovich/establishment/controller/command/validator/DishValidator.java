@@ -15,6 +15,7 @@ public class DishValidator {
 
     private static final String DISH_AVAILABLE = "AVAILABLE";
     private static final String DISH_DISABLED = "DISABLED";
+    private static final String DISH_ID_REGEXP = "^[0-9]+$";
     private static final String NAME_REGEXP = "^[A-za-z\\s]{1,50}$";
     private static final String PRICE_REGEXP = "^[+-]?([0-9]+([.][0-9]{0,2})?|[.][0-9]{1,2})$";
     private static final String AMOUNT_GRAMS_REGEXP = "^[0-9]+$";
@@ -31,6 +32,11 @@ public class DishValidator {
             instance = new DishValidator();
         }
         return instance;
+    }
+
+    public boolean validateDishId(String dishIdLine) {
+        Boolean result = Pattern.matches(DISH_ID_REGEXP, dishIdLine);
+        return result;
     }
 
     public HashMap<String, Boolean> validateDishData(String name, String priceLine,

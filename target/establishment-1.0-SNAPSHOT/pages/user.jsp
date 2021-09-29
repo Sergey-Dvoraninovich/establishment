@@ -57,7 +57,7 @@
                         <img id="upload-image" src="../images/photo_add.png">
                     </label>
                 </div>
-                <input style="display:none;" type="file" id="photo" name="photo" >
+                <input style="display:none;" type="file" id="photo" name="photo" accept=".png,.jpg" >
                 <div id="file-name"></div>
                 <input type="submit" value="${edit}" class="block-item-action" id="upload-photo-submit">
                 <c:if test="${sessionScope.impossible_to_upload_user_photo}">

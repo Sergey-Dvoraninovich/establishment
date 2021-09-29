@@ -76,33 +76,6 @@
         </div>
     </c:if>
 </form>
-<c:url value="/ApiController?command=upload_dish_photo&id=${sessionScope.dish.id}" var="edit_dish_photo"/>
-<div class="block-item">
-    <div class="block-item-header">
-        <h2><fmt:message key="admin.dishes.photo_update"/></h2>
-    </div>
-    <form enctype="multipart/form-data" action="${edit_dish_photo}" method="post" id="upload-photo-form">
-        <input type="hidden" name="dish_id" value="${sessionScope.dish.id}">
-        <div class="upload-photo-image">
-            <label for="photo" id="placer">
-                <img id="upload-image" src="../../../images/photo_add.png">
-            </label>
-        </div>
-        <input style="display:none;" type="file" id="photo" name="photo" >
-        <div id="file-name"></div>
-        <input type="submit" value="${edit}" class="block-item-action" id="upload-photo-submit">
-        <c:if test="${sessionScope.impossible_to_upload_dish_photo}">
-            <div class="local-error">
-                <p><fmt:message key="admin.dishes.impossible_to_upload_dish_photo"/></p>
-            </div>
-        </c:if>
-        <c:if test="${sessionScope.edit_dish_error}">
-            <div class="local-error">
-                <p><fmt:message key="admin.dishes.edit_dish_error"/></p>
-            </div>
-        </c:if>
-    </form>
-</div>
 <c:url value="/ApiController?command=add_dish_ingredient" var="add_dish_ingredient"/>
 <form action="${add_dish_ingredient}" method="post" class="ui-form">
     <h3><fmt:message key="admin.dishes.add_dish_ingredient"/></h3>

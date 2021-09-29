@@ -10,11 +10,14 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 public class FileUploadServiceImpl implements FileUploadService {
     private static final Logger logger = LogManager.getLogger(FileUploadServiceImpl.class);
     private static final String UPLOAD_DIR = "images";
     private static final String LOCAL_UPLOAD_DIR = "c:\\tmp\\";
+    private static final String PNG_EXTENSION = ".png";
+    private static final String JPG_EXTENSION = ".jpg";
     private static FileUploadServiceImpl instance;
 
     private FileUploadServiceImpl() {
@@ -48,10 +51,16 @@ public class FileUploadServiceImpl implements FileUploadService {
                     if (!part.getSubmittedFileName().equals("")) {
                         filename = part.getSubmittedFileName();
                         String extension = filename.substring(filename.lastIndexOf("."));
-                        filename = objectClassName + "_" + objectId + "_" + LocalDateTime.now() + extension;
-                        filename = filename.replace(":", "-");
-                        part.write(uploadFileDir + filename);
-                        part.write(LOCAL_UPLOAD_DIR + filename);
+                        if (Pattern.matches(PNG_EXTENSION, extension)
+                            || Pattern.matches(JPG_EXTENSION, extension)) {
+                            filename = objectClassName + "_" + objectId + "_" + LocalDateTime.now() + extension;
+                            filename = filename.replace(":", "-");
+                            part.write(uploadFileDir + filename);
+                            part.write(LOCAL_UPLOAD_DIR + filename);
+                        }
+                        else {
+                            filename = "";
+                        }
                     }
                 }
             }
