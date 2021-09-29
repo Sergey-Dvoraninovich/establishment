@@ -4,7 +4,6 @@ public final class RequestParameter {
     public static final String COMMAND = "command";
     public static final String ID = "id";
     public static final String USER_ID = "user_id";
-    public static final String SHOW_DISABLES_DISHES = "show_disabled_dishes";
     public static final String EDIT_FORM = "edit_form";
     public static final String CHANGE_PASSWORD_FORM = "change_password_form";
     public static final String NAME = "name";
@@ -27,7 +26,6 @@ public final class RequestParameter {
     public static final String BONUSES_IN_PAYMENT = "bonuses_in_payment";
     public static final String PAYMENT_TYPE = "payment_type";
 
-    public static final String NEW_TOTAL_AMOUNT = "new_total_amount";
     public static final String NEXT_MIN_POS = "next_min_pos";
     public static final String NEXT_MAX_POS = "next_max_pos";
 

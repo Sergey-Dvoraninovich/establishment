@@ -12,7 +12,6 @@ public enum RolesCommandTypes {
             GO_TO_START_PAGE,
             GO_TO_USERS_PAGE,
             DEFAULT,
-            START_PAGE,
             SIGN_OUT,
             GO_TO_INGREDIENTS_PAGE,
             GO_TO_CREATE_INGREDIENT_PAGE,
@@ -52,7 +51,6 @@ public enum RolesCommandTypes {
     CUSTOMER(new CommandType[]{
             GO_TO_START_PAGE,
             DEFAULT,
-            START_PAGE,
             SIGN_OUT,
             GO_TO_DISHES_PAGE,
             VERIFY_CODE,
@@ -78,7 +76,6 @@ public enum RolesCommandTypes {
             GO_TO_LOGIN_PAGE,
             GO_TO_SIGN_UP_PAGE,
             DEFAULT,
-            START_PAGE,
             LOGIN_PAGE,
             SIGN_UP_PAGE,
             GO_TO_DISHES_PAGE,

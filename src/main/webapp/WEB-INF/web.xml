@@ -9,12 +9,13 @@
             <taglib-location>/tld/custom.tld</taglib-location>
         </taglib>
     </jsp-config>
+
     <filter>
         <filter-name>CommandAccessFilter</filter-name>
         <filter-class>com.dvoraninovich.establishment.controller.filter.CommandAccessFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>CommandAccessFilter</filter-name>
-        <url-pattern>/controller</url-pattern>
+        <url-pattern>/ApiController</url-pattern>
     </filter-mapping>
 </web-app>

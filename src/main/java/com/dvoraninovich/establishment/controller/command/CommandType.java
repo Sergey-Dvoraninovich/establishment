@@ -6,7 +6,6 @@ public enum CommandType {
     GO_TO_LOGIN_PAGE,
     GO_TO_SIGN_UP_PAGE,
     DEFAULT,
-    START_PAGE,
     LOGIN_PAGE,
     SIGN_OUT,
     SIGN_UP_PAGE,
