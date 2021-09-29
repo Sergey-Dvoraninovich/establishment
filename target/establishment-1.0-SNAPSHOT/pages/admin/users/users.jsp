@@ -171,7 +171,7 @@
                     <div><fmt:message key="user_roles.customer"/></div>
                 </c:if>
             </div>
-            <div class="line-item">
+            <div id="user-info-line" class="line-item">
                 <div class="user-info">
                     <div>
                         <a>
@@ -184,10 +184,12 @@
                         <div>
                             <a>${user.login}</a>
                         </div>
+                        <c:if test="${user.role == 'CUSTOMER'}">
                         <div class="action">
                             <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=1&next_max_pos=10&new_total_amount=true&user_id=${user.id}" var="customer_orders"/>
-                            <a><fmt:message key="orders.orders"/></a>
+                            <a href="${customer_orders}"><fmt:message key="orders.orders"/></a>
                         </div>
+                        </c:if>
                     </div>
                 </div>
             </div>
@@ -242,6 +244,9 @@
     }
     #order-states {
         width: 35%;
+    }
+    #user-info-line {
+        width: 20%;
     }
     #base-role-state {
         width: 50px;
