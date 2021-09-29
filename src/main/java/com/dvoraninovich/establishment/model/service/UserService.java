@@ -54,7 +54,7 @@ public interface UserService {
      * Gets code for User with specified id.
      *
      * @param id the id of User
-     * @return the code. empty if there is no such user
+     * @return the code. Empty if there is no such user
      * @throws ServiceException the service exception
      */
     Optional<String> getCode(long id) throws ServiceException;
@@ -63,7 +63,7 @@ public interface UserService {
      * Gets code expiration time for User with specified id.
      *
      * @param id the id of User
-     * @return the code expiration time
+     * @return the code expiration time. Empty if there is no such user
      * @throws ServiceException the service exception
      */
     Optional<LocalDateTime> getCodeExpirationTime(long id) throws ServiceException;
@@ -77,7 +77,7 @@ public interface UserService {
      * @param cardNumber   the card number
      * @param userStatuses the user statuses
      * @param userRoles    the user roles
-     * @return the long
+     * @return the long of users amount
      * @throws ServiceException the service exception
      */
     Long countUsers(String login, String mail, String phoneNumber, String cardNumber,
@@ -92,9 +92,9 @@ public interface UserService {
      * @param cardNumber   the card number
      * @param userStatuses the user statuses
      * @param userRoles    the user roles
-     * @param minPos       the min pos
-     * @param maxPos       the max pos
-     * @return the list
+     * @param minPos       the min pos of pagination
+     * @param maxPos       the max pos of pagination
+     * @return the list of users
      * @throws ServiceException the service exception
      */
     List<User> findFilteredUsers(String login, String mail, String phoneNumber, String cardNumber, String[] userStatuses,
@@ -102,6 +102,7 @@ public interface UserService {
 
     /**
      * Count users long.
+     * Specified for counting users with specified data form session
      *
      * @param login        the login
      * @param mail         the mail
@@ -109,7 +110,7 @@ public interface UserService {
      * @param cardNumber   the card number
      * @param userStatuses the user statuses
      * @param userRoles    the user roles
-     * @return the long
+     * @return the long of user amount
      * @throws ServiceException the service exception
      */
     Long countUsers(String login, String mail, String phoneNumber, String cardNumber,
@@ -117,6 +118,7 @@ public interface UserService {
 
     /**
      * Find filtered users list.
+     * Specified for counting users with specified data form session
      *
      * @param login        the login
      * @param mail         the mail
@@ -124,18 +126,18 @@ public interface UserService {
      * @param cardNumber   the card number
      * @param userStatuses the user statuses
      * @param userRoles    the user roles
-     * @param minPos       the min pos
-     * @param maxPos       the max pos
-     * @return the list
+     * @param minPos       the min pos of pagination
+     * @param maxPos       the max pos of pagination
+     * @return the list of users
      * @throws ServiceException the service exception
      */
     List<User> findFilteredUsers(String login, String mail, String phoneNumber, String cardNumber, List<String> userStatuses,
                                  List<String> userRoles, long minPos, long maxPos) throws ServiceException;
 
     /**
-     * Is login unique boolean.
+     * Is login unique.
      *
-     * @param login the login
+     * @param login the user login
      * @return the boolean
      */
     boolean isLoginUnique(String login);
