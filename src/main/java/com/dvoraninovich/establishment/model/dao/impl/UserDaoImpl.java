@@ -21,8 +21,8 @@ import static com.dvoraninovich.establishment.model.dao.DatabaseTableColumn.*;
 
 public class UserDaoImpl implements UserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
-
     private static final UserDao instance = new UserDaoImpl();
+
     private static final String SELECT_ALL_USERS
             = "SELECT users.id, users.login, users.mail, "
             + "statuses.status, roles.role, "
@@ -62,17 +62,6 @@ public class UserDaoImpl implements UserDao {
             + "INNER JOIN statuses "
             + "ON users.id_status = statuses.id "
             + "WHERE users.login = ?; ";
-    private static final String FIND_USER_BY_EMAIL
-            = "SELECT users.id, users.login, users.mail, "
-            + "statuses.status, roles.role, "
-            + "users.card_number, users.phone_number, users.bonuses_amount, "
-            + "users.photo "
-            + "FROM users "
-            + "INNER JOIN roles "
-            + "ON users.id_role = roles.id "
-            + "INNER JOIN statuses "
-            + "ON users.id_status = statuses.id "
-            + "WHERE users.mail = ?; ";
     private static final String FIND_USER_BY_ID
             = "SELECT users.id, users.login, users.mail, "
             + "statuses.status, roles.role, "
@@ -84,24 +73,9 @@ public class UserDaoImpl implements UserDao {
             + "INNER JOIN statuses "
             + "ON users.id_status = statuses.id "
             + "WHERE users.id = ?; ";
-    private static final String FIND_USER_BY_PHONE_NUM
-            = "SELECT users.id, users.login, users.mail, "
-            + "statuses.status, roles.role, "
-            + "users.card_number, users.phone_number, users.bonuses_amount,"
-            + "users.photo "
-            + "FROM users "
-            + "INNER JOIN roles "
-            + "ON users.id_role = roles.id "
-            + "INNER JOIN statuses "
-            + "ON users.id_status = statuses.id "
-            + "WHERE users.phone_number = ?; ";
     private static final String SET_PASSWORD_BY_ID
             = "UPDATE users "
             + "SET password_hash = ? "
-            + "WHERE id = ?;";
-    private static final String SET_SALT_BY_ID
-            = "UPDATE users "
-            + "SET salt = ? "
             + "WHERE id = ?;";
     private static final String INSERT_USER
             = "INSERT users(login, mail, password_hash, salt, id_status, id_role, "
@@ -116,7 +90,7 @@ public class UserDaoImpl implements UserDao {
             + "WHERE id = ?;";
     private static final String DELETE_USER
             = "UPDATE users " +
-            "SET id_status = 4 " +
+            "SET id_status = 3 " +
             "WHERE id = ?;";
     private static final String GET_PASSWORD_BY_ID
             = "SELECT users.password_hash "
@@ -134,10 +108,6 @@ public class UserDaoImpl implements UserDao {
             = "SELECT users.code_expiration_time "
             + "FROM users "
             + "WHERE id = ?;";
-    private static final String SET_VERIFICATION_CODE_BY_ID
-            = "UPDATE users " +
-            "SET id_status = ?, code_expiration_time = TIMESTAMPADD(MINUTE, 5, CURRENT_TIMESTAMP())) " +
-            "WHERE id = ?;";
     private static final String LIMIT_LINE = "LIMIT";
 
     public static UserDao getInstance(){
@@ -154,7 +124,8 @@ public class UserDaoImpl implements UserDao {
                 users.add(createUserFromResultSet(resultSet));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while finding users", e);
+            logger.error("Impossible to find users", e);
+            throw new DaoException("Impossible to find users", e);
         }
         return users;
     }
@@ -172,7 +143,8 @@ public class UserDaoImpl implements UserDao {
                 user = Optional.of(createUserFromResultSet(resultSet));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while finding user with id: " + id, e);
+            logger.error("Impossible to find user with id: " + id, e);
+            throw new DaoException("Impossible to find user with id: " + id, e);
         }
         return user;
     }
@@ -205,7 +177,8 @@ public class UserDaoImpl implements UserDao {
                 generatedKeys.next();
                 id = generatedKeys.getLong(1);
             } catch (DatabaseException | SQLException e) {
-                throw new DaoException("Error while inserting user with login: " + user.getLogin(), e);
+                logger.error("Impossible to insert user with login: " + user.getLogin(), e);
+                throw new DaoException("Impossible to insert user with login: " + user.getLogin(), e);
             }
         }
         return id;
@@ -228,7 +201,8 @@ public class UserDaoImpl implements UserDao {
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while updating user with login: " + user.getLogin(), e);
+            logger.error("Impossible to update user with login: " + user.getLogin(), e);
+            throw new DaoException("Impossible to update user with login: " + user.getLogin(), e);
         }
         return successfulOperation;
     }
@@ -243,45 +217,10 @@ public class UserDaoImpl implements UserDao {
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while deleting user with id: " + id, e);
+            logger.error("Impossible to delete user with id: " + id, e);
+            throw new DaoException("Impossible to delete user with id: " + id, e);
         }
         return successfulOperation;
-    }
-
-    @Override
-    public Long countUsers() throws DaoException {
-        Long usersAmount = Long.valueOf(0);
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(COUNT_FILTERED_USERS);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                usersAmount = resultSet.getLong(1);
-            }
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while counting users", e);
-        }
-        return usersAmount;
-    }
-
-    @Override
-    public List<User> findFilteredUsers(long minPos, long maxPos) throws DaoException {
-        List<User> users = new ArrayList<>();
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(SELECT_FILTERED_USERS);
-            statement.setLong(1, minPos-1);
-            statement.setLong(2, maxPos);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                users.add(createUserFromResultSet(resultSet));
-            }
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while selecting users", e);
-        }
-        return users;
     }
 
     @Override
@@ -298,7 +237,8 @@ public class UserDaoImpl implements UserDao {
                 usersAmount = resultSet.getLong(1);
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while counting users", e);
+            logger.error("Impossible to count users", e);
+            throw new DaoException("Impossible to count users", e);
         }
         return usersAmount;
     }
@@ -319,27 +259,10 @@ public class UserDaoImpl implements UserDao {
                 users.add(createUserFromResultSet(resultSet));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while selecting users", e);
+            logger.error("Impossible to select users", e);
+            throw new DaoException("Impossible to select users", e);
         }
         return users;
-    }
-
-    @Override
-    public Optional<User> findUserByEmail(String email) throws DaoException {
-        Optional<User> user = Optional.empty();
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL);
-            statement.setString(1, email);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                user = Optional.of(createUserFromResultSet(resultSet));
-            }
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while finding user with email: " + email, e);
-        }
-        return user;
     }
 
     @Override
@@ -355,24 +278,8 @@ public class UserDaoImpl implements UserDao {
                 user = Optional.of(createUserFromResultSet(resultSet));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while finding user with login: " + login, e);
-        }
-        return user;
-    }
-
-    @Override
-    public Optional<User> findUserByPhoneNum(String phoneNum) throws DaoException {
-        Optional<User> user = Optional.empty();
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_PHONE_NUM);
-            statement.setString(1, phoneNum);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                user = Optional.of(createUserFromResultSet(resultSet));
-            }
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while finding user with phone number: " + phoneNum, e);
+            logger.error("Impossible to find user with login: " + login, e);
+            throw new DaoException("Impossible to find user with login: " + login, e);
         }
         return user;
     }
@@ -388,39 +295,8 @@ public class UserDaoImpl implements UserDao {
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while inserting password for user with id: " + id, e);
-        }
-        return successfulOperation;
-    }
-
-    @Override
-    public boolean setSaltById(Long id, String salt) throws DaoException {
-        boolean successfulOperation;
-        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(SET_SALT_BY_ID);
-            statement.setString(1, salt);
-            statement.setLong(2, id);
-            Integer rowsNum = statement.executeUpdate();
-            successfulOperation = rowsNum != 0;
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while inserting salt for user with id: " + id, e);
-        }
-        return successfulOperation;
-    }
-
-    @Override
-    public boolean setCodeById(Long id, String code) throws DaoException {
-        boolean successfulOperation;
-        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(SET_VERIFICATION_CODE_BY_ID);
-            statement.setString(1, code);
-            statement.setLong(2, id);
-            Integer rowsNum = statement.executeUpdate();
-            successfulOperation = rowsNum != 0;
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while setting code for user with id: " + id, e);
+            logger.error("Impossible to insert password for user with id: " + id, e);
+            throw new DaoException("Impossible to insert password for user with id: " + id, e);
         }
         return successfulOperation;
     }
@@ -438,7 +314,8 @@ public class UserDaoImpl implements UserDao {
                 passwordHash = Optional.of(resultSet.getString(USER_PASSWORD_HASH));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while finding password of user with id: " + id, e);
+            logger.error("Impossible to find password of user with id: " + id, e);
+            throw new DaoException("Impossible to find password of user with id: " + id, e);
         }
         return passwordHash;
     }
@@ -456,7 +333,8 @@ public class UserDaoImpl implements UserDao {
                 salt = Optional.of(resultSet.getString(USER_SALT));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while finding salt of user with id: " + id, e);
+            logger.error("Impossible to find salt of user with id: " + id, e);
+            throw new DaoException("Impossible to find salt of user with id: " + id, e);
         }
         return salt;
     }
@@ -474,7 +352,8 @@ public class UserDaoImpl implements UserDao {
                 code = Optional.of(resultSet.getString(USER_CODE));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while finding code of user with id: " + id, e);
+            logger.error("Impossible to find code of user with id: " + id, e);
+            throw new DaoException("Impossible to find code of user with id: " + id, e);
         }
         return code;
     }
@@ -493,7 +372,8 @@ public class UserDaoImpl implements UserDao {
                 codeExpirationTime = Optional.of(codeExpirationTimestamp.toLocalDateTime());
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while finding codeExpirationTime of user with id: " + id, e);
+            logger.error("Impossible to find codeExpirationTime of user with id: " + id, e);
+            throw new DaoException("Impossible to find codeExpirationTime of user with id: " + id, e);
         }
         return codeExpirationTime;
     }

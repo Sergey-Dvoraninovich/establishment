@@ -1,22 +1,24 @@
 package com.dvoraninovich.establishment.model.dao.impl;
 
-import com.dvoraninovich.establishment.model.entity.*;
 import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.exception.DatabaseException;
 import com.dvoraninovich.establishment.model.dao.IngredientDao;
+import com.dvoraninovich.establishment.model.entity.Ingredient;
 import com.dvoraninovich.establishment.model.pool.DatabaseConnectionPool;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dvoraninovich.establishment.model.dao.DatabaseTableColumn.*;
+import static com.dvoraninovich.establishment.model.dao.DatabaseTableColumn.INGREDIENT_ID;
+import static com.dvoraninovich.establishment.model.dao.DatabaseTableColumn.INGREDIENT_NAME;
 
 public class IngredientDaoImpl implements IngredientDao {
+    private static final Logger logger = LogManager.getLogger(IngredientDaoImpl.class);
     private static final IngredientDaoImpl instance = new IngredientDaoImpl();
-    private static final DatabaseConnectionPool connectionPool = DatabaseConnectionPool.getInstance();
 
     private static final String SELECT_ALL_INGREDIENT
             = "SELECT ingredients.id, ingredients.name "
@@ -32,12 +34,6 @@ public class IngredientDaoImpl implements IngredientDao {
             = "UPDATE ingredeints "
             + "SET name = ? "
             + "WHERE id = ?;";
-    private static final String FIND_DISH_INGREDIENTS
-            = "SELECT ingredients.id, ingredients.name "
-            + "FROM ingredients "
-            + "INNER JOIN dishes_ingredients "
-            + "ON ingredients.id = dishes_ingredients.id_ingredient "
-            + "WHERE dishes_ingredients.id_dish = ?";
 
     public static IngredientDaoImpl getInstance() {
         return instance;
@@ -49,17 +45,16 @@ public class IngredientDaoImpl implements IngredientDao {
     @Override
     public List<Ingredient> findAll() throws DaoException {
         List<Ingredient> ingredientList = new ArrayList<>();
-        try (Connection connection = connectionPool.acquireConnection();
+        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_INGREDIENT);
             while (resultSet.next()) {
                 Ingredient ingredient = createIngredientFromResultSet(resultSet);
                 ingredientList.add(ingredient);
             }
-        } catch (SQLException e) {
-            throw new DaoException("Can't handle IngredientDao.findAll request", e);
-        } catch (DatabaseException e) {
-            throw new DaoException(e);
+        } catch (SQLException | DatabaseException e) {
+            logger.error("Impossible to find all ingredients", e);
+            throw new DaoException("Impossible to find all ingredients", e);
         }
         return ingredientList;
     }
@@ -74,7 +69,9 @@ public class IngredientDaoImpl implements IngredientDao {
              Integer rowsNum = statement.executeUpdate();
              successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle inserting ingredient " + ingredient.getName() +
+            logger.error("Impossible to insert ingredient " + ingredient.getName() +
+                    "with id: " + ingredient.getId(), e);
+            throw new DaoException("Impossible to insert ingredient " + ingredient.getName() +
                                  "with id: " + ingredient.getId(), e);
         }
         return successfulOperation;
@@ -92,7 +89,9 @@ public class IngredientDaoImpl implements IngredientDao {
                 Integer rowsNum = statement.executeUpdate();
                 successfulOperation = rowsNum != 0;
             } catch (DatabaseException | SQLException e) {
-                throw new DaoException("Can't handle updating ingredient " + ingredient.getName() +
+                logger.error("Impossible to update ingredient " + ingredient.getName() +
+                        " with id: " + ingredient.getId(), e);
+                throw new DaoException("Impossible to update ingredient " + ingredient.getName() +
                         " with id: " + ingredient.getId(), e);
             }
         }
@@ -102,7 +101,7 @@ public class IngredientDaoImpl implements IngredientDao {
     @Override
     public Optional<Ingredient> findById(Long id) throws DaoException {
         Ingredient ingredient = Ingredient.builder().build();
-        try (Connection connection = connectionPool.acquireConnection();
+        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_INGREDIENT_BY_ID)) {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -111,49 +110,10 @@ public class IngredientDaoImpl implements IngredientDao {
                 ingredient.setName(resultSet.getString(INGREDIENT_NAME));
             }
         } catch (SQLException | DatabaseException e) {
-            throw new DaoException("Can't handle IngredientDao.findById request", e);
+            logger.error("Impossible to find dish by id", e);
+            throw new DaoException("Impossible to find dish by id", e);
         }
         return Optional.of(ingredient);
-    }
-
-    @Override
-    public List<Ingredient> findDishIngredients(Dish dish) throws DaoException {
-        List<Ingredient> ingredientList = new ArrayList<>();
-        try (Connection connection = connectionPool.acquireConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_DISH_INGREDIENTS)) {
-            statement.setLong(1, dish.getId());
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Ingredient ingredient = createIngredientFromResultSet(resultSet);
-                        //resultSetParser.createIngredient(resultSet);
-                ingredientList.add(ingredient);
-            }
-        } catch (SQLException e) {
-            throw new DaoException("Can't handle IngredientDao.findDishIngredients request", e);
-        } catch (DatabaseException e) {
-            throw new DaoException(e);
-        }
-        return ingredientList;
-    }
-
-    @Override
-    public Long testInsert(Ingredient ingredient) throws DaoException {
-        Long id;
-        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(INSERT_INGREDIENT, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, ingredient.getName());
-            statement.executeUpdate();
-
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            generatedKeys.next();
-            id = generatedKeys.getLong(1);
-
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle inserting ingredient " + ingredient.getName() +
-                    " with id: " + ingredient.getId(), e);
-        }
-        return id;
     }
 
     private Ingredient createIngredientFromResultSet(ResultSet resultSet) throws SQLException {

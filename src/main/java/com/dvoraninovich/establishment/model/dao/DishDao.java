@@ -1,7 +1,7 @@
 package com.dvoraninovich.establishment.model.dao;
 
-import com.dvoraninovich.establishment.model.entity.Dish;
 import com.dvoraninovich.establishment.exception.DaoException;
+import com.dvoraninovich.establishment.model.entity.Dish;
 import com.dvoraninovich.establishment.model.entity.Ingredient;
 
 import java.util.List;
@@ -27,14 +27,6 @@ public interface DishDao extends BaseDao<Long, Dish> {
      * @throws DaoException the dao exception
      */
     boolean makeAvailable(Long id) throws DaoException;
-
-    /**
-     * Find all available.
-     *
-     * @return the list of all available dishes
-     * @throws DaoException the dao exception
-     */
-    List<Dish> findAllAvailable() throws DaoException;
 
     /**
      * Find order dishes.

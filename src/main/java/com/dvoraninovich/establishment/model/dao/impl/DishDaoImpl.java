@@ -1,10 +1,13 @@
 package com.dvoraninovich.establishment.model.dao.impl;
 
-import com.dvoraninovich.establishment.model.entity.*;
 import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.exception.DatabaseException;
 import com.dvoraninovich.establishment.model.dao.DishDao;
+import com.dvoraninovich.establishment.model.entity.Dish;
+import com.dvoraninovich.establishment.model.entity.Ingredient;
 import com.dvoraninovich.establishment.model.pool.DatabaseConnectionPool;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -15,8 +18,8 @@ import java.util.Optional;
 import static com.dvoraninovich.establishment.model.dao.DatabaseTableColumn.*;
 
 public class DishDaoImpl implements DishDao {
+    private static final Logger logger = LogManager.getLogger(DishDaoImpl.class);
     private static final DishDaoImpl instance = new DishDaoImpl();
-    private static final DatabaseConnectionPool connectionPool = DatabaseConnectionPool.getInstance();
 
     private static final String SELECT_ALL_DISHES
             = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
@@ -37,10 +40,6 @@ public class DishDaoImpl implements DishDao {
             + "INNER JOIN orders "
             + "ON orders.id = dishes_lists_items.id_order "
             + "WHERE orders.id = ?;";
-    private static final String FIND_ALL_AVAILABLE_DISHES
-            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
-            + "FROM dishes "
-            + "WHERE is_available = true;";
     private static final String FIND_DISH_BY_ID
             = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
             + "FROM dishes "
@@ -81,46 +80,27 @@ public class DishDaoImpl implements DishDao {
     @Override
     public List<Dish> findAll() throws DaoException {
         List<Dish> dishList = new ArrayList<>();
-        try (Connection connection = connectionPool.acquireConnection();
+        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_DISHES);
             while (resultSet.next()) {
                 Dish dish = createDishFromResultSet(resultSet);
                 dishList.add(dish);
             }
-        } catch (SQLException e) {
-            throw new DaoException("Can't handle DishDao.findAll request", e);
-        } catch (DatabaseException e) {
-            throw new DaoException(e);
+        } catch (SQLException | DatabaseException e) {
+            logger.error("Impossible to find all dishes", e);
+            throw new DaoException("Impossible to find all dishes", e);
         }
         return dishList;
     }
 
     @Override
-    public List<Dish> findAllAvailable() throws DaoException {
-        List<Dish> dishList = new ArrayList<>();
-        try (Connection connection = connectionPool.acquireConnection();
-             Statement statement = connection.createStatement()) {
-             ResultSet resultSet = statement.executeQuery(FIND_ALL_AVAILABLE_DISHES);
-             while (resultSet.next()) {
-                 Dish dish = createDishFromResultSet(resultSet);
-                 dishList.add(dish);
-             }
-        } catch (SQLException e) {
-            throw new DaoException("Can't handle DishDao.findAllAvailable request", e);
-        } catch (DatabaseException e) {
-            throw new DaoException(e);
-        }
-        return dishList;
-    }
-
-    @Override
-    public List<Dish> findOrderDishes(long id) throws DaoException {
+    public List<Dish> findOrderDishes(long orderId) throws DaoException {
         List<Dish> dishList = new ArrayList<>();
         try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
         ) {
             PreparedStatement statement = connection.prepareStatement(SELECT_ORDER_DISHES);
-            statement.setLong(1, id);
+            statement.setLong(1, orderId);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -128,7 +108,8 @@ public class DishDaoImpl implements DishDao {
                 dishList.add(dish);
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle finding dishes for order with id: " + id, e);
+            logger.error("Impossible to find dishes for order by orderId: " + orderId, e);
+            throw new DaoException("Impossible to find dishes for order by orderId: " + orderId, e);
         }
         return dishList;
     }
@@ -146,7 +127,8 @@ public class DishDaoImpl implements DishDao {
                 dish = Optional.of(createDishFromResultSet(resultSet));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle finding dish with id: " + id, e);
+            logger.error("Impossible to find dish by id: " + id, e);
+            throw new DaoException("Impossible to find dish by id: " + id, e);
         }
         return dish;
     }
@@ -166,7 +148,9 @@ public class DishDaoImpl implements DishDao {
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle inserting dish " + dish.getName() +
+            logger.error("Impossible to insert dish " + dish.getName() +
+                    " with id: " + dish.getId(), e);
+            throw new DaoException("Impossible to insert dish " + dish.getName() +
                     " with id: " + dish.getId(), e);
         }
         return successfulOperation;
@@ -189,7 +173,9 @@ public class DishDaoImpl implements DishDao {
                 Integer rowsNum = statement.executeUpdate();
                 successfulOperation = rowsNum != 0;
             } catch (DatabaseException | SQLException e) {
-                throw new DaoException("Can't handle updating dish " + dish.getName() +
+                logger.error("Impossible to update dish " + dish.getName() +
+                        " with id: " + dish.getId(), e);
+                throw new DaoException("Impossible to update dish " + dish.getName() +
                         " with id: " + dish.getId(), e);
             }
         }
@@ -206,7 +192,8 @@ public class DishDaoImpl implements DishDao {
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle disabling dish with id: " + id, e);
+            logger.error("Impossible to disable dish with id: " + id, e);
+            throw new DaoException("Impossible to disable dish with id: " + id, e);
         }
         return successfulOperation;
     }
@@ -221,7 +208,8 @@ public class DishDaoImpl implements DishDao {
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle making available dish with id: " + id, e);
+            logger.error("Impossible to make available dish with id: " + id, e);
+            throw new DaoException("Impossible to make available dish with id: " + id, e);
         }
         return successfulOperation;
     }
@@ -229,7 +217,7 @@ public class DishDaoImpl implements DishDao {
     @Override
     public List<Ingredient> findDishIngredients(Long id) throws DaoException {
         List<Ingredient> ingredientList = new ArrayList<>();
-        try (Connection connection = connectionPool.acquireConnection();
+        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_DISH_INGREDIENTS)) {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -240,10 +228,9 @@ public class DishDaoImpl implements DishDao {
                         .build();
                 ingredientList.add(ingredient);
             }
-        } catch (SQLException e) {
-            throw new DaoException("Can't handle DishDao.findDishIngredients request", e);
-        } catch (DatabaseException e) {
-            throw new DaoException(e);
+        } catch (SQLException | DatabaseException e) {
+            logger.error("Impossible to find dish ingredients", e);
+            throw new DaoException("Impossible to find dish ingredients", e);
         }
         return ingredientList;
     }
@@ -259,7 +246,9 @@ public class DishDaoImpl implements DishDao {
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle adding ingredient with id: " + ingredientId
+            logger.error("Impossible to add ingredient with id: " + ingredientId
+                    + "to dish with id: " + dishId, e);
+            throw new DaoException("Impossible to add ingredient with id: " + ingredientId
                     + "to dish with id: " + dishId, e);
         }
         return successfulOperation;
@@ -276,7 +265,9 @@ public class DishDaoImpl implements DishDao {
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle removing ingredient with id: " + ingredientId
+            logger.error("Impossible to remove ingredient with id: " + ingredientId
+                    + "to dish with id: " + dishId, e);
+            throw new DaoException("Impossible to remove ingredient with id: " + ingredientId
                     + "to dish with id: " + dishId, e);
         }
         return successfulOperation;
@@ -296,7 +287,8 @@ public class DishDaoImpl implements DishDao {
                 dishesAmount = resultSet.getLong(1);
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while counting orders", e);
+            logger.error("Impossible to count orders", e);
+            throw new DaoException("Impossible to count orders", e);
         }
         return dishesAmount;
     }
@@ -317,7 +309,8 @@ public class DishDaoImpl implements DishDao {
                 dishes.add(createDishFromResultSet(resultSet));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while counting orders", e);
+            logger.error("Impossible to count orders", e);
+            throw new DaoException("Impossible to count orders", e);
         }
         return dishes;
     }

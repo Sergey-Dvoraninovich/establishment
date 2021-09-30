@@ -60,11 +60,11 @@ public class DatabaseConnectionPool {
                 availableConnections.put(connection);
             }
         } catch (IOException e) {
-            logger.fatal("Unable to read database properties", e);
-            throw new RuntimeException("Unable to read database properties", e);
+            logger.fatal("Impossible to read database properties", e);
+            throw new RuntimeException("Impossible to read database properties", e);
         } catch (NumberFormatException e) {
-            logger.fatal("Unable to configure vital parameters of connection pool", e);
-            throw new RuntimeException("Unable to configure size of connection pool", e);
+            logger.fatal("Impossible to configure vital parameters of connection pool", e);
+            throw new RuntimeException("Impossible to configure size of connection pool", e);
         } catch (InterruptedException e) {
             logger.error("Caught an exception", e);
             Thread.currentThread().interrupt();
@@ -73,10 +73,10 @@ public class DatabaseConnectionPool {
         }
 
         if (availableConnections.size() < poolMinSize) {
-            logger.fatal("Unable to create pool due to lack of connections. Required "
+            logger.fatal("Impossible to create pool due to lack of connections. Required "
                     + poolMinSize + " but got "
                     + availableConnections.size());
-            throw new RuntimeException("Unable to create pool due to lack of connections. Required "
+            throw new RuntimeException("Impossible to create pool due to lack of connections. Required "
                     + poolMinSize + " but got "
                     + availableConnections.size());
         }
@@ -136,7 +136,7 @@ public class DatabaseConnectionPool {
                 logger.error("Caught an exception", e);
                 Thread.currentThread().interrupt();
             } catch (SQLException e) {
-                logger.error("Unable to close connection in a proper way", e);
+                logger.error("Impossible to close connection in a proper way", e);
             }
         }
 

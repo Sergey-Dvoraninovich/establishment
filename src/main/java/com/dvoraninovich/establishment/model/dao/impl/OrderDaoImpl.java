@@ -8,6 +8,8 @@ import com.dvoraninovich.establishment.model.entity.OrderState;
 import com.dvoraninovich.establishment.model.entity.PaymentType;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.model.pool.DatabaseConnectionPool;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -20,8 +22,8 @@ import java.util.Optional;
 import static com.dvoraninovich.establishment.model.dao.DatabaseTableColumn.*;
 
 public class OrderDaoImpl implements OrderDao {
+    private static final Logger logger = LogManager.getLogger(OrderDaoImpl.class);
     private static final OrderDaoImpl instance = new OrderDaoImpl();
-    private static final DatabaseConnectionPool connectionPool = DatabaseConnectionPool.getInstance();
 
     private static final String SELECT_ALL_ORDERS
             = "SELECT orders.id, orders.id_user, orders_statuses.order_status, orders.order_time, orders.finish_time, "
@@ -95,26 +97,6 @@ public class OrderDaoImpl implements OrderDao {
             + "ON orders.id_payment_type = payment_types.id "
             + "WHERE orders.id_user = ? AND orders_statuses.order_status = 'IN_CREATION';";
 
-    private static final String FIND_USER_ORDERS
-            = "SELECT orders.id, orders.id_user, orders_statuses.order_status, orders.order_time, orders.finish_time, "
-            + " orders.card_number, payment_types.payment_type, orders.bonuses_in_payment, orders.final_price "
-            + "FROM orders "
-            + "INNER JOIN orders_statuses "
-            + "ON orders.id_order_status = orders_statuses.id "
-            + "INNER JOIN payment_types "
-            + "ON orders.id_payment_type = payment_types.id "
-            + "WHERE orders.id_user = ? AND orders_statuses.order_status != 'IN_CREATION' "
-            + "ORDER BY orders.order_time DESC "
-            + "LIMIT ?, ?; ";
-    private static final String FIND_USER_ORDERS_AMOUNT
-            = "SELECT COUNT(orders.id) "
-            + "FROM orders "
-            + "INNER JOIN orders_statuses "
-            + "ON orders.id_order_status = orders_statuses.id "
-            + "INNER JOIN payment_types "
-            + "ON orders.id_payment_type = payment_types.id "
-            + "WHERE orders.id_user = ? AND orders_statuses.order_status != 'IN_CREATION' ;";
-
     private static final String INSERT_ORDER
             = "INSERT orders(id_user, id_order_status, order_time, "
             + "finish_time, card_number, id_payment_type, bonuses_in_payment, final_price) "
@@ -136,17 +118,16 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> findAll() throws DaoException {
         List<Order> orderList = new ArrayList<>();
-        try (Connection connection = connectionPool.acquireConnection();
+        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
              Statement statement = connection.createStatement()) {
              ResultSet resultSet = statement.executeQuery(SELECT_ALL_ORDERS);
              while (resultSet.next()) {
                  Order order = createOrderFromResultSet(resultSet);
                  orderList.add(order);
              }
-        } catch (SQLException e) {
-            throw new DaoException("Can't handle OrderDaoImpl.findAll request", e);
-        } catch (DatabaseException e) {
-            throw new DaoException(e);
+        } catch (SQLException | DatabaseException e) {
+            logger.error("Impossible to find all orders", e);
+            throw new DaoException("Impossible to find all orders", e);
         }
         return orderList;
     }
@@ -164,7 +145,8 @@ public class OrderDaoImpl implements OrderDao {
                 order = Optional.of(createOrderFromResultSet(resultSet));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle finding order with id: " + id, e);
+            logger.error("Impossible to find order with id: " + id, e);
+            throw new DaoException("Impossible to find order with id: " + id, e);
         }
         return order;
     }
@@ -182,7 +164,8 @@ public class OrderDaoImpl implements OrderDao {
                 dishesAmount = resultSet.getLong(1);
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle counting dishes amount for order with id: " + id, e);
+            logger.error("Impossible to count dishes amount for order with id: " + id, e);
+            throw new DaoException("Impossible to count dishes amount for order with id: " + id, e);
         }
         return dishesAmount;
     }
@@ -206,47 +189,10 @@ public class OrderDaoImpl implements OrderDao {
                 }
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle counting final price for order with id: " + id, e);
+            logger.error("Impossible to count final price for order with id: " + id, e);
+            throw new DaoException("Impossible to count final price for order with id: " + id, e);
         }
         return finalPrice;
-    }
-
-    @Override
-    public List<Order> findUserOrders(long userId, long minPos, long maxPos) throws DaoException {
-        List<Order> orders = new ArrayList<>();
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(FIND_USER_ORDERS);
-            statement.setLong(1, userId);
-            statement.setLong(2, minPos-1);
-            statement.setLong(3, maxPos);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                orders.add(createOrderFromResultSet(resultSet));
-            }
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle finding orders for user with id: " + userId, e);
-        }
-        return orders;
-    }
-
-    @Override
-    public Long countUserOrders(long userId) throws DaoException {
-        Long amount = Long.valueOf(0);
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(FIND_USER_ORDERS_AMOUNT);
-            statement.setLong(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                amount = resultSet.getLong(1);
-            }
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle counting final price for order with id: " + userId, e);
-        }
-        return amount;
     }
 
     @Override
@@ -269,26 +215,10 @@ public class OrderDaoImpl implements OrderDao {
                 successfulOperation = rowsNum != 0;
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle reinstalling final price for order with id: " + id, e);
+            logger.error("Impossible to reinstall final price for order with id: " + id, e);
+            throw new DaoException("Impossible to reinstall final price for order with id: " + id, e);
         }
         return successfulOperation;
-    }
-
-    @Override
-    public Long countOrders() throws DaoException {
-        Long amount = Long.valueOf(0);
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(COUNT_ORDERS);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                amount = resultSet.getLong(1);
-            }
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle counting order amount", e);
-        }
-        return amount;
     }
 
     @Override
@@ -306,7 +236,8 @@ public class OrderDaoImpl implements OrderDao {
                 amount = resultSet.getLong(1);
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle counting order amount", e);
+            logger.error("Impossible to count orders amount", e);
+            throw new DaoException("Impossible to count orders amount", e);
         }
         return amount;
     }
@@ -328,7 +259,8 @@ public class OrderDaoImpl implements OrderDao {
             Integer rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle inserting order with id: " + order.getId(), e);
+            logger.error("Impossible to insert order with id: " + order.getId(), e);
+            throw new DaoException("Impossible to insert order with id: " + order.getId(), e);
         }
         return successfulOperation;
     }
@@ -352,7 +284,8 @@ public class OrderDaoImpl implements OrderDao {
                 Integer rowsNum = statement.executeUpdate();
                 successfulOperation = rowsNum != 0;
             } catch (DatabaseException | SQLException e) {
-                throw new DaoException("Can't handle updating order with id: " + order.getId(), e);
+                logger.error("Impossible to update order with id: " + order.getId(), e);
+                throw new DaoException("Impossible to update order with id: " + order.getId(), e);
             }
         }
         return successfulOperation;
@@ -371,7 +304,8 @@ public class OrderDaoImpl implements OrderDao {
                 order = Optional.of(createOrderFromResultSet(resultSet));
             }
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle finding order in creation for user with id: " + userId, e);
+            logger.error("Impossible to find order in creation for user with id: " + userId, e);
+            throw new DaoException("Impossible to find order in creation for user with id: " + userId, e);
         }
         return order;
     }
@@ -396,50 +330,17 @@ public class OrderDaoImpl implements OrderDao {
             generatedKeys.next();
             id = generatedKeys.getLong(1);
         } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Error while inserting order", e);
+            logger.error("Impossible to insert order", e);
+            throw new DaoException("Impossible to insert order", e);
         }
         return id;
-    }
-
-    @Override
-    public HashMap<Order, User> findOrdersWithUsersLimit(long minPos, long maxPos) throws DaoException {
-        HashMap<Order, User> userHashMap = new HashMap<>();
-        try (Connection connection = connectionPool.acquireConnection()) {
-
-            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_ORDERS_WITH_USER_INFO);
-            statement.setLong(1, minPos-1);
-            statement.setLong(2, maxPos);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                Order order = createOrderFromResultSet(resultSet);
-
-
-                String login = resultSet.getString(USER_LOGIN);
-                String mail = resultSet.getString(USER_MAIL);
-                String phone_number = resultSet.getString(USER_PHONE_NUMBER);
-                String photo = resultSet.getString(USER_PHOTO);
-
-                User user = User.builder()
-                        .setLogin(login)
-                        .setMail(mail)
-                        .setPhoto(photo)
-                        .setPhoneNumber(phone_number)
-                        .build();
-
-                userHashMap.put(order, user);
-            }
-        } catch (SQLException | DatabaseException e) {
-            throw new DaoException("Can't handle OrderDaoImpl.findAllOrdersWithUserinfo request", e);
-        }
-        return userHashMap;
     }
 
     @Override
     public HashMap<Order, User> findOrdersWithUsersLimit(String userIdLine, String minPriceLine, String maxPriceLine, long minPos, long maxPos,
                                                          String[] orderStates, String[] paymentTypes) throws DaoException {
         HashMap<Order, User> userHashMap = new HashMap<>();
-        try (Connection connection = connectionPool.acquireConnection()) {
+        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection()) {
 
             String requestLine = addFilterParameters(SELECT_ALL_ORDERS_WITH_USER_INFO, userIdLine, minPriceLine, maxPriceLine,
                                                      orderStates, paymentTypes);
@@ -468,27 +369,10 @@ public class OrderDaoImpl implements OrderDao {
                 userHashMap.put(order, user);
             }
         } catch (SQLException | DatabaseException e) {
-            throw new DaoException("Can't handle OrderDaoImpl.findAllOrdersWithUserinfo request", e);
+            logger.error("Impossible to find to find orders with users", e);
+            throw new DaoException("Impossible to find to find orders with users", e);
         }
         return userHashMap;
-    }
-
-    @Override
-    public List<Order> findAllUserOrders(long userId) throws DaoException {
-        List<Order> orders = new ArrayList<>();
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(FIND_USER_ORDER_IN_CREATION);
-            statement.setLong(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                orders.add(createOrderFromResultSet(resultSet));
-            }
-        } catch (DatabaseException | SQLException e) {
-            throw new DaoException("Can't handle finding orders for user with id: " + userId, e);
-        }
-        return orders;
     }
 
     private String addFilterParameters(String requestLine, String userIdLine, String minPriceLine, String maxPriceLine,
@@ -515,7 +399,6 @@ public class OrderDaoImpl implements OrderDao {
         Integer wherePos = requestLine.indexOf(WHERE_LINE);
         StringBuilder resultString = new StringBuilder(requestLine);
         resultString.insert(wherePos + WHERE_LINE.length(), filterString);
-        System.out.println(resultString.toString());
         return resultString.toString();
     }
 

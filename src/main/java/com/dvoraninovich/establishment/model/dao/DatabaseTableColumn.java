@@ -28,13 +28,6 @@ public final class DatabaseTableColumn {
     public static final String ORDER_BONUSES_IN_PAYMENT = "orders.bonuses_in_payment";
     public static final String ORDER_FINAL_PRICE = "orders.final_price";
 
-    public static final String ORDER_FEEDBACK_ID = "id";
-    public static final String ORDER_FEEDBACK_USER_ID = "id_user";
-    public static final String ORDER_FEEDBACK_ORDER_ID = "id_order";
-    public static final String ORDER_FEEDBACK_TEXT = "text";
-    public static final String ORDER_FEEDBACK_TIME = "time";
-    public static final String ORDER_FEEDBACK_MARK = "mark";
-
     public static final String USER_ID = "users.id";
     public static final String USER_LOGIN = "users.login";
     public static final String USER_MAIL = "users.mail";

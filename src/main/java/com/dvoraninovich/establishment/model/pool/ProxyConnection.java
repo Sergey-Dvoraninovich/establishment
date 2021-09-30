@@ -21,7 +21,7 @@ class ProxyConnection implements Connection{
         if (!getAutoCommit()){
             setAutoCommit(true);
         }
-        DatabaseConnectionPool.getInstance().releaseConnection(connection);
+        DatabaseConnectionPool.getInstance().releaseConnection(this);
     }
 
     @Override
