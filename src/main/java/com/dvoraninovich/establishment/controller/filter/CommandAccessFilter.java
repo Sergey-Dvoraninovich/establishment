@@ -58,7 +58,6 @@ public class CommandAccessFilter implements Filter {
 
         if (isValidCommand) {
             CommandType command = CommandType.valueOf(commandName);
-            System.out.println(command);
 
             List<CommandType> guestCommands = RolesCommandTypes.GUEST.getRoleCommandTypesList();
             if (userRole.equals(GUEST) && !guestCommands.contains(command)) {

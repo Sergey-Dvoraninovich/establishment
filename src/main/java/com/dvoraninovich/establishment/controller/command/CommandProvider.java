@@ -64,6 +64,8 @@ public final class CommandProvider {
         commands.put(EDIT_USER_DATA, new EditUserDataCommand());
         commands.put(CHANGE_USER_PASSWORD, new ChangeUserPasswordCommand());
         commands.put(CHANGE_USER_STATUS, new ChangeUserStatusCommand());
+        commands.put(SEND_ACTIVATION_CODE, new SendActivationCodeCommand());
+        commands.put(SET_LOCALE, new SetLocaleCommand());
     }
 
     public static CommandProvider getInstance() {

@@ -73,9 +73,9 @@ public class UserServiceImpl implements UserService {
                     user.setId(id);
                     registeredUser = Optional.of(user);
 
-                    //String subject = "Email confirmation ";
-                    //String mailBody = "Your verification code is: " + code;
-                    //mailService.sendMail(mail, subject, mailBody);
+//                    String subject = "Email confirmation ";
+//                    String mailBody = "Your verification code is: " + code;
+//                    mailService.sendMail(mail, subject, mailBody);
                 }
             }
         } catch (DaoException e) {

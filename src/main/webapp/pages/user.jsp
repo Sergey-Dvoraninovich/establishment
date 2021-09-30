@@ -276,6 +276,10 @@
                     <c:url value="/ApiController?command=go_to_verify_code_page" var="verification_page"/>
                     <a href="${verification_page}"><fmt:message key="profile.verify_mail"/></a>
                 </div>
+                <div class="block-item-action">
+                    <c:url value="/ApiController?command=send_activation_code" var="send_activation_code"/>
+                    <a href="${send_activation_code}"><fmt:message key="profile.send_verification_code"/></a>
+                </div>
             </div>
         </c:if>
         <div class="block-item">

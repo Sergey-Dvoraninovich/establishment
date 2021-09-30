@@ -3,6 +3,7 @@ package com.dvoraninovich.establishment.controller.listener;
 import com.dvoraninovich.establishment.controller.command.CommandType;
 import com.dvoraninovich.establishment.controller.command.RolesCommandTypes;
 import com.dvoraninovich.establishment.model.entity.User;
+import com.dvoraninovich.establishment.model.entity.UserStatus;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.LOCALE;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.USER;
 import static com.dvoraninovich.establishment.model.entity.Role.GUEST;
+import static com.dvoraninovich.establishment.model.entity.UserStatus.*;
 
 @WebListener
 public class SessionListenerImpl implements HttpSessionListener {
@@ -22,7 +24,7 @@ public class SessionListenerImpl implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent sessionEvent) {
         HttpSession session = sessionEvent.getSession();
-        session.setAttribute(USER, User.builder().setId(0).setRole(GUEST).build());
+        session.setAttribute(USER, User.builder().setId(0).setRole(GUEST).setStatus(CONFIRMED).build());
         session.setAttribute(LOCALE, RUSSIAN_LOCALE);
     }
 

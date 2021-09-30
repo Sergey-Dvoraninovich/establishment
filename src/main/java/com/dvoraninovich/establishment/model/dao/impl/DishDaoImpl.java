@@ -370,7 +370,6 @@ public class DishDaoImpl implements DishDao {
         wherePos -= lineToFind.length() - 1;
         StringBuilder resultString = new StringBuilder(requestLine);
         resultString.insert(wherePos + lineToFind.length() - 1, filterString + " ");
-System.out.println(resultString.toString());
         return resultString.toString();
     }
 

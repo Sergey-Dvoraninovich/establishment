@@ -6,6 +6,7 @@ public final class RequestParameter {
     public static final String USER_ID = "user_id";
     public static final String EDIT_FORM = "edit_form";
     public static final String CHANGE_PASSWORD_FORM = "change_password_form";
+    public static final String SET_LOCALE = "set_locale";
     public static final String NAME = "name";
     public static final String LOGIN = "login";
     public static final String PHOTO = "photo";

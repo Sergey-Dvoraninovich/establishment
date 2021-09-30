@@ -2,7 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<fmt:setBundle basename="locale" />
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
+<fmt:setBundle basename="locale"/>
 
 <c:set var="profile"><fmt:message key="profile" /></c:set>
 <c:set var="sign_in"><fmt:message key="login.login" /></c:set>
@@ -91,7 +92,8 @@
           </c:when>
           <c:otherwise>
             <div class="locale-item">
-              <a class="header-block-text">
+              <c:url value="/ApiController?command=set_locale&set_locale=ru&page=${requestScope.get}" var="set_ru_locale"/>
+              <a href="${set_ru_locale}" class="header-block-text">
                 <fmt:message key="locale.ru"/>
               </a>
             </div>
@@ -107,7 +109,8 @@
           </c:when>
           <c:otherwise>
             <div class="locale-item">
-              <a class="header-block-text">
+              <c:url value="/ApiController?command=set_locale&set_locale=en" var="set_en_locale"/>
+              <a href="${set_en_locale}" class="header-block-text">
                 <fmt:message key="locale.en"/>
               </a>
             </div>

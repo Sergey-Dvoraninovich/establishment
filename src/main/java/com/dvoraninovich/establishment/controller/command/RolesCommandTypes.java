@@ -1,6 +1,5 @@
 package com.dvoraninovich.establishment.controller.command;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +46,8 @@ public enum RolesCommandTypes {
             SET_DISHES_FILTER_PARAMETERS,
             CHANGE_USER_PASSWORD,
             CHANGE_USER_STATUS,
+            SEND_ACTIVATION_CODE,
+            SET_LOCALE,
     }),
     CUSTOMER(new CommandType[]{
             GO_TO_START_PAGE,
@@ -66,10 +67,13 @@ public enum RolesCommandTypes {
             RECALCULATE_PRICE,
             GO_TO_CUSTOMER_ORDERS,
             GO_TO_ORDER_PAGE,
+            GO_TO_USER_PAGE,
             UPLOAD_USER_PHOTO,
             SET_ORDERS_FILTER_PARAMETERS,
             SET_DISHES_FILTER_PARAMETERS,
             CHANGE_USER_PASSWORD,
+            SEND_ACTIVATION_CODE,
+            SET_LOCALE,
     }),
     GUEST(new CommandType[]{
             GO_TO_START_PAGE,
@@ -81,6 +85,7 @@ public enum RolesCommandTypes {
             GO_TO_DISHES_PAGE,
             GO_TO_DISH_PAGE,
             SET_DISHES_FILTER_PARAMETERS,
+            SET_LOCALE,
     });
     private CommandType[] roleCommandTypesArray;
     private RolesCommandTypes(CommandType[] roleCommandTypesArray) {
