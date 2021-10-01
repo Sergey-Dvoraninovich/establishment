@@ -18,4 +18,14 @@
         <filter-name>CommandAccessFilter</filter-name>
         <url-pattern>/ApiController</url-pattern>
     </filter-mapping>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/pages/errors/error500.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/pages/errors/error404.jsp</location>
+    </error-page>
 </web-app>

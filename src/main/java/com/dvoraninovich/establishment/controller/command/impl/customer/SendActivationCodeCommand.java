@@ -35,7 +35,8 @@ public class SendActivationCodeCommand implements Command {
             if (user != null) {
                 if (user.getStatus().equals(IN_REGISTRATION)) {
                     //TODO generate code
-                    mailService.sendActivateMail(user.getMail(), "1234");
+                    //mailService.sendActivateMail(user.getMail(), "1234");
+                    mailService.test();
                     router = new Router(USER_PAGE + "?id=" + user.getId(), REDIRECT);
                 }
             }

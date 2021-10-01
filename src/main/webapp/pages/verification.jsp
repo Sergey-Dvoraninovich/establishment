@@ -8,6 +8,7 @@
 
 <html>
 <head>
+    <link href="../css/pages/verification.css" rel="stylesheet">
     <title><fmt:message key="verify_code.title"/> </title>
 </head>
 <body>

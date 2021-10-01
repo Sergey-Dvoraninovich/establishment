@@ -2,7 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<fmt:setBundle basename="locale" />
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
+<fmt:setBundle basename="locale"/>
 
 <c:set var="disable"><fmt:message key="admin.dishes.disable" /></c:set>
 <c:set var="make_available"><fmt:message key="admin.dishes.make_available" /></c:set>
@@ -15,6 +16,7 @@
 <html>
 <head>
     <title>${sessionScope.dish.name}</title>
+    <link href="../css/pages/dish.css" rel="stylesheet">
 </head>
 <body>
 <jsp:include page="shared/header.jsp" />

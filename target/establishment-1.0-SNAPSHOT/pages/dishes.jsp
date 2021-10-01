@@ -2,7 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<fmt:setBundle basename="locale" />
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
+<fmt:setBundle basename="locale"/>
 
 <c:set var="disable"><fmt:message key="admin.dishes.disable" /></c:set>
 <c:set var="make_available"><fmt:message key="admin.dishes.make_available" /></c:set>
@@ -23,7 +24,7 @@
 <html>
 <head>
     <title><fmt:message key="admin.dishes.title" /></title>
-    <link href="../css/pages/dishes.css" rel="stylesheet">
+    <link href="../css/pages/dishes.css" rel = "stylesheet">
 </head>
 <body>
 <jsp:include page="shared/header.jsp" />
@@ -151,7 +152,7 @@
                 <div id="dish-picture" class="block-item">
                     <img class="dish-picture"
                          src="../images/dish/${dish.photo}"
-                         onerror="this.src='/../images/default_dish.png';">
+                         onerror="this.src='../images/default_dish.png';">
                 </div>
                 <div id="description" class="block-item">
                     <div class="row-item-flexbox">
@@ -245,57 +246,6 @@
 </div>
 </body>
 <style>
-    body {
-        font: 15px 'Roboto', Arial, Helvetica, sans-serif;
-    }
-    a {
-        font-size: 25px;
-        text-decoration: none;
-    }
-    .workspace-flex-container {
-        margin-top: 35px;
-        display: flex;
-        flex-flow: row wrap;
-        align-content: space-around;
-    }
-    .flex-block {
-        flex-flow: row nowrap;
-        align-content: space-around;
-        color: white;
-        font-size: 15px;
-        margin: 15px;
-        padding: 10px;
-        width: min-content;
-        border-radius: 5px;
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-    }
-    .flex-block:hover {
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-    }
-    #dish-picture {
-        height: 200px;
-        width: 350px;
-    }
-    .dish-picture {
-        height: 100%;
-        width: auto;
-    }
-    #dish-add-picture {
-        height: 205px;
-        width: 350px;
-    }
-    #add-icon {
-        height: 90px;
-        width: 90px;
-    }
-    h3 {
-        font-size: 30px;
-        color: #000000;
-    }
     .block-item {
         margin-top: 0px;
         margin-bottom: 0px;
@@ -307,170 +257,10 @@
         box-shadow: none;
     }
     .block-item:hover {
-        border: 0px;
-        -webkit-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
-        -moz-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
-        box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
-    }
-    #description{
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-    }
-    .row-item-flexbox{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-    }
-    .row-item-flexbox>a{
-        font-size: 20px;
-        color: #4d4d4d;
-        margin: 5px 0px;
-    }
-    input[type="submit"]{
-        font-size: 20px;
-        position: center;
-        color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        margin: 5px 0px 0px 15px;
-        padding: 5px 5px 5px 20px;
-        text-align: center;
-        width: 90%;
-        background-color: #a15566;
-    }
-    input[type="submit"]:hover {
-        background-color: #804451;
-    }
-
-
-
-
-
-    .block-item {
-        margin-top: 0px;
-        margin-bottom: 0px;
-        padding-top: 0px;
-        padding-bottom: 0px;
         border: none;
         -webkit-box-shadow: none;
         -moz-box-shadow: none;
         box-shadow: none;
-    }
-    .block-item:hover {
-        border: 0px;
-        -webkit-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
-        -moz-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
-        box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
-    }
-    .local-error {
-        margin-top: 0px;
-        color: #cf361b;
-    }
-
-
-    #order-states {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    .checkbox-container>div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    .filter-line {
-        margin-top: 75px;
-    }
-    .filter-line>form {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-    }
-    .filter-line>form>div {
-        width: 15%;
-        margin: 0px 20px;
-    }
-    input[type=text]{
-        width:100%;
-        border:2px solid #aaa;
-        border-radius:5px;
-        margin:8px 0;
-        outline:none;
-        padding:8px;
-        box-sizing:border-box;
-        transition:.3s;
-    }
-    input[type=text]:focus{
-        border-color:#a15566;
-        box-shadow:0 0 8px 0 #a15566;
-    }
-    input[type=number]{
-        width:100%;
-        border:2px solid #aaa;
-        border-radius:5px;
-        margin:8px 0;
-        outline:none;
-        padding:8px;
-        box-sizing:border-box;
-        transition:.3s;
-    }
-    input[type=number]:focus{
-        border-color:#a15566;
-        box-shadow:0 0 8px 0 #a15566;
-    }
-    .checkbox-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    .form-checkbox-btn {
-        display: inline-block;
-        margin: 8px 10px;
-        border-radius: 5px;
-        width: -moz-available;
-    }
-    .form-checkbox-btn:hover {
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-    }
-    .form-checkbox-btn input[type=checkbox] {
-        display: none;
-    }
-    .form-checkbox-btn label {
-        width: available;
-        display: inline-block;
-        cursor: pointer;
-        padding: 0px 15px;
-        line-height: 34px;
-        border:2px solid #aaa;
-        border-radius: 5px;
-        user-select: none;
-    }
-
-    .form-checkbox-btn input[type=checkbox]:checked + label {
-        color: #ffffff;
-        border: 2px solid #804451;
-        background-color: #804451;
-    }
-    .pagination {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-    }
-    .pagination>div {
-        width: min-content;
-    }
-    .pagination>div>a {
-        font-size: 20px;
     }
 </style>
 </html>

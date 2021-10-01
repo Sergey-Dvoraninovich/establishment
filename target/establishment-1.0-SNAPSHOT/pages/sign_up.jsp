@@ -8,6 +8,7 @@
 <html>
 <head>
     <title><fmt:message key="login.password_placeholder" /></title>
+    <link href="../css/pages/sign_up.css" rel="stylesheet">
 </head>
 <body>
 <jsp:include page="shared/header.jsp" />

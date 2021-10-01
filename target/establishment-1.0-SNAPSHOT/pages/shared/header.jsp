@@ -277,4 +277,19 @@
     color: #ffffff;
     font-size: 30px;
   }
+  .error-messages {
+    margin-top: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .error-message-title>a {
+    font-size: 25px;
+    color: #000000;
+  }
+  .error-message-text>a {
+    font-size: 20px;
+    color: #4d4d4d;
+  }
 </style>

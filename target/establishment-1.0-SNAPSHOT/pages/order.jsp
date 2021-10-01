@@ -13,6 +13,7 @@
 <html>
 <head>
     <title><fmt:message key="orders.order_title"/></title>
+    <link href="../css/pages/order.css" rel="stylesheet">
 </head>
 <body>
 <jsp:include page="shared/header.jsp" />

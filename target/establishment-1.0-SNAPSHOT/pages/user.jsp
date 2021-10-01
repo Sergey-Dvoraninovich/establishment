@@ -14,7 +14,8 @@
 
 <html>
 <head>
-    <link href = "../css/style.css" rel = "style" type = "text/css" />
+    <link href = "../css/style.css" rel = "style" type = "text/css"/>
+    <link href="../css/pages/user.css" rel="stylesheet">
     <title><fmt:message key="profile"/></title>
 </head>
 <body>

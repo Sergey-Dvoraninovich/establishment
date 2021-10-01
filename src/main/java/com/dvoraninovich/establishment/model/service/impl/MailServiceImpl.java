@@ -69,6 +69,67 @@ public class MailServiceImpl implements MailService {
         return result;
     }
 
+    @Override
+    public void test() {
+        Properties properties = new Properties();
+        //Хост или IP-адрес почтового сервера
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        //Требуется ли аутентификация для отправки сообщения
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.starttls.enable", "true");
+        //Порт для установки соединения
+        //properties.put("mail.smtp.socketFactory.port", "465");
+//        properties.put("mail.smtp.port", "465");
+//        properties.put("mail.smtp.ssl.enable", "true");
+
+//        properties.put("mail.smtp.socketFactory.class",
+//                "javax.net.ssl.SSLSocketFactory");
+//        properties.put("mail.smtp.socketFactory.port", "465");
+        //Фабрика сокетов, так как при отправке сообщения Yandex требует SSL-соединения
+        //properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
+        //Создаем соединение для отправки почтового сообщения
+        Session session = Session.getDefaultInstance(properties,
+                //Аутентификатор - объект, который передает логин и пароль
+                new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication("establishment1903.test@gmail.com", "EstAdmin03");
+                    }
+                    //"establishment1903.test@gmail.com", "EstAdmin03"
+                    //"piterson.alex.1903@yandex.ru", "AdminTest"
+                });
+
+        //Создаем новое почтовое сообщение
+        Message message = new MimeMessage(session);
+        //От кого
+        try {
+            message.setFrom(new InternetAddress("establishment1903.test@gmail.com"));
+
+        //Кому
+        message.setRecipient(Message.RecipientType.TO, new InternetAddress("establishment1903.test@gmail.com"));
+        //Тема письма
+        message.setSubject("Очень важное письмо!!!");
+        //Текст письма
+        message.setText("Hello, Email!");
+        //Поехали!!!
+        Transport.send(message);
+
+
+            Transport tr = session.getTransport("smtp");
+            tr.connect("smtp.gmail.com", "establishment1903.test@gmail.com", "EstAdmin03");
+            message.saveChanges();
+            tr.sendMessage(message, message.getAllRecipients());
+            tr.close();
+
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private String createActivationText(String activateCode) {
         StringBuilder mailText = new StringBuilder("Email confirmation ");
         mailText.append(" To be able to order dishes, activate your account. ");
