@@ -13,8 +13,9 @@ public class DishValidator {
     private static final Logger logger = LogManager.getLogger(DishValidator.class);
     private static DishValidator instance;
 
-    private static final String DISH_AVAILABLE = "AVAILABLE";
-    private static final String DISH_DISABLED = "DISABLED";
+    public static final String DISH_AVAILABLE = "AVAILABLE";
+    public static final String DISH_DISABLED = "DISABLED";
+
     private static final String DISH_ID_REGEXP = "^[0-9]+$";
     private static final String NAME_REGEXP = "^[A-za-z\\s]{1,50}$";
     private static final String PRICE_REGEXP = "^[+-]?([0-9]+([.][0-9]{0,2})?|[.][0-9]{1,2})$";
@@ -118,6 +119,7 @@ public class DishValidator {
                 BigDecimal minPrice = new BigDecimal(minPriceLine);
                 BigDecimal maxPrice = new BigDecimal(maxPriceLine);
                 currentResult = minPrice.compareTo(maxPrice) <= 0;
+                currentResult &= !validationMessages.getOrDefault(INVALID_FILTER_PARAMETERS, false);
                 validationMessages.put(INVALID_FILTER_PARAMETERS, !currentResult);
             }
 
@@ -144,6 +146,7 @@ public class DishValidator {
                 Integer minPrice = Integer.valueOf(minCaloriesAmountLine);
                 Integer maxPrice = Integer.valueOf(maxCaloriesAmountLine);
                 currentResult = minPrice.compareTo(maxPrice) <= 0;
+                currentResult &= !validationMessages.getOrDefault(INVALID_FILTER_PARAMETERS, false);
                 validationMessages.put(INVALID_FILTER_PARAMETERS, !currentResult);
             }
 
@@ -170,6 +173,7 @@ public class DishValidator {
                 Integer minAmountGrams = Integer.valueOf(minAmountGramsLine);
                 Integer maxAmountGrams = Integer.valueOf(maxAmountGramsLine);
                 currentResult = minAmountGrams.compareTo(maxAmountGrams) <= 0;
+                currentResult &= !validationMessages.getOrDefault(INVALID_FILTER_PARAMETERS, false);
                 validationMessages.put(INVALID_FILTER_PARAMETERS, !currentResult);
             }
 
@@ -184,7 +188,7 @@ public class DishValidator {
             }
 
         } catch (Exception e) {
-            logger.info("dish filter validation error: " + e);
+            logger.info("dish filter validation exception: " + e);
             validationMessages.put(DISH_VALIDATION_ERROR, true);
         }
 

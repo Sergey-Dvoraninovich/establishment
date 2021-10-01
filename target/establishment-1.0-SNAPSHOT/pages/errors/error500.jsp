@@ -19,6 +19,9 @@
     <div class="error-message-text">
         <a><fmt:message key="error500.info"/></a>
     </div>
+    <div class="error-message-text">
+        <a>${sessionScope.error}</a>
+    </div>
 </div>
 </body>
 </html>

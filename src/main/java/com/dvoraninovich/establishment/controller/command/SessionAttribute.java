@@ -62,6 +62,7 @@ public final class SessionAttribute {
     public static final String REMOVE_DISH_INGREDIENT_ERROR = "remove_dish_ingredient_error";
     public static final String DISH_VALIDATION_ERROR = "dish_validation_error";
     public static final String IMPOSSIBLE_TO_UPLOAD_DISH_PHOTO = "impossible_to_upload_dish_photo";
+    public static final String ORDER_VALIDATION_ERROR = "order_validation_error";
 
     public static final String ORDER = "order";
     public static final String ID_ORDER = "id_order";
@@ -114,6 +115,7 @@ public final class SessionAttribute {
     public static final String INVALID_MAX_PRICE = "invalid_max_price";
     public static final String INVALID_FILTER_PARAMETERS = "invalid_filter_parameters";
     public static final String FILTER_ERROR = "filter_error";
+    public static final String INVALID_USER_ID = "invalid_user_id";
 
     private SessionAttribute() {
     }

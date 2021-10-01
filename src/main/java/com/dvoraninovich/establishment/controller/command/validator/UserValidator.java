@@ -52,12 +52,6 @@ public class UserValidator {
         return result;
     }
 
-    public boolean validateMail(String mail){
-        boolean result;
-        result =Pattern.matches(MAIL_REGEXP, mail);
-        return result;
-    }
-
     public boolean validatePhoneNum(String phoneNum){
         boolean result;
         result = Pattern.matches(PHONE_NUM_REGEXP, phoneNum);
@@ -67,12 +61,6 @@ public class UserValidator {
     public boolean validateCardNum(String cardNum){
         boolean result;
         result = Pattern.matches(CARD_NUM_REGEXP, cardNum);
-        return result;
-    }
-
-    public boolean validateCode(String code){
-        boolean result;
-        result = Pattern.matches(CODE_REGEXP, code);
         return result;
     }
 
@@ -94,23 +82,29 @@ public class UserValidator {
         HashMap<String, Boolean> validationMessages = new HashMap<>();
         boolean currentResult;
 
-        currentResult = Pattern.matches(LOGIN_REGEXP, login);
-        validationMessages.put(INVALID_LOGIN, !currentResult);
+        try {
+            currentResult = Pattern.matches(LOGIN_REGEXP, login);
+            validationMessages.put(INVALID_LOGIN, !currentResult);
 
-        currentResult = Pattern.matches(PASSWORD_REGEXP, password);
-        validationMessages.put(INVALID_PASSWORD, !currentResult);
+            currentResult = Pattern.matches(PASSWORD_REGEXP, password);
+            validationMessages.put(INVALID_PASSWORD, !currentResult);
 
-        currentResult = Pattern.matches(MAIL_REGEXP, mail);
-        validationMessages.put(INVALID_MAIL, !currentResult);
+            currentResult = Pattern.matches(MAIL_REGEXP, mail);
+            validationMessages.put(INVALID_MAIL, !currentResult);
 
-        currentResult = Pattern.matches(PHONE_NUM_REGEXP, phoneNum);
-        validationMessages.put(INVALID_PHONE_NUM, !currentResult);
+            currentResult = Pattern.matches(PHONE_NUM_REGEXP, phoneNum);
+            validationMessages.put(INVALID_PHONE_NUM, !currentResult);
 
-        currentResult = Pattern.matches(CARD_NUM_REGEXP, cardNum);
-        validationMessages.put(INVALID_CARD_NUM, !currentResult);
+            currentResult = Pattern.matches(CARD_NUM_REGEXP, cardNum);
+            validationMessages.put(INVALID_CARD_NUM, !currentResult);
 
-        currentResult = service.isLoginUnique(login);
-        validationMessages.put(NOT_UNIQUE_LOGIN, !currentResult);
+            currentResult = service.isLoginUnique(login);
+            validationMessages.put(NOT_UNIQUE_LOGIN, !currentResult);
+        }
+        catch (Exception e) {
+            logger.info("user validation exception: " + e);
+            validationMessages.put(USER_VALIDATION_ERROR, true);
+        }
 
         return validationMessages;
     }
@@ -121,50 +115,56 @@ public class UserValidator {
         HashMap<String, Boolean> validationMessages = new HashMap<>();
         boolean currentResult;
 
-        if (!login.equals("")) {
-            currentResult = Pattern.matches(FILTER_LOGIN_REGEXP, login);
-            validationMessages.put(INVALID_LOGIN, !currentResult);
-        }
-
-        if (!mail.equals("")) {
-            currentResult = Pattern.matches(FILTER_MAIL_REGEXP, mail);
-            validationMessages.put(INVALID_MAIL, !currentResult);
-        }
-
-        if (!phoneNumber.equals("")) {
-            currentResult = Pattern.matches(FILTER_PHONE_NUM_REGEXP, phoneNumber);
-            validationMessages.put(INVALID_PHONE_NUM, !currentResult);
-        }
-
-        if (!cardNumber.equals("")) {
-            currentResult = Pattern.matches(FILTER_CARD_NUM_REGEXP, cardNumber);
-            validationMessages.put(INVALID_CARD_NUM, !currentResult);
-        }
-
-
-        currentResult = false;
-        ArrayList<String> userStatusesValues = new ArrayList<>();
-        for (UserStatus state: UserStatus.values()){
-            userStatusesValues.add(state.name());
-        }
-        for (String line : userStatusesLines) {
-            if (!userStatusesValues.contains(line)) {
-                currentResult = true;
+        try {
+            if (!login.equals("")) {
+                currentResult = Pattern.matches(FILTER_LOGIN_REGEXP, login);
+                validationMessages.put(INVALID_LOGIN, !currentResult);
             }
-        }
-        validationMessages.put(INVALID_USER_STATUS, currentResult);
 
-        currentResult = false;
-        ArrayList<String> userRolesValues = new ArrayList<>();
-        for (Role type: Role.values()){
-            userRolesValues.add(type.name());
-        }
-        for (String line : userRolesLine) {
-            if (!userRolesValues.contains(line)) {
-                currentResult = true;
+            if (!mail.equals("")) {
+                currentResult = Pattern.matches(FILTER_MAIL_REGEXP, mail);
+                validationMessages.put(INVALID_MAIL, !currentResult);
             }
+
+            if (!phoneNumber.equals("")) {
+                currentResult = Pattern.matches(FILTER_PHONE_NUM_REGEXP, phoneNumber);
+                validationMessages.put(INVALID_PHONE_NUM, !currentResult);
+            }
+
+            if (!cardNumber.equals("")) {
+                currentResult = Pattern.matches(FILTER_CARD_NUM_REGEXP, cardNumber);
+                validationMessages.put(INVALID_CARD_NUM, !currentResult);
+            }
+
+
+            currentResult = false;
+            ArrayList<String> userStatusesValues = new ArrayList<>();
+            for (UserStatus state : UserStatus.values()) {
+                userStatusesValues.add(state.name());
+            }
+            for (String line : userStatusesLines) {
+                if (!userStatusesValues.contains(line)) {
+                    currentResult = true;
+                }
+            }
+            validationMessages.put(INVALID_USER_STATUS, currentResult);
+
+            currentResult = false;
+            ArrayList<String> userRolesValues = new ArrayList<>();
+            for (Role type : Role.values()) {
+                userRolesValues.add(type.name());
+            }
+            for (String line : userRolesLine) {
+                if (!userRolesValues.contains(line)) {
+                    currentResult = true;
+                }
+            }
+            validationMessages.put(INVALID_USER_ROLE, currentResult);
         }
-        validationMessages.put(INVALID_USER_ROLE, currentResult);
+        catch (Exception e) {
+            logger.info("user filter validation exception: " + e);
+            validationMessages.put(USER_VALIDATION_ERROR, true);
+        }
 
         return validationMessages;
     }

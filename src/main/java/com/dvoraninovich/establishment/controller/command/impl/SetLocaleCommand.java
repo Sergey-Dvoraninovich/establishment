@@ -20,13 +20,15 @@ public class SetLocaleCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        Router router;
         HttpSession session = request.getSession();
         String locale = request.getParameter(SET_LOCALE);
 
         if (locale != null) {
             if (locale.equals(RUSSIAN_LOCALE) || locale.equals(ENGLISH_LOCALE)) {
                 session.setAttribute(LOCALE, locale);
+            }
+            else {
+                logger.info("Attempt ot set not provided locale " + locale);
             }
         }
 

@@ -39,7 +39,7 @@ public class IngredientValidator {
             }
 
         } catch (Exception e) {
-            logger.info("ingredient validation error: " + e);
+            logger.info("ingredient validation exception: " + e);
             validationMessages.add(INGREDIENT_VALIDATION_ERROR);
         }
 

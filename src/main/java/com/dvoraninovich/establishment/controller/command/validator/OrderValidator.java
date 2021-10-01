@@ -72,7 +72,7 @@ public class OrderValidator {
 
             if (!userIdLine.equals("")) {
                 currentResult = Pattern.matches(USER_ID_REGEXP, userIdLine);
-                validationMessages.put(INVALID_MIN_PRICE, currentResult);
+                validationMessages.put(INVALID_USER_ID, currentResult);
             }
 
             if (!minPriceLine.equals("")) {
@@ -127,7 +127,8 @@ public class OrderValidator {
             validationMessages.put(INVALID_PAYMENT_TYPES, currentResult);
         }
         catch (Exception e) {
-            logger.info("order filter validation error: " + e);
+            logger.info("order filter validation exception: " + e);
+            validationMessages.put(ORDER_VALIDATION_ERROR, true);
         }
 
         return validationMessages;

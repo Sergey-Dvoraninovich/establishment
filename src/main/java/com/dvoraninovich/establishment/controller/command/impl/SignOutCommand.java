@@ -20,8 +20,7 @@ public class SignOutCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        session.setAttribute(USER, User.builder().setId(0).setRole(GUEST).build());
-        session.setAttribute(IS_AUTHENTICATED, false);
+        session.invalidate();
         return new Router(INDEX_PAGE, REDIRECT);
     }
 }
