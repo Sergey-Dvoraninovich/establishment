@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import java.util.HashMap;
 
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.NOT_UNIQUE_LOGIN;
 import static com.dvoraninovich.establishment.model.entity.Role.*;
 import static com.dvoraninovich.establishment.model.entity.UserStatus.*;
 
@@ -117,12 +118,12 @@ public class UserValidatorTest {
     }
 
     @DataProvider(name = "validFilterParameters")
-    public static Object[][] primeNumbers() {
+    public static Object[][] validFilterParameters() {
         return new Object[][] {{"Alex", "mail@gmail.com", "+375299970202", "1111222233334444",
                         new String[]{IN_REGISTRATION.name()}, new String[]{CUSTOMER.name()}},
-                {"Alex_z", "mail.mail@yandex.ru", "+375299970202", "1111222233334444",
+                {"Alex_Z", "mail.mail@yandex.ru", "+375299970202", "1111222233334444",
                         new String[]{IN_REGISTRATION.name(), CONFIRMED.name()}, new String[]{CUSTOMER.name(), GUEST.name()}},
-                {"Alex_z", "mail99@gmail.com", "+375299970202", "1111222233334444",
+                {"AlexZ", "mail99@gmail.com", "+375299970202", "1111222233334444",
                         new String[]{IN_REGISTRATION.name(), CONFIRMED.name(), BLOCKED.name()}, new String[]{CUSTOMER.name(), GUEST.name(), ADMIN.name()}}};
     }
     @Test(dataProvider = "validFilterParameters")
@@ -132,5 +133,62 @@ public class UserValidatorTest {
                 mail, phoneNumber, cardNumber, userStatusesLines, userRolesLines);
         boolean containsError = validationMap.containsValue(true);
         Assert.assertFalse(containsError);
+    }
+
+    @DataProvider(name = "invalidFilterParameters")
+    public static Object[][] invalidFilterParameters() {
+        return new Object[][] {{"1Alex$", "mail@gmail.com", "+375299970202", "1111222233334444",
+                new String[]{IN_REGISTRATION.name()}, new String[]{CUSTOMER.name()}},
+                {"alex", "!yandex.ru", "+375299970202", "1111222233334444",
+                        new String[]{IN_REGISTRATION.name(), CONFIRMED.name()}, new String[]{CUSTOMER.name(), GUEST.name()}},
+                {"Alex", "mail.mail@yandex.ru", "plus375299970202", "1111222233334444",
+                        new String[]{IN_REGISTRATION.name(), CONFIRMED.name()}, new String[]{CUSTOMER.name(), GUEST.name()}},
+                {"alex", "mail99@gmail.com", "+375299970202", "1111222233334444b",
+                        new String[]{IN_REGISTRATION.name(), CONFIRMED.name(), BLOCKED.name()}, new String[]{CUSTOMER.name(), GUEST.name(), ADMIN.name()}},
+                {"Alex", "mail.mail@yandex.ru", "+375299970202", "1111222233334444",
+                        new String[]{IN_REGISTRATION.name(), "NEW"}, new String[]{CUSTOMER.name(), GUEST.name()}},
+                {"Alex", "mail.mail@yandex.ru", "+375299970202", "1111222233334444",
+                        new String[]{IN_REGISTRATION.name(), CONFIRMED.name()}, new String[]{"NEW", GUEST.name()}}};
+    }
+    @Test(dataProvider = "invalidFilterParameters")
+    public void userValidatorFilterLoginInvalidTest(String login, String mail, String phoneNumber, String cardNumber,
+                                        String[] userStatusesLines, String[] userRolesLines) {
+        HashMap<String, Boolean> validationMap = validator.validateFilterParameters(login,
+                mail, phoneNumber, cardNumber, userStatusesLines, userRolesLines);
+        boolean containsError = validationMap.containsValue(true);
+        Assert.assertTrue(containsError);
+    }
+
+
+    @DataProvider(name = "validUserData")
+    public static Object[][] validUserData() {
+        return new Object[][] {{"Alex", "Password1", "mail@gmail.com", "+375299970202", "1111222233334444"},
+                {"Alex_Z", "pASSWORD1", "mail.mail@yandex.ru", "+375299970202", "1111222233334444"},
+                {"AlexZ", "Pa123456", "mail99@gmail.com", "+375299970202", "1111222233334444"}};
+    }
+    @Test(dataProvider = "validUserData")
+    public void userValidatorDataTest(String login, String password, String mail, String phoneNumber, String cardNumber) {
+        HashMap<String, Boolean> validationMap = validator.validateUserData(login, password, mail, phoneNumber, cardNumber);
+        validationMap.remove(NOT_UNIQUE_LOGIN);
+        boolean containsError = validationMap.containsValue(true);
+        Assert.assertFalse(containsError);
+    }
+
+    @DataProvider(name = "inValidUserData")
+    public static Object[][] inValidUserData() {
+        return new Object[][] {{"Alex$", "Password1", "mail@gmail.com", "+375299970202", "1111222233334444"},
+                {"Alex", "Pass", "mail@gmail.com", "+375299970202", "1111222233334444"},
+                {"Alex", "Password", "mail@gmail.com", "+375299970202", "1111222233334444"},
+                {"Alex", "Password1", "@gmail.com", "+375299970202", "1111222233334444"},
+                {"Alex", "Password1", "mail@gmail", "+375299970202", "1111222233334444"},
+                {"Alex", "Password1", "mail@gmail.com", "plus375299970202", "1111222233334444"},
+                {"Alex", "Password1", "mail@gmail.com", "+375299970202", "1111222233334444d"}};
+    }
+    @Test(dataProvider = "inValidUserData")
+    public void userValidatorDataInvalidTest(String login, String password, String mail, String phoneNumber, String cardNumber) {
+        HashMap<String, Boolean> validationMap = validator.validateUserData(login, password, mail, phoneNumber, cardNumber);
+        validationMap.remove(NOT_UNIQUE_LOGIN);
+        boolean containsError = validationMap.containsValue(true);
+        Assert.assertTrue(containsError);
     }
 }

@@ -72,7 +72,7 @@ public class OrderValidator {
 
             if (!userIdLine.equals("")) {
                 currentResult = Pattern.matches(USER_ID_REGEXP, userIdLine);
-                validationMessages.put(INVALID_USER_ID, currentResult);
+                validationMessages.put(INVALID_USER_ID, !currentResult);
             }
 
             if (!minPriceLine.equals("")) {
