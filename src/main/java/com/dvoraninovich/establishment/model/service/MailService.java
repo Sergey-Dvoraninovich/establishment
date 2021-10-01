@@ -5,5 +5,7 @@ import com.dvoraninovich.establishment.exception.ServiceException;
 public interface MailService {
 
     boolean sendActivateMail(String recipient, String activationCode) throws ServiceException;
+
+    //TODO remove it
     void test() throws ServiceException;
 }
