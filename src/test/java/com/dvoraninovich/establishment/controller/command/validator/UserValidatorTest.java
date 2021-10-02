@@ -1,19 +1,38 @@
 package com.dvoraninovich.establishment.controller.command.validator;
 
+import com.dvoraninovich.establishment.model.service.UserService;
+import com.dvoraninovich.establishment.model.service.impl.UserServiceImpl;
+import org.mockito.Mockito;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-
+import java.lang.reflect.Field;
 import java.util.HashMap;
 
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.NOT_UNIQUE_LOGIN;
 import static com.dvoraninovich.establishment.model.entity.Role.*;
 import static com.dvoraninovich.establishment.model.entity.UserStatus.*;
 
 public class UserValidatorTest {
 
     private UserValidator validator = UserValidator.getInstance();
+
+    @BeforeClass
+    public void init() {
+        UserService validatorService = UserServiceImpl.getInstance();
+        validatorService = Mockito.mock(UserService.class);
+        Mockito.when(validatorService.isLoginUnique(Mockito.anyString()))
+                .thenReturn(true);
+        try {
+            Class validatorClass = UserValidator.class;
+            Field field = validatorClass.getDeclaredField("service");
+            field.setAccessible(true);
+            field.set(validator, validatorService);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Assert.fail("Impossible to setup mocks");
+        }
+    }
 
     @DataProvider(name = "validLogins")
     public static Object[][] validLogins() {
@@ -129,6 +148,7 @@ public class UserValidatorTest {
     @Test(dataProvider = "validFilterParameters")
     public void userValidatorFilterTest(String login, String mail, String phoneNumber, String cardNumber,
                                         String[] userStatusesLines, String[] userRolesLines) {
+
         HashMap<String, Boolean> validationMap = validator.validateFilterParameters(login,
                 mail, phoneNumber, cardNumber, userStatusesLines, userRolesLines);
         boolean containsError = validationMap.containsValue(true);
@@ -169,7 +189,6 @@ public class UserValidatorTest {
     @Test(dataProvider = "validUserData")
     public void userValidatorDataTest(String login, String password, String mail, String phoneNumber, String cardNumber) {
         HashMap<String, Boolean> validationMap = validator.validateUserData(login, password, mail, phoneNumber, cardNumber);
-        validationMap.remove(NOT_UNIQUE_LOGIN);
         boolean containsError = validationMap.containsValue(true);
         Assert.assertFalse(containsError);
     }
@@ -187,7 +206,6 @@ public class UserValidatorTest {
     @Test(dataProvider = "inValidUserData")
     public void userValidatorDataInvalidTest(String login, String password, String mail, String phoneNumber, String cardNumber) {
         HashMap<String, Boolean> validationMap = validator.validateUserData(login, password, mail, phoneNumber, cardNumber);
-        validationMap.remove(NOT_UNIQUE_LOGIN);
         boolean containsError = validationMap.containsValue(true);
         Assert.assertTrue(containsError);
     }
