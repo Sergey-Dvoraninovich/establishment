@@ -24,6 +24,10 @@ public class DishDaoImpl implements DishDao {
     private static final String SELECT_ALL_DISHES
             = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
             + "FROM dishes;";
+    private static final String FIND_ALL_AVAILABLE_DISHES
+            = "SELECT dishes.id, dishes.price, dishes.calories, dishes.amount_grams, dishes.name, dishes.is_available, dishes.photo "
+            + "FROM dishes "
+            + "WHERE is_available = true;";
     private static final String COUNT_DISHES
             = "SELECT COUNT(dishes.id)"
             + "FROM dishes;";
@@ -90,6 +94,23 @@ public class DishDaoImpl implements DishDao {
         } catch (SQLException | DatabaseException e) {
             logger.error("Impossible to find all dishes", e);
             throw new DaoException("Impossible to find all dishes", e);
+        }
+        return dishList;
+    }
+
+    @Override
+    public List<Dish> findAllAvailable() throws DaoException {
+        List<Dish> dishList = new ArrayList<>();
+        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(FIND_ALL_AVAILABLE_DISHES);
+            while (resultSet.next()) {
+                Dish dish = createDishFromResultSet(resultSet);
+                dishList.add(dish);
+            }
+        } catch (SQLException | DatabaseException e) {
+            logger.error("Impossible to find all available dishes", e);
+            throw new DaoException("Impossible to find all available dishes", e);
         }
         return dishList;
     }

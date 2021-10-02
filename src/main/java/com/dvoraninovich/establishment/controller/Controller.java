@@ -43,10 +43,6 @@ public class Controller extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String commandName = request.getParameter(COMMAND);
         Command command = COMMAND_PROVIDER.getCommand(commandName);
-        if (command == null) {
-            logger.error("incorrect command " + command);
-            response.sendRedirect(INDEX_PAGE);
-        }
         Router router = command.execute(request);
         switch (router.getRouterType()) {
             case REDIRECT:

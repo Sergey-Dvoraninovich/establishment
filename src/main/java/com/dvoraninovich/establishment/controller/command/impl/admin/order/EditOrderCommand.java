@@ -50,8 +50,6 @@ public class EditOrderCommand implements Command {
         String newBonusesAmountLine = request.getParameter(BONUSES_IN_PAYMENT);
         BigDecimal newBonusesAmount = new BigDecimal(newBonusesAmountLine);
 
-        System.out.println(orderStateLine);
-        System.out.println(paymentTypeLine);
         if (orderStateLine != null) {
             if (!orderValidator.validateOrderState(orderStateLine)) {
                 session.setAttribute(INVALID_ORDER_STATES, true);

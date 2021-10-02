@@ -66,7 +66,6 @@ public class AddDishToBasketCommand implements Command {
             session.setAttribute(DISHES_IN_BASKET, dishesAmount);
             router = new Router(DISHES_PAGE, REDIRECT);
         } catch (ServiceException e) {
-            e.printStackTrace();
             session.setAttribute(EXCEPTION, e);
             router = new Router(ERROR_PAGE, FORWARD);
         }

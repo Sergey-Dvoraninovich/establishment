@@ -79,6 +79,8 @@ public final class SessionAttribute {
     public static final String NOT_ENOUGH_BONUSES = "NOT_ENOUGH_BONUSES";
     public static final String YOU_SHOULD_CHOOSE_SOMETHING = "you_should_buy_something";
     public static final String EDIT_ORDER_ERROR = "edit_order_error";
+    public static final String AVAILABLE_DISHES = "available_dishes";
+    public static final String ADD_DISH_TO_ORDER_ERROR = "add_dish_to_order_error";
 
     public static final String ORDERS_FILTER_ORDER_STATES = "orders_filter_order_states";
     public static final String ORDERS_FILTER_PAYMENT_TYPES = "orders_filter_payment_types";

@@ -277,3 +277,20 @@ input[type="submit"]:hover {
 form {
     width: 100%;
 }
+.price-line {
+    font-size: 20px;
+}
+select{
+    width:100%;
+    border:2px solid #aaa;
+    border-radius:5px;
+    margin:8px 0;
+    outline:none;
+    padding:8px;
+    box-sizing:border-box;
+    transition:.3s;
+}
+select:focus{
+    border-color:#a15566;
+    box-shadow:0 0 8px 0 #a15566;
+}

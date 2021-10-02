@@ -29,6 +29,14 @@ public interface DishDao extends BaseDao<Long, Dish> {
     boolean makeAvailable(Long id) throws DaoException;
 
     /**
+     * Find all available.
+     *
+     * @return the list of available dishes
+     * @throws DaoException the dao exception
+     */
+    List<Dish> findAllAvailable() throws DaoException;
+
+    /**
      * Find order dishes.
      *
      * @param id the order id

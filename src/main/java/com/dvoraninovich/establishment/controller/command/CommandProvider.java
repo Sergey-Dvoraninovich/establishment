@@ -66,6 +66,7 @@ public final class CommandProvider {
         commands.put(CHANGE_USER_STATUS, new ChangeUserStatusCommand());
         commands.put(SEND_ACTIVATION_CODE, new SendActivationCodeCommand());
         commands.put(SET_LOCALE, new SetLocaleCommand());
+        commands.put(ADD_DISH_TO_ORDER, new AddDishToOrderCommand());
     }
 
     public static CommandProvider getInstance() {

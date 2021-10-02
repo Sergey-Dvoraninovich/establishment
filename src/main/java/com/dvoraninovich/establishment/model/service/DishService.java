@@ -21,6 +21,14 @@ public interface DishService {
     List<Dish> findAll() throws ServiceException;
 
     /**
+     * Find all available.
+     *
+     * @return the list of available dishes
+     * @throws ServiceException the service exception
+     */
+    List<Dish> findAllAvailable() throws ServiceException;
+
+    /**
      * Find order dishes.
      *
      * @param orderId the order id

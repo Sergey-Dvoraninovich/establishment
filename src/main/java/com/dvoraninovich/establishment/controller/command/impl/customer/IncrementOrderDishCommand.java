@@ -10,6 +10,8 @@ import com.dvoraninovich.establishment.model.service.DishListItemService;
 import com.dvoraninovich.establishment.model.service.OrderService;
 import com.dvoraninovich.establishment.model.service.impl.DishListItemServiceImpl;
 import com.dvoraninovich.establishment.model.service.impl.OrderServiceImpl;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,6 +26,7 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.EXCEPTION;
 
 public class IncrementOrderDishCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(IncrementOrderDishCommand.class);
     private DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
     private OrderService orderService = OrderServiceImpl.getInstance();
 
@@ -31,9 +34,9 @@ public class IncrementOrderDishCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
-        Optional<DishListItem> optionalDishListItem = Optional.empty();
+        Optional<DishListItem> optionalDishListItem;
         DishListItem dishListItem;
-        Optional<Order> optionalOrder = Optional.empty();
+        Optional<Order> optionalOrder;
         Order order;
 
         User user = (User) session.getAttribute(USER);
@@ -43,8 +46,8 @@ public class IncrementOrderDishCommand implements Command {
         String orderIdLine = request.getParameter(ID_ORDER);
 
         try {
-            Long dishListItemId = Long.parseLong(dishListItemIdLine);
-            Long orderId = Long.parseLong(orderIdLine);
+            long dishListItemId = Long.parseLong(dishListItemIdLine);
+            long orderId = Long.parseLong(orderIdLine);
             optionalOrder = orderService.findById(orderId);
             if (optionalOrder.isPresent()) {
                 order = optionalOrder.get();
@@ -65,7 +68,7 @@ public class IncrementOrderDishCommand implements Command {
             }
             switch (user.getRole()) {
                 case ADMIN: {
-                    router = new Router(ORDER + "?id_order=" + orderIdLine, REDIRECT);
+                    router = new Router(ORDER_PAGE + "?id_order=" + orderIdLine, REDIRECT);
                     break;
                 }
                 case CUSTOMER: {
@@ -78,7 +81,8 @@ public class IncrementOrderDishCommand implements Command {
                 }
             }
         } catch (ServiceException e) {
-            e.printStackTrace();
+            logger.error("Impossible to increment dish list item with id: "
+                    + dishListItemIdLine + " to order with id: " + orderIdLine, e);
             session.setAttribute(EXCEPTION, e);
             router = new Router(ERROR_PAGE, FORWARD);
         }

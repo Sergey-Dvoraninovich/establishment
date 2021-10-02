@@ -9,6 +9,8 @@
 <c:set var="bonuses_in_payment">${sessionScope.order.bonusesInPayment}</c:set>
 <c:set var="recalculate_price_info"><fmt:message key="basket.recalculate_price"/></c:set>
 <c:set var="set_price"><fmt:message key="set"/> ${sessionScope.order.finalPrice}</c:set>
+<c:set var="save_changes"><fmt:message key="save_changes"/></c:set>
+<c:set var="add"><fmt:message key="add"/></c:set>
 
 <html>
 <head>
@@ -87,6 +89,11 @@
                                             ${sessionScope.order_dishes_map.get(dish_list_item.dishId).name}
                                     </a>
                                 </div>
+                                <c:if test="${not sessionScope.order_dishes_map.get(dish_list_item.dishId).isAvailable}">
+                                <div id="red-state" class="dish-text">
+                                    <fmt:message key="filter.disabled"/>
+                                </div>
+                                </c:if>
                             </div>
                             <div id="amount-control" class="dish-container-line">
                                 <c:if test="${sessionScope.user.role == 'ADMIN'}">
@@ -141,6 +148,27 @@
             </div>
         </c:if>
         <c:if test="${sessionScope.user.role == 'ADMIN'}">
+            <c:if test="${sessionScope.available_dishes.size() != 0}">
+            <c:url value="/ApiController?command=add_dish_to_order" var="add_dish_to_order"/>
+            <form action="${add_dish_to_order}" method="post">
+                <input type="hidden" id="id" name="id" value="${sessionScope.order.id}"/>
+                <div class="form-row">
+                    <select class="dish-select" id="available_dishes" name="available_dishes">
+                        <c:forEach var="dish" items="${sessionScope.available_dishes}">
+                            <option class="ingredient-option" value="${dish.id}">${dish.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div>
+                    <input type="submit" value="${add}"/>
+                </div>
+                <c:if test="${sessionScope.add_dish_to_order_error}">
+                    <div class="local-error">
+                        <p><fmt:message key="basket.add_dish_to_basket_error"/></p>
+                    </div>
+                </c:if>
+            </form>
+            </c:if>
             <c:url value="/ApiController?command=edit_order&id=${sessionScope.order.id}" var="edit_order"/>
             <form action="${edit_order}" method="post">
                 <div class="form-row">
@@ -211,8 +239,11 @@
                     <input type="number" step="1" min="0" max="${customer_bonuses}" name="bonuses_in_payment" id="bonuses_in_payment"
                            value="${bonuses_in_payment}" placeholder="${bonuses_in_payment}"/>
                 </div>
+                <div class="price-line">
+                    <div><fmt:message key="admin.dishes.dish_price"/>: ${sessionScope.order.finalPrice}</div>
+                </div>
                 <div>
-                    <input type="submit" value="${set_price}"/>
+                    <input type="submit" value="${save_changes}"/>
                 </div>
                 <c:if test="${sessionScope.edit_order_error}">
                     <div class="local-error">
@@ -250,109 +281,7 @@
 </div>
 </body>
 <style>
-    .workspace-flex-container {
-        margin-top: 35px;
-        padding-top: 15px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: flex-start;
-    }
-    .profile-picture {
-        height: 250px;
-        width: 250px;
-        border-radius: 10px;
-    }
-    .profile-item-picture {
-        height: 35px;
-        width: 35px;
-    }
-    .workspace-column {
-        font: 20px 'Roboto', Arial, Helvetica, sans-serif;
-        margin: 25px;
-    }
-    a {
-        font: 20px 'Roboto', Arial, Helvetica, sans-serif;
-        font-size: 15px;
-        text-decoration: none;
-    }
-    div {
-        font: 20px 'Roboto', Arial, Helvetica, sans-serif;
-    }
-
-    #description{
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-    }
-    .row-item-flexbox{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-    }
-    .row-item-flexbox-item>h2{
-        margin-left: 10px;
-    }
-
-    .block-item{
-        border-radius: 10px;
-        padding: 10px;
-        margin: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-    }
-    #icon{
-        padding: 0px;
-    }
-    .block-item:hover{
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-    }
-
-    .block-item-header{
-        margin: 0px;
-        padding: 0px;
-    }
-    .block-item-header>h2{
-        color: #000000;
-        font-size: 30px;
-    }
-    .block-item-text{
-    }
-    .block-item-text>a{
-        color: #4d4d4d;
-        font-size: 20px;
-    }
-    .block-item-action {
-        position: center;
-        border-radius: 10px;
-        margin-top: 15px;
-        padding: 5px;
-        text-align: center;
-        width: 70%;
-        background-color: #a15566;
-    }
-    #description-action {
-        margin-left: 55px;
-    }
-    .block-item-action:hover {
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-    }
-    .block-item-action>a {
-        color: #ffffff;
-        font-size: 25px;
-    }
-    input[type=number]{
+    select{
         width:100%;
         border:2px solid #aaa;
         border-radius:5px;
@@ -362,172 +291,9 @@
         box-sizing:border-box;
         transition:.3s;
     }
-    input[type=number]:focus{
+    select:focus{
         border-color:#a15566;
         box-shadow:0 0 8px 0 #a15566;
-    }
-    input[type="submit"]{
-        font-size: 20px;
-        color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        margin-top: 15px;
-        padding: 5px;
-        text-align: center;
-        width: 100%;
-        background-color: #a15566;
-    }
-    input[type="submit"]:hover {
-        background-color: #804451;
-    }
-    .radio-container {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: center;
-    }
-    .form_radio_btn {
-        display: inline-block;
-        margin-right: 10px;
-        margin-bottom: 15px;
-        border-radius: 5px;
-        width: -moz-available;
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-    }
-    .form_radio_btn:hover {
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-    }
-    .form_radio_btn input[type=radio] {
-        display: none;
-    }
-    .form_radio_btn label {
-        width: available;
-        display: inline-block;
-        cursor: pointer;
-        padding: 0px 15px;
-        line-height: 34px;
-        border:2px solid #aaa;
-        border-radius: 5px;
-        user-select: none;
-    }
-
-    .form_radio_btn input[type=radio]:checked + label {
-        color: #ffffff;
-        border:2px solid #804451;
-        background-color: #804451;
-    }
-    #active input[type=radio]:checked + label {
-        color: #ffffff;
-        border:2px solid #7ba05b;
-        background-color: #7ba05b;
-    }
-    #completed input[type=radio]:checked + label {
-        color: #ffffff;
-        border:2px solid #7ba05b;
-        background-color: #7ba05b;
-    }
-    #expired input[type=radio]:checked + label {
-        color: #ffffff;
-        border:2px solid #cf361b;
-        background-color: #cf361b;
-    }
-    .local-error {
-        font-size: 15px;
-        color: red;
-    }
-    .dishes-container{
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: stretch;
-    }
-    .dish-container{
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: space-between;
-    }
-    #icon-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .dish-container-column {
-        height: 150px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    #amount-control {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-    }
-    .photo-container {
-        height: 150px;
-        width: 270px;
-    }
-    .dish-picture {
-        height: inherit;
-        width: auto;
-    }
-    .control-picture {
-        margin: 10px;
-        height: 30px;
-        width: 30px;
-    }
-    .dish-text a {
-        font-size: 25px;
-    }
-    #base-state {
-        width: max-content;
-        padding: 5px;
-        border-radius: 5px;
-        color: #ffffff;
-        background-color: #a15566;
-    }
-    #green-state {
-        width: max-content;
-        padding: 5px;
-        border-radius: 5px;
-        color: #ffffff;
-        background-color: #7ba05b;
-    }
-    #green-state-1 {
-        width: max-content;
-        padding: 5px;
-        border-radius: 5px;
-        color: #ffffff;
-        background-color: #7ba05b;
-    }
-    #red-state {
-        width: max-content;
-        padding: 5px;
-        border-radius: 5px;
-        color: #ffffff;
-        background-color: #cf361b;
-    }
-    .line-item {
-        width: -webkit-fill-available;
-        margin: 5px;
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: space-between;
-    }
-    .line-item>div {
-        margin: 0px 10px;
-        font-size: 20px;
-    }
-    form {
-        width: 100%;
     }
 </style>
 </html>

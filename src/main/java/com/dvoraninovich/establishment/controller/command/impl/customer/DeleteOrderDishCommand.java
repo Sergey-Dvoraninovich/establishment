@@ -3,13 +3,18 @@ package com.dvoraninovich.establishment.controller.command.impl.customer;
 import com.dvoraninovich.establishment.controller.command.Command;
 import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.exception.ServiceException;
+import com.dvoraninovich.establishment.model.entity.Dish;
 import com.dvoraninovich.establishment.model.entity.DishListItem;
 import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.model.service.DishListItemService;
+import com.dvoraninovich.establishment.model.service.DishService;
 import com.dvoraninovich.establishment.model.service.OrderService;
 import com.dvoraninovich.establishment.model.service.impl.DishListItemServiceImpl;
+import com.dvoraninovich.establishment.model.service.impl.DishServiceImpl;
 import com.dvoraninovich.establishment.model.service.impl.OrderServiceImpl;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,26 +29,29 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.EXCEPTION;
 
 public class DeleteOrderDishCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(DeleteOrderDishCommand.class);
     private DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
     private OrderService orderService = OrderServiceImpl.getInstance();
+    private DishService dishService = DishServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
-        Optional<DishListItem> optionalDishListItem = Optional.empty();
-        Optional<Order> optionalOrder = Optional.empty();
+        Optional<DishListItem> optionalDishListItem;
+        Optional<Order> optionalOrder;
         Order order;
 
         User user = (User) session.getAttribute(USER);
         Long dishesAmount = (Long) session.getAttribute(DISHES_IN_BASKET);
         List<DishListItem> dishListItems = (List<DishListItem>) session.getAttribute(ORDER_DISH_LIST_ITEMS);
+        List<Dish> availableDishes = (List<Dish>) session.getAttribute(AVAILABLE_DISHES);
         String dishListItemIdLine = request.getParameter(ID_DISH_LIST_ITEM);
         String orderIdLine = request.getParameter(ID_ORDER);
 
         try {
-            Long dishListItemId = Long.parseLong(dishListItemIdLine);
-            Long orderId = Long.parseLong(orderIdLine);
+            long dishListItemId = Long.parseLong(dishListItemIdLine);
+            long orderId = Long.parseLong(orderIdLine);
             optionalOrder = orderService.findById(orderId);
             if (optionalOrder.isPresent()) {
                 order = optionalOrder.get();
@@ -51,17 +59,21 @@ public class DeleteOrderDishCommand implements Command {
                 if (optionalDishListItem.isPresent()) {
                     dishListItemService.delete(dishListItemId);
                     dishListItems.remove(optionalDishListItem.get());
+                    Optional<Dish> optionalDish = dishService.findDishById(optionalDishListItem.get().getDishId());
+                    optionalDish.ifPresent(availableDishes::add);
+                    session.setAttribute(AVAILABLE_DISHES, availableDishes);
                     session.setAttribute(ORDER_DISH_LIST_ITEMS, dishListItems);
                 }
                 BigDecimal finalPrice = orderService.countOrderFinalPrice(order.getId()) ;
                 order.setFinalPrice(finalPrice);
                 orderService.update(order);
                 dishesAmount = orderService.countDishesAmount(order.getId());
+
                 session.setAttribute(ORDER, order);
             }
             switch (user.getRole()) {
                 case ADMIN: {
-                    router = new Router(ORDER + "?id_order=" + orderIdLine, REDIRECT);
+                    router = new Router(ORDER_PAGE + "?id_order=" + orderIdLine, REDIRECT);
                     break;
                 }
                 case CUSTOMER: {
@@ -74,7 +86,8 @@ public class DeleteOrderDishCommand implements Command {
                 }
             }
         } catch (ServiceException e) {
-            e.printStackTrace();
+            logger.error("Impossible to delete dish list item with id: "
+                    + dishListItemIdLine + " to order with id: " + orderIdLine, e);
             session.setAttribute(EXCEPTION, e);
             router = new Router(ERROR_PAGE, FORWARD);
         }

@@ -198,25 +198,42 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Boolean updateOrderFinalPrice(long id) throws DaoException {
         BigDecimal finalPrice = new BigDecimal("0.00");
-        Boolean successfulOperation = false;
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(COUNT_ORDER_FINAL_PRICE);
-            statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
+        boolean successfulOperation = false;
+        Connection connection = null;
+        try {
+            try {
+                connection = DatabaseConnectionPool.getInstance().acquireConnection();
+                connection.setAutoCommit(false);
 
-            if (resultSet.next()) {
-                finalPrice = resultSet.getBigDecimal(1);
-                finalPrice = finalPrice == null ? new BigDecimal("0.00") : finalPrice;
-                statement = connection.prepareStatement(UPDATE_ORDER_FINAL_PRICE);
-                statement.setBigDecimal(1, finalPrice);
-                statement.setLong(2, id);
-                Integer rowsNum = statement.executeUpdate();
-                successfulOperation = rowsNum != 0;
+                PreparedStatement countStatement = connection.prepareStatement(COUNT_ORDER_FINAL_PRICE);
+                countStatement.setLong(1, id);
+                ResultSet resultSet = countStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    finalPrice = resultSet.getBigDecimal(1);
+                    finalPrice = finalPrice == null ? new BigDecimal("0.00") : finalPrice;
+                    PreparedStatement updateStatement = connection.prepareStatement(UPDATE_ORDER_FINAL_PRICE);
+                    updateStatement.setBigDecimal(1, finalPrice);
+                    updateStatement.setLong(2, id);
+                    int rowsNum = updateStatement.executeUpdate();
+                    successfulOperation = rowsNum != 0;
+                }
+
+                connection.commit();
+            } catch (DatabaseException | SQLException e) {
+                if (connection != null) {
+                    connection.rollback();
+                }
+                logger.error("Impossible to reinstall final price for order with id: " + id, e);
+                throw new DaoException("Impossible to reinstall final price for order with id: " + id, e);
+            } finally {
+                if (connection != null) {
+                    connection.setAutoCommit(false);
+                }
             }
-        } catch (DatabaseException | SQLException e) {
-            logger.error("Impossible to reinstall final price for order with id: " + id, e);
-            throw new DaoException("Impossible to reinstall final price for order with id: " + id, e);
+        } catch (SQLException transactionException) {
+            logger.error("Impossible to rollback transaction", transactionException);
+            throw new DaoException("Impossible to rollback transaction", transactionException);
         }
         return successfulOperation;
     }
@@ -256,7 +273,7 @@ public class OrderDaoImpl implements OrderDao {
             statement.setInt(6,order.getPaymentType().ordinal()+1);
             statement.setBigDecimal(7, order.getBonusesInPayment());
             statement.setBigDecimal(8, order.getFinalPrice());
-            Integer rowsNum = statement.executeUpdate();
+            int rowsNum = statement.executeUpdate();
             successfulOperation = rowsNum != 0;
         } catch (DatabaseException | SQLException e) {
             logger.error("Impossible to insert order with id: " + order.getId(), e);
@@ -281,7 +298,7 @@ public class OrderDaoImpl implements OrderDao {
                 statement.setBigDecimal(7, order.getBonusesInPayment());
                 statement.setBigDecimal(8, order.getFinalPrice());
                 statement.setLong(9, order.getId());
-                Integer rowsNum = statement.executeUpdate();
+                int rowsNum = statement.executeUpdate();
                 successfulOperation = rowsNum != 0;
             } catch (DatabaseException | SQLException e) {
                 logger.error("Impossible to update order with id: " + order.getId(), e);
@@ -396,7 +413,7 @@ public class OrderDaoImpl implements OrderDao {
         if (paymentTypes.length != 0){
             filterString.append(makeFilterGroup(ORDER_PAYMENT_TYPE, paymentTypes)).append(" AND ");
         }
-        Integer wherePos = requestLine.indexOf(WHERE_LINE);
+        int wherePos = requestLine.indexOf(WHERE_LINE);
         StringBuilder resultString = new StringBuilder(requestLine);
         resultString.insert(wherePos + WHERE_LINE.length(), filterString);
         return resultString.toString();

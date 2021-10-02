@@ -47,6 +47,15 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    public List<Dish> findAllAvailable() throws ServiceException {
+        try {
+            return dishDao.findAllAvailable();
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public List<Dish> findOrderDishes(long id) throws ServiceException {
         try {
             return dishDao.findOrderDishes(id);
@@ -121,7 +130,8 @@ public class DishServiceImpl implements DishService {
             }
             return ingredients;
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            logger.error("Impossible to find unused dish ingredients", e);
+            throw new ServiceException("Impossible to find unused dish ingredients", e);
         }
     }
 
@@ -160,7 +170,8 @@ public class DishServiceImpl implements DishService {
             return dishDao.countFilteredDishes(name, minPriceLine, maxPriceLine, minCaloriesAmountLine, maxCaloriesAmountLine,
                     minAmountGramsLine, maxAmountGramsLine, states);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            logger.error("Impossible to count filtered dishes", e);
+            throw new ServiceException("Impossible to count filtered dishes", e);
         }
     }
 
@@ -181,7 +192,8 @@ public class DishServiceImpl implements DishService {
             return dishDao.findFilteredDishes(name, minPriceLine, maxPriceLine, minCaloriesAmountLine, maxCaloriesAmountLine,
                     minAmountGramsLine, maxAmountGramsLine, states, minPos, maxPos);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            logger.error("Impossible to find filtered dishes", e);
+            throw new ServiceException("Impossible to find filtered dishes", e);
         }
     }
 
@@ -209,7 +221,8 @@ public class DishServiceImpl implements DishService {
             return dishDao.countFilteredDishes(name, minPriceLine, maxPriceLine, minCaloriesAmountLine, maxCaloriesAmountLine,
                     minAmountGramsLine, maxAmountGramsLine, states);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            logger.error("Impossible to count filtered dishes", e);
+            throw new ServiceException("Impossible to count filtered dishes", e);
         }
     }
 
@@ -237,7 +250,8 @@ public class DishServiceImpl implements DishService {
             return dishDao.findFilteredDishes(name, minPriceLine, maxPriceLine, minCaloriesAmountLine, maxCaloriesAmountLine,
                     minAmountGramsLine, maxAmountGramsLine, states, minPos, maxPos);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            logger.error("Impossible to find filtered dishes", e);
+            throw new ServiceException("Impossible to find filtered dishes", e);
         }
     }
 }

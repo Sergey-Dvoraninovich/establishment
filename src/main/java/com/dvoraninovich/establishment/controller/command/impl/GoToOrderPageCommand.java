@@ -41,6 +41,7 @@ public class GoToOrderPageCommand implements Command {
         Optional<Order> optionalOrder = Optional.empty();
         Optional<User> optionalOrderUser = Optional.empty();
         List<DishListItem> dishListItems = new ArrayList<>();
+        List<Dish> availableDishes = new ArrayList<>();
         HashMap<Long, Dish> dishesHashMap = new HashMap<>();
 
         User user = (User) session.getAttribute(USER);
@@ -60,6 +61,10 @@ public class GoToOrderPageCommand implements Command {
                     dishesHashMap.put(dish.getId(), dish);
                 }
                 optionalOrderUser = userService.findById(order.getUserId());
+                availableDishes = dishService.findAllAvailable();
+                for (Dish dish: dishes) {
+                    availableDishes.remove(dish);
+                }
             }
         } catch (ServiceException e) {
             logger.info("Impossible to find order with id: " + orderIdLine, e);
@@ -68,6 +73,7 @@ public class GoToOrderPageCommand implements Command {
         session.setAttribute(ORDER_DISH_LIST_ITEMS, dishListItems);
         session.setAttribute(ORDER_DISHES_MAP, dishesHashMap);
         session.setAttribute(ORDER_USER, optionalOrderUser.get());
+        session.setAttribute(AVAILABLE_DISHES, availableDishes);
         return new Router(ORDER_PAGE + "?id=" + orderIdLine, REDIRECT);
     }
 }
