@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,7 @@ public class DecrementOrderDishCommand implements Command {
         Long dishesAmount = (Long) session.getAttribute(DISHES_IN_BASKET);
         List<DishListItem> dishListItems = (List<DishListItem>) session.getAttribute(ORDER_DISH_LIST_ITEMS);
         List<Dish> availableDishes = (List<Dish>) session.getAttribute(AVAILABLE_DISHES);
+        availableDishes = availableDishes == null ? new ArrayList<>() : availableDishes;
         String dishListItemIdLine = request.getParameter(ID_DISH_LIST_ITEM);
         String orderIdLine = request.getParameter(ID_ORDER);
 

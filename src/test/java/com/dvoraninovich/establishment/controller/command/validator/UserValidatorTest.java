@@ -136,6 +136,26 @@ public class UserValidatorTest {
         Assert.assertFalse(result);
     }
 
+    @DataProvider(name = "validBonusesAmount")
+    public static Object[][] validBonusesAmount() {
+        return new Object[][] {{"0"}, {"10"}};
+    }
+    @Test(dataProvider = "validBonusesAmount")
+    public void orderValidatorBonusesAmountTest(String bonusesAmountLine) {
+        boolean result = validator.validateBonusesAmount(bonusesAmountLine);
+        Assert.assertTrue(result);
+    }
+
+    @DataProvider(name = "invalidBonusesAmount")
+    public static Object[][] invalidBonusesAmount() {
+        return new Object[][] {{"-1"}, {"10b"}, {"145.4"}};
+    }
+    @Test(dataProvider = "invalidBonusesAmount")
+    public void orderValidatorBonusesAmountInvalidTest(String bonusesAmountLine) {
+        boolean result = validator.validateBonusesAmount(bonusesAmountLine);
+        Assert.assertFalse(result);
+    }
+
     @DataProvider(name = "validFilterParameters")
     public static Object[][] validFilterParameters() {
         return new Object[][] {{"Alex", "mail@gmail.com", "+375299970202", "1111222233334444",

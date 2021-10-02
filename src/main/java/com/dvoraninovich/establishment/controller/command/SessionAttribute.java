@@ -28,6 +28,7 @@ public final class SessionAttribute {
     public static final String IMPOSSIBLE_TO_UPLOAD_USER_PHOTO = "impossible_to_upload_user_photo";
     public static final String USER_PROFILE_ID = "user_profile_id";
     public final static String LOCALE = "locale";
+    public final static String CHANGE_BONUSES_AMOUNT_ERROR = "change_bonuses_amount_error";
 
     public static final String DIFFERENT_PASSWORDS = "different_passwords";
     public static final String USER_ALREADY_AUTHENTICATED = "user_already_authenticated";
@@ -76,8 +77,8 @@ public final class SessionAttribute {
     public static final String DISHES_IN_BASKET = "dishes_in_basket";
     public static final String ID_DISH_LIST_ITEM = "id_dish_list_item";
     public static final String TOO_MANY_BONUSES = "too_many_bonuses";
-    public static final String NOT_ENOUGH_BONUSES = "NOT_ENOUGH_BONUSES";
-    public static final String YOU_SHOULD_CHOOSE_SOMETHING = "you_should_buy_something";
+    public static final String NOT_ENOUGH_BONUSES = "not_enough_bonuses";
+    public static final String YOU_SHOULD_CHOOSE_SOMETHING = "you_should_choose_something";
     public static final String EDIT_ORDER_ERROR = "edit_order_error";
     public static final String AVAILABLE_DISHES = "available_dishes";
     public static final String ADD_DISH_TO_ORDER_ERROR = "add_dish_to_order_error";

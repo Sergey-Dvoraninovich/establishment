@@ -7,6 +7,7 @@ import com.dvoraninovich.establishment.model.service.impl.UserServiceImpl;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -23,6 +24,7 @@ public class UserValidator {
     private static final String MAIL_REGEXP = "^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}$";
     private static final String PHONE_NUM_REGEXP = "^\\+\\d{12}$";
     private static final String CARD_NUM_REGEXP = "^\\d{16}$";
+    private static final String BONUSES_AMOUNT_REGEXP = "^\\d+$";
     private static final String CODE_REGEXP = "^[a-zA-Z0-9]{16}$";
 
     private static final String FILTER_LOGIN_REGEXP = "^[A-Za-z_]{1,25}$";
@@ -74,6 +76,16 @@ public class UserValidator {
             currentResult = true;
         }
         return currentResult;
+    }
+
+    public boolean validateBonusesAmount(String bonusesAmountLine){
+        boolean result;
+        result = Pattern.matches(BONUSES_AMOUNT_REGEXP, bonusesAmountLine);
+        if (result) {
+            BigDecimal minPrice = new BigDecimal(bonusesAmountLine);
+            result = minPrice.compareTo(new BigDecimal("0")) >= 0;
+        }
+        return result;
     }
 
     public HashMap<String, Boolean> validateUserData(String login, String password, String mail,

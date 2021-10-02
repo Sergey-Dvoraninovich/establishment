@@ -46,6 +46,28 @@
                 </div>
             </div>
         </c:if>
+        <c:if test="${sessionScope.user.role == 'ADMIN' && sessionScope.user_profile.role == 'CUSTOMER'}">
+        <c:url value="/ApiController?command=change_user_bonuses_amount" var="change_user_bonuses_amount"/>
+        <div class="block-item">
+        <form action="${change_user_bonuses_amount}" method="post">
+            <div class="form-row">
+                <input type="hidden" id="id" name="id" value="${sessionScope.user_profile.id}"/>
+                <label for="bonuses_amount"><fmt:message key="basket.customer_bonuses" /></label>
+                <input type="number" min="0" step="1" name="bonuses_amount" id="bonuses_amount"
+                       value="${sessionScope.user_profile.bonusesAmount}"
+                       placeholder="${sessionScope.user_profile.bonusesAmount}"/>
+                <c:if test="${sessionScope.change_bonuses_amount_error}">
+                    <div class="local-error">
+                        <p><fmt:message key="profile.change_bonuses_amount_error" /><p>
+                    </div>
+                </c:if>
+            </div>
+            <div>
+                <input type="submit" value="${edit}"/>
+            </div>
+        </form>
+        </div>
+        </c:if>
         <c:url value="/ApiController?command=upload_user_photo&id=${sessionScope.user_profile.id}" var="edit_user_photo"/>
         <div class="block-item">
             <div class="block-item-header">
@@ -532,6 +554,20 @@
         transition:.3s;
     }
     input[type=password]:focus{
+        border-color:#a15566;
+        box-shadow:0 0 8px 0 #a15566;
+    }
+    input[type=number]{
+        width:100%;
+        border:2px solid #aaa;
+        border-radius:5px;
+        margin:8px 0;
+        outline:none;
+        padding:8px;
+        box-sizing:border-box;
+        transition:.3s;
+    }
+    input[type=number]:focus{
         border-color:#a15566;
         box-shadow:0 0 8px 0 #a15566;
     }

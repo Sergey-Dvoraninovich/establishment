@@ -8,6 +8,8 @@
 <c:set var="bonuses_in_payment">${sessionScope.order.bonusesInPayment}</c:set>
 <c:set var="recalculate_price_info"><fmt:message key="basket.recalculate_price"/></c:set>
 <c:set var="basket_price"><fmt:message key="basket.buy_for"/> ${sessionScope.order.finalPrice}</c:set>
+<c:set var="final_price"><fmt:message key="basket.final_price"/>: ${sessionScope.order.finalPrice}</c:set>
+<c:set var="user_status">${sessionScope.user.status}</c:set>
 
 <html>
 <head>
@@ -106,10 +108,13 @@
                         </div>
                     </c:if>
                 </div>
-                <c:url value="/ApiController?command=recalculate_price" var="recalculate_price"/>
-                <a href="${recalculate_price}"><fmt:message key="basket.recalculate_price"/></a>
-                <c:url value="/ApiController?command=recalculate_price&id_order=${sessionScope.order.id}" var="recalculate_price"/>
+                <c:if test="${user_status != 'CONFIRMED'}">
+                    <div class="form-row">
+                            ${final_price}
+                    </div>
+                </c:if>
                 <div>
+                    <c:url value="/ApiController?command=recalculate_price&id_order=${sessionScope.order.id}" var="recalculate_price"/>
                     <input formaction="${recalculate_price}" formmethod="post"
                            type="submit" value="${recalculate_price_info}"/>
                 </div>
@@ -123,11 +128,13 @@
                         <p><fmt:message key="basket.not_enough_bonuses"/></p>
                     </div>
                 </c:if>
-                <c:url value="/ApiController?command=buy_basket" var="buy_basket"/>
-                <div>
-                    <input formaction="${buy_basket}" formmethod="post"
-                           type="submit" value="${basket_price}"/>
-                </div>
+                <c:if test="${user_status == 'CONFIRMED'}">
+                    <c:url value="/ApiController?command=buy_basket" var="buy_basket"/>
+                    <div>
+                        <input formaction="${buy_basket}" formmethod="post"
+                               type="submit" value="${basket_price}"/>
+                    </div>
+                </c:if>
                 <c:if test="${sessionScope.you_should_choose_something}">
                     <div class="local-error">
                         <p><fmt:message key="basket.you_should_order_smth"/></p>

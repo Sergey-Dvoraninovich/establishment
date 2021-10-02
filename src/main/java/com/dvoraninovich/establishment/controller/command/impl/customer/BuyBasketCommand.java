@@ -13,6 +13,8 @@ import com.dvoraninovich.establishment.model.service.UserService;
 import com.dvoraninovich.establishment.model.service.impl.DishListItemServiceImpl;
 import com.dvoraninovich.establishment.model.service.impl.OrderServiceImpl;
 import com.dvoraninovich.establishment.model.service.impl.UserServiceImpl;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -32,6 +34,7 @@ import static com.dvoraninovich.establishment.model.entity.OrderState.CREATED;
 import static com.dvoraninovich.establishment.model.entity.PaymentType.CARD;
 
 public class BuyBasketCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(BuyBasketCommand.class);
     private DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
     private OrderService orderService = OrderServiceImpl.getInstance();
     private UserService userService = UserServiceImpl.getInstance();
@@ -40,9 +43,7 @@ public class BuyBasketCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
-        Optional<DishListItem> optionalDishListItem = Optional.empty();
-        DishListItem dishListItem;
-        Optional<Order> optionalBasket = Optional.empty();
+        Optional<Order> optionalBasket;
         Order basket;
 
         session.setAttribute(NOT_ENOUGH_BONUSES, false);
@@ -85,7 +86,7 @@ public class BuyBasketCommand implements Command {
             }
             router = new Router(CUSTOMER_BASKET_PAGE, REDIRECT);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            logger.error("Impossible to buy basket for user with id" + user.getId(), e);
             session.setAttribute(EXCEPTION, e);
             router = new Router(ERROR_PAGE, FORWARD);
         }

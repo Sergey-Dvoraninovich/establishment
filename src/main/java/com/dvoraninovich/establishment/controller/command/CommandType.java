@@ -49,5 +49,6 @@ public enum CommandType {
     SEND_ACTIVATION_CODE,
     SET_LOCALE,
     ADD_DISH_TO_ORDER,
+    CHANGE_USER_BONUSES_AMOUNT,
 
 }
