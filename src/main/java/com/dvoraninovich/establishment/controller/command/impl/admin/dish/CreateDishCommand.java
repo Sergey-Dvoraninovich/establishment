@@ -7,12 +7,16 @@ import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.Dish;
 import com.dvoraninovich.establishment.model.service.DishService;
 import com.dvoraninovich.establishment.model.service.impl.DishServiceImpl;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
@@ -21,6 +25,7 @@ import static com.dvoraninovich.establishment.controller.command.Router.RouterTy
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
 public class CreateDishCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(CreateDishCommand.class);
     private DishService service = DishServiceImpl.getInstance();
     private DishValidator validator = DishValidator.getInstance();
     private final static String DEFAULT_DISH_PHOTO = "default_dish.png";
@@ -41,7 +46,7 @@ public class CreateDishCommand implements Command {
         String amountGramsLine = request.getParameter(AMOUNT_GRAMS);
         String caloriesAmountLine = request.getParameter(CALORIES_AMOUNT);
 
-        HashMap<String, Boolean> validationResult = new HashMap<>();
+        HashMap<String, Boolean> validationResult;
         validationResult = validator.validateDishData(name, priceLine, amountGramsLine, caloriesAmountLine);
 
         Set<String> validationMessages = validationResult.keySet();
@@ -64,7 +69,7 @@ public class CreateDishCommand implements Command {
                 .build();
 
         try {
-            boolean creationResult = false;
+            boolean creationResult;
             creationResult = service.addDish(dish);
             if (creationResult) {
                 List<Dish> dishes = service.findAll();
@@ -77,7 +82,7 @@ public class CreateDishCommand implements Command {
             }
         } catch (ServiceException e) {
             e.printStackTrace();
-            session.setAttribute(EXCEPTION, e);
+            logger.error("Impossible to create dish", e);
             router = new Router(ERROR_PAGE, FORWARD);
         }
         return router;

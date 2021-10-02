@@ -23,7 +23,7 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 
 public class SetUsersFilterParametersCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SetOrdersFilterParametersCommand.class);
-    private static final Long ORDERS_PAGE_ITEMS_AMOUNT = Long.valueOf(10);
+    private static final Long ORDERS_PAGE_ITEMS_AMOUNT = 10L;
     UserValidator validator = UserValidator.getInstance();
     UserService service = UserServiceImpl.getInstance();
 
@@ -65,7 +65,7 @@ public class SetUsersFilterParametersCommand implements Command {
 
         try {
             List<User> users;
-            Long minPos = Long.valueOf(1);
+            Long minPos = 1L;
             Long maxPos = ORDERS_PAGE_ITEMS_AMOUNT;
 
             Long totalAmount = service.countUsers(loginLine, mailLine,

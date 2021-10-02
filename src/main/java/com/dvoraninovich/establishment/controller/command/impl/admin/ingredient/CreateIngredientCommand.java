@@ -7,11 +7,11 @@ import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.Ingredient;
 import com.dvoraninovich.establishment.model.service.IngredientService;
 import com.dvoraninovich.establishment.model.service.impl.IngredientServiceImpl;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
@@ -21,6 +21,7 @@ import static com.dvoraninovich.establishment.controller.command.Router.RouterTy
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
 public class CreateIngredientCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(CreateIngredientCommand.class);
     private IngredientService service = IngredientServiceImpl.getInstance();
     private IngredientValidator validator = IngredientValidator.getInstance();
 
@@ -35,7 +36,7 @@ public class CreateIngredientCommand implements Command {
 
         String name = request.getParameter(NAME);
 
-        List<String> validationMessages = new ArrayList<>();
+        List<String> validationMessages;
         validationMessages = validator.validateIngredient(name);
 
         if (!validationMessages.isEmpty()) {
@@ -50,10 +51,9 @@ public class CreateIngredientCommand implements Command {
 
 
         try {
-            boolean creationResult = false;
+            boolean creationResult;
             creationResult = service.addIngredient(ingredient);
             if (creationResult) {
-                //TODO work with it
                 List<Ingredient> ingredients = service.findAll();
                 session.setAttribute("ingredients", ingredients);
                 router = new Router(INGREDIENTS_PAGE, REDIRECT);
@@ -63,7 +63,7 @@ public class CreateIngredientCommand implements Command {
                 router = new Router(CREATE_INGREDIENT_PAGE, REDIRECT);
             }
         } catch (ServiceException e) {
-            e.printStackTrace();
+            logger.error("Impossible to create ingredient", e);
             session.setAttribute(EXCEPTION, e);
             router = new Router(ERROR_PAGE, FORWARD);
         }

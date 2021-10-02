@@ -8,6 +8,8 @@ import com.dvoraninovich.establishment.model.entity.Dish;
 import com.dvoraninovich.establishment.model.entity.Ingredient;
 import com.dvoraninovich.establishment.model.service.DishService;
 import com.dvoraninovich.establishment.model.service.impl.DishServiceImpl;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,17 +26,15 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.INGREDIENTS;
 
 public class EditDishCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(EditDishCommand.class);
     private DishService service = DishServiceImpl.getInstance();
     private DishValidator validator = DishValidator.getInstance();
-    private final static String DEFAULT_DISH_PHOTO = "default_dish.png";
 
     @Override
     public Router execute(HttpServletRequest request) {
         Router router;
         HttpSession session = request.getSession();
-        List<Ingredient> ingredients = new ArrayList<>();
-        Optional<Dish> optionalDish = Optional.empty();
-        Long dishId = Long.valueOf(0);
+        long dishId;
 
         session.setAttribute(INVALID_DISH_NAME, false);
         session.setAttribute(INVALID_DISH_PRICE, false);
@@ -75,7 +75,7 @@ public class EditDishCommand implements Command {
         .build();
 
         try {
-            boolean creationResult = false;
+            boolean creationResult;
             creationResult = service.editDish(dish);
             if (creationResult) {
                 session.setAttribute(DISH, dish);
@@ -87,6 +87,7 @@ public class EditDishCommand implements Command {
             }
         } catch (ServiceException e) {
             e.printStackTrace();
+            logger.info("Impossible to edit dish with id:" + dishId, e);
             session.setAttribute(EXCEPTION, e);
             router = new Router(ERROR_PAGE, FORWARD);
         }

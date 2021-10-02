@@ -24,16 +24,17 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
+import static com.dvoraninovich.establishment.controller.command.Router.RouterType.FORWARD;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.model.entity.Role.CUSTOMER;
 
 public class GoToOrderPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToCustomerBasketCommand.class);
-    OrderService orderService = OrderServiceImpl.getInstance();
-    DishService dishService = DishServiceImpl.getInstance();
-    UserService userService = UserServiceImpl.getInstance();
-    DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
+    private OrderService orderService = OrderServiceImpl.getInstance();
+    private DishService dishService = DishServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
+    private DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -68,6 +69,8 @@ public class GoToOrderPageCommand implements Command {
             }
         } catch (ServiceException e) {
             logger.info("Impossible to find order with id: " + orderIdLine, e);
+            session.setAttribute(EXCEPTION, e);
+            return new Router(ERROR_PAGE, FORWARD);
         }
         session.setAttribute(ORDER, optionalOrder.get());
         session.setAttribute(ORDER_DISH_LIST_ITEMS, dishListItems);

@@ -25,7 +25,7 @@ import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
 
 public class SetOrdersFilterParametersCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SetOrdersFilterParametersCommand.class);
-    private static final Long ORDERS_PAGE_ITEMS_AMOUNT = Long.valueOf(10);
+    private static final Long ORDERS_PAGE_ITEMS_AMOUNT = 10L;
     OrderValidator validator = OrderValidator.getInstance();
     OrderService service = OrderServiceImpl.getInstance();
 
@@ -75,7 +75,7 @@ public class SetOrdersFilterParametersCommand implements Command {
 
         try {
             List<Order> orders = new ArrayList<>();
-            Long minPos = Long.valueOf(1);
+            Long minPos = 1L;
             Long maxPos = ORDERS_PAGE_ITEMS_AMOUNT;
 
             Long totalAmount = service.countFilteredOrders(userIdLine, minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines);

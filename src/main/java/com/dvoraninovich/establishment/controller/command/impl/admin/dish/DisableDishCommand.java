@@ -7,6 +7,8 @@ import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.Dish;
 import com.dvoraninovich.establishment.model.service.DishService;
 import com.dvoraninovich.establishment.model.service.impl.DishServiceImpl;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,6 +23,7 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.EXCEPTION;
 
 public class DisableDishCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(DisableDishCommand.class);
     private DishService service = DishServiceImpl.getInstance();
     private DishValidator validator = DishValidator.getInstance();
 
@@ -30,9 +33,9 @@ public class DisableDishCommand implements Command {
         HttpSession session = request.getSession();
 
         String dishIdLine = request.getParameter(DISH_ID);
-        Long dishId;
+        long dishId;
         if (validator.validateDishId(dishIdLine)) {
-            dishId = Long.valueOf(dishIdLine);
+            dishId = Long.parseLong(dishIdLine);
         }
         else {
             return new Router(DISH_PAGE + "?id=" + dishIdLine, REDIRECT);
@@ -48,6 +51,7 @@ public class DisableDishCommand implements Command {
             }
             router = new Router(DISH_PAGE + "?id=" + dishIdLine, REDIRECT);
         } catch (ServiceException e) {
+            logger.info("Impossible to disable dish with id:" + dishIdLine, e);
             session.setAttribute(EXCEPTION, e);
             router = new Router(ERROR_PAGE, FORWARD);
         }

@@ -22,8 +22,8 @@ import static com.dvoraninovich.establishment.model.entity.UserStatus.*;
 
 public class SendActivationCodeCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SendActivationCodeCommand.class);
-    UserService userService = UserServiceImpl.getInstance();
-    MailService mailService = MailServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
+    private MailService mailService = MailServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

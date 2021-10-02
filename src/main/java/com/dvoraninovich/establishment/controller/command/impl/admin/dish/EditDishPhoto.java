@@ -29,8 +29,8 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 
 public class EditDishPhoto implements Command {
     private static final Logger logger = LogManager.getLogger(EditDishPhoto.class);
-    DishService dishService = DishServiceImpl.getInstance();
-    FileUploadService fileUploadService = FileUploadServiceImpl.getInstance();
+    private DishService dishService = DishServiceImpl.getInstance();
+    private FileUploadService fileUploadService = FileUploadServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

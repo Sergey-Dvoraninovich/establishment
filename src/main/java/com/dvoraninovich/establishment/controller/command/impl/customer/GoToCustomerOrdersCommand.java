@@ -26,7 +26,7 @@ import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
 public class GoToCustomerOrdersCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToCustomerOrdersCommand.class);
     private static final Long ORDERS_PAGE_ITEMS_AMOUNT = Long.valueOf(10);
-    OrderService orderService = OrderServiceImpl.getInstance();
+    private OrderService orderService = OrderServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

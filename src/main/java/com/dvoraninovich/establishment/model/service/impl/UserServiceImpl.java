@@ -7,6 +7,7 @@ import com.dvoraninovich.establishment.model.dao.UserDao;
 import com.dvoraninovich.establishment.model.dao.impl.UserDaoImpl;
 import com.dvoraninovich.establishment.model.service.UserService;
 import com.dvoraninovich.establishment.util.CodeGenerator;
+import com.dvoraninovich.establishment.util.SaltGenerator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -14,16 +15,15 @@ import org.apache.log4j.Logger;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
-    private static final String SALT_ITEMS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final Integer SALT_LENGTH = 16;
     private static final Integer CODE_LENGTH = 16;
     private static UserServiceImpl instance;
     private UserDao userDao = UserDaoImpl.getInstance();
     private CodeGenerator codeGenerator = CodeGenerator.getInstance();
+    private SaltGenerator saltGenerator = SaltGenerator.getInstance();
 
     private UserServiceImpl() {
     }
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     public Optional<User> register(User user, String password) throws ServiceException {
         Optional<User> registeredUser = Optional.empty();
         String code = codeGenerator.getCode(CODE_LENGTH);
-        String salt = makeSalt(SALT_LENGTH);
+        String salt = saltGenerator.makeSalt(SALT_LENGTH);
         String passwordHash = makePasswordHash(password);
         passwordHash = makePasswordHash(passwordHash + salt);
         try {
@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
                     user.setId(id);
                     registeredUser = Optional.of(user);
 
+                    //TODO implement it
 //                    String subject = "Email confirmation ";
 //                    String mailBody = "Your verification code is: " + code;
 //                    mailService.sendMail(mail, subject, mailBody);
@@ -94,6 +95,7 @@ public class UserServiceImpl implements UserService {
             passwordHash = makePasswordHash(passwordHash + salt);
             return userDao.setPasswordById(id, passwordHash);
         } catch (DaoException e) {
+            logger.error("Impossible to set password for user with id: " + id, e);
             throw new ServiceException(e);
         }
     }
@@ -183,15 +185,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isLoginUnique(String login){
-        Optional<User> user;
-
+        boolean isSuccessful = false;
         try {
-            user = userDao.findUserByLogin(login);
+            Optional<User> optionalUser = userDao.findUserByLogin(login);
+            isSuccessful = optionalUser.isPresent();
         } catch (DaoException e) {
-            logger.error("Can't handle UserService.isLoginUnique", e);
-            return false;
+            logger.error("Impossible to find out uniqueness of login " + login, e);
         }
-        return !user.isPresent();
+        return isSuccessful;
     }
 
     @Override
@@ -206,17 +207,5 @@ public class UserServiceImpl implements UserService {
     private String makePasswordHash(String password){
         String passwordHash = DigestUtils.sha256Hex(password);
         return passwordHash;
-    }
-
-    private String makeSalt(Integer length) {
-        Random random = new Random();
-        int symbolsAmount = SALT_ITEMS.length();
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            int symbolPosition = random.nextInt(symbolsAmount);
-            char symbol = SALT_ITEMS.charAt(symbolPosition);
-            stringBuilder.append(symbol);
-        }
-        return stringBuilder.toString();
     }
 }

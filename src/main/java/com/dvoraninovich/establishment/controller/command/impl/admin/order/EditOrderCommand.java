@@ -63,8 +63,7 @@ public class EditOrderCommand implements Command {
         }
 
         try {
-            Long id = Long.valueOf(orderIdLine);
-
+            long id = Long.parseLong(orderIdLine);
             Optional<Order> optionalOrder = orderService.findById(id);
             if (!optionalOrder.isPresent()){
                 session.setAttribute(EDIT_ORDER_ERROR, true);

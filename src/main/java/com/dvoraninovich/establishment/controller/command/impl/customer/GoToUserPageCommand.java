@@ -22,7 +22,7 @@ import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
 
 public class GoToUserPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToUserPageCommand.class);
-    UserService userService = UserServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

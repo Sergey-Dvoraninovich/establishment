@@ -23,7 +23,7 @@ import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
 
 public class GoToDishesPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToDishesPageCommand.class);
-    private static final Long DISHES_PAGE_ITEMS_AMOUNT = Long.valueOf(10);
+    private static final Long DISHES_PAGE_ITEMS_AMOUNT = 10L;
     private static final String DISH_AVAILABLE = "AVAILABLE";
     private DishService dishService = DishServiceImpl.getInstance();
 

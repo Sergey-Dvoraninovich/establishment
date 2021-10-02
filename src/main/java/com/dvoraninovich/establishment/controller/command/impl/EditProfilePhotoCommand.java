@@ -29,14 +29,13 @@ import static com.dvoraninovich.establishment.model.entity.Role.CUSTOMER;
 
 public class EditProfilePhotoCommand implements Command {
     private static final Logger logger = LogManager.getLogger(EditDishPhoto.class);
-    UserService userService = UserServiceImpl.getInstance();
-    FileUploadService fileUploadService = FileUploadServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
+    private FileUploadService fileUploadService = FileUploadServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
-        Router router;
         String userIdLine = request.getParameter(ID);
-        Optional<User> optionalUser = Optional.empty();
+        Optional<User> optionalUser;
         HttpSession session = request.getSession();
 
         User user = (User) session.getAttribute(USER);
@@ -44,7 +43,7 @@ public class EditProfilePhotoCommand implements Command {
         session.setAttribute(CHANGE_PROFILE_PHOTO_ERROR, false);
 
         try {
-            Long userId = Long.valueOf(userIdLine);
+            long userId = Long.parseLong(userIdLine);
             optionalUser = userService.findById(userId);
             if (optionalUser.isPresent()) {
                 User targetUser = optionalUser.get();

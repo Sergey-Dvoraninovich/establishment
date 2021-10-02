@@ -24,10 +24,10 @@ import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
 
 public class SetDishesFilterParametersCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SetDishesFilterParametersCommand.class);
-    private static final Long DISHES_PAGE_ITEMS_AMOUNT = Long.valueOf(10);
+    private static final Long DISHES_PAGE_ITEMS_AMOUNT = 10L;
     private static final String DISH_AVAILABLE = "AVAILABLE";
-    DishValidator validator = DishValidator.getInstance();
-    DishService service = DishServiceImpl.getInstance();
+    private DishValidator validator = DishValidator.getInstance();
+    private DishService service = DishServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -73,7 +73,7 @@ public class SetDishesFilterParametersCommand implements Command {
         }
 
         try {
-            Long minPos = Long.valueOf(1);
+            Long minPos = 1L;
             Long maxPos = DISHES_PAGE_ITEMS_AMOUNT;
 
             Long totalAmount = service.countFilteredDishes(dishName, minPriceLine, maxPriceLine,

@@ -23,8 +23,8 @@ import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
 
 public class EditUserDataCommand implements Command {
     private static final Logger logger = LogManager.getLogger(EditUserDataCommand.class);
-    UserService userService = UserServiceImpl.getInstance();
-    UserValidator userValidator = UserValidator.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
+    private UserValidator userValidator = UserValidator.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -79,7 +79,7 @@ public class EditUserDataCommand implements Command {
                 router = new Router(USER_PAGE + "?id=" + idParameter + "&edit_form=true", REDIRECT);
             }
         } catch (ServiceException e) {
-            logger.info("Impossible to go to user page", e);
+            logger.info("Impossible to edit user data", e);
         }
         return router;
     }

@@ -31,16 +31,16 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 
 public class GoToCustomerBasketCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToCustomerBasketCommand.class);
-    OrderService orderService = OrderServiceImpl.getInstance();
-    DishService dishService = DishServiceImpl.getInstance();
-    UserService userService = UserServiceImpl.getInstance();
-    DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
+    private OrderService orderService = OrderServiceImpl.getInstance();
+    private DishService dishService = DishServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
+    private DishListItemService dishListItemService = DishListItemServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Optional<Order> order = Optional.empty();
-        Long dishesAmount = Long.valueOf(0);
+        Long dishesAmount = 0L;
         List<DishListItem> dishListItems = new ArrayList<>();
         HashMap<Long, Dish> dishesHashMap = new HashMap<>();
         User user = (User) session.getAttribute(USER);
