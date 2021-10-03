@@ -17,8 +17,7 @@ import static com.dvoraninovich.establishment.controller.command.PagePath.ERROR_
 import static com.dvoraninovich.establishment.controller.command.PagePath.INGREDIENTS_PAGE;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.FORWARD;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.EXCEPTION;
-import static com.dvoraninovich.establishment.controller.command.SessionAttribute.INGREDIENTS;
+import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 
 public class GoToIngredientsPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToIngredientsPageCommand.class);
@@ -27,9 +26,11 @@ public class GoToIngredientsPageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
+        String filterName = (String) session.getAttribute(INGREDIENTS_FILTER_NAME);
+        filterName = filterName == null ? "" : filterName;
         List<Ingredient> ingredients;
         try {
-            ingredients = service.findAll();
+            ingredients = service.findAllByName(filterName);
         } catch (ServiceException e) {
             logger.info("Impossible to find ingredients", e);
             session.setAttribute(EXCEPTION, e);

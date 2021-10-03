@@ -13,7 +13,8 @@ public class IngredientValidatorTest {
 
     @DataProvider(name = "validNames")
     public static Object[][] validNames() {
-        return new Object[][] {{"Carrot"}, {"Cheese"}, {"Milk"}};
+        return new Object[][] {{"Carrot"}, {"Cheese"}, {"Milk"},
+                {"Морковь"}, {"Цветная капуста"}, {"Томат"}, {"Молоко"}};
     }
     @Test(dataProvider = "validNames")
     public void ingredientValidatorTest(String name) {
@@ -24,7 +25,7 @@ public class IngredientValidatorTest {
 
     @DataProvider(name = "invalidNames")
     public static Object[][] invalidNames() {
-        return new Object[][] {{"alert('Carrot')"}, {"Cheese1"}, {"Milk!"}};
+        return new Object[][] {{"alert('Carrot')"}, {"Cheese1"}, {"Milk!"}, {" Капуста"}, {" Цветная капуста "}};
     }
     @Test(dataProvider = "invalidNames")
     public void ingredientValidatorInvalidTest(String name) {

@@ -50,6 +50,7 @@ public enum RolesCommandTypes {
             SET_LOCALE,
             ADD_DISH_TO_ORDER,
             CHANGE_USER_BONUSES_AMOUNT,
+            SET_INGREDIENTS_FILTER_PARAMETERS
     }),
     CUSTOMER(new CommandType[]{
             GO_TO_START_PAGE,

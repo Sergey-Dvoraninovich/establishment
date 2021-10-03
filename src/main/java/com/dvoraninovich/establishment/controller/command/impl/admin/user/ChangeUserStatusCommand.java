@@ -24,8 +24,8 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 
 public class ChangeUserStatusCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToUserPageCommand.class);
-    UserService userService = UserServiceImpl.getInstance();
-    UserValidator userValidator = UserValidator.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
+    private UserValidator userValidator = UserValidator.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

@@ -24,8 +24,8 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 public class SetUsersFilterParametersCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SetOrdersFilterParametersCommand.class);
     private static final Long ORDERS_PAGE_ITEMS_AMOUNT = 10L;
-    UserValidator validator = UserValidator.getInstance();
-    UserService service = UserServiceImpl.getInstance();
+    private UserValidator validator = UserValidator.getInstance();
+    private UserService service = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

@@ -26,8 +26,8 @@ import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
 public class SetOrdersFilterParametersCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SetOrdersFilterParametersCommand.class);
     private static final Long ORDERS_PAGE_ITEMS_AMOUNT = 10L;
-    OrderValidator validator = OrderValidator.getInstance();
-    OrderService service = OrderServiceImpl.getInstance();
+    private OrderValidator validator = OrderValidator.getInstance();
+    private OrderService service = OrderServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

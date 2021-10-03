@@ -14,8 +14,8 @@ import java.util.Optional;
 
 public class IngredientServiceImpl implements IngredientService {
     private static final Logger logger = LogManager.getLogger(IngredientServiceImpl.class);
-    private IngredientDao ingredientDao = IngredientDaoImpl.getInstance();
     private static IngredientServiceImpl instance;
+    private IngredientDao ingredientDao = IngredientDaoImpl.getInstance();
 
     private IngredientServiceImpl() {
     }
@@ -31,6 +31,20 @@ public class IngredientServiceImpl implements IngredientService {
     public List<Ingredient> findAll() throws ServiceException{
         try {
             return ingredientDao.findAll();
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Ingredient> findAllByName(String name) throws ServiceException {
+        try {
+            if (name.equals("")){
+                return ingredientDao.findAll();
+            }
+            else {
+                return ingredientDao.findAllByName(name);
+            }
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

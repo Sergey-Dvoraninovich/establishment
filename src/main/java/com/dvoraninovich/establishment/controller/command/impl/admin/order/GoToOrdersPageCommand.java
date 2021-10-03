@@ -26,7 +26,7 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 public class GoToOrdersPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToOrdersPageCommand.class);
     private static final Long ORDERS_PAGE_ITEMS_AMOUNT = 10L;
-    OrderService orderService = OrderServiceImpl.getInstance();
+    private OrderService orderService = OrderServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

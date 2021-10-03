@@ -29,9 +29,9 @@ import static com.dvoraninovich.establishment.model.entity.OrderState.*;
 
 public class EditOrderCommand implements Command {
     private static final Logger logger = LogManager.getLogger(EditOrderCommand.class);
-    OrderValidator orderValidator = OrderValidator.getInstance();
-    UserService userService = UserServiceImpl.getInstance();
-    OrderService orderService = OrderServiceImpl.getInstance();
+    private OrderValidator orderValidator = OrderValidator.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
+    private OrderService orderService = OrderServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

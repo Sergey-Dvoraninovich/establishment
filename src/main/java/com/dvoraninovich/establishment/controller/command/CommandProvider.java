@@ -6,6 +6,7 @@ import com.dvoraninovich.establishment.controller.command.impl.admin.dish.*;
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.CreateIngredientCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToCreateIngredientPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToIngredientsPageCommand;
+import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.SetIngredientsFilterParametersCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.order.*;
 import com.dvoraninovich.establishment.controller.command.impl.admin.user.ChangeUserBonusesAmount;
 import com.dvoraninovich.establishment.controller.command.impl.admin.user.ChangeUserStatusCommand;
@@ -69,6 +70,7 @@ public final class CommandProvider {
         commands.put(SET_LOCALE, new SetLocaleCommand());
         commands.put(ADD_DISH_TO_ORDER, new AddDishToOrderCommand());
         commands.put(CHANGE_USER_BONUSES_AMOUNT, new ChangeUserBonusesAmount());
+        commands.put(SET_INGREDIENTS_FILTER_PARAMETERS, new SetIngredientsFilterParametersCommand());
     }
 
     public static CommandProvider getInstance() {

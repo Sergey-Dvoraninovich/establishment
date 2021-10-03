@@ -104,6 +104,8 @@ public final class SessionAttribute {
     public static final String USERS_FILTER_MAIL = "users_filter_mail";
     public static final String USERS_FILTER_CARD_NUMBER = "users_filter_card_number";
 
+    public static final String INGREDIENTS_FILTER_NAME = "ingredients_filter_name";
+
     public static final String INVALID_USER_STATUS = "invalid_user_status";
     public static final String INVALID_USER_ROLE = "invalid_user_role";
     public static final String INVALID_ORDER_STATES = "invalid_order_states";

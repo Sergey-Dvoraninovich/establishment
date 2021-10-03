@@ -19,6 +19,15 @@ public interface IngredientService {
     List<Ingredient> findAll() throws ServiceException;
 
     /**
+     * Find all by name.
+     *
+     * @param name the name of ingredient
+     * @return the list of ingredients
+     * @throws ServiceException the service exception
+     */
+    List<Ingredient> findAllByName(String name) throws ServiceException;
+
+    /**
      * Find ingredient by id.
      *
      * @param id the id

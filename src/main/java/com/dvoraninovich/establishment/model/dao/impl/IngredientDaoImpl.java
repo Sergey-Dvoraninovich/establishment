@@ -4,6 +4,7 @@ import com.dvoraninovich.establishment.exception.DaoException;
 import com.dvoraninovich.establishment.exception.DatabaseException;
 import com.dvoraninovich.establishment.model.dao.IngredientDao;
 import com.dvoraninovich.establishment.model.entity.Ingredient;
+import com.dvoraninovich.establishment.model.entity.Order;
 import com.dvoraninovich.establishment.model.pool.DatabaseConnectionPool;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -23,6 +24,10 @@ public class IngredientDaoImpl implements IngredientDao {
     private static final String SELECT_ALL_INGREDIENT
             = "SELECT ingredients.id, ingredients.name "
             + "FROM ingredients;";
+    private static final String SELECT_ALL_INGREDIENT_BY_NAME
+            = "SELECT ingredients.id, ingredients.name "
+            + "FROM ingredients "
+            + "WHERE ingredients.name LIKE ?; ";
     private static final String SELECT_INGREDIENT_BY_ID
             = "SELECT ingredients.name "
             + "FROM ingredients "
@@ -114,6 +119,25 @@ public class IngredientDaoImpl implements IngredientDao {
             throw new DaoException("Impossible to find dish by id", e);
         }
         return Optional.of(ingredient);
+    }
+
+    @Override
+    public List<Ingredient> findAllByName(String name) throws DaoException {
+        List<Ingredient> ingredientsList = new ArrayList<>();
+        try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection()) {
+            name = new StringBuilder("%").append(name).append("%").toString();
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_INGREDIENT_BY_NAME);
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Ingredient ingredient = createIngredientFromResultSet(resultSet);
+                ingredientsList.add(ingredient);
+            }
+        } catch (SQLException | DatabaseException e) {
+            logger.error("Impossible to find all ingredients by name: " + name, e);
+            throw new DaoException("Impossible to find all ingredients by name: " + name, e);
+        }
+        return ingredientsList;
     }
 
     private Ingredient createIngredientFromResultSet(ResultSet resultSet) throws SQLException {

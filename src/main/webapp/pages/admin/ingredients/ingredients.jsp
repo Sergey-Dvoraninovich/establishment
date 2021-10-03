@@ -5,12 +5,40 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="locale" />
 
+<c:set var="find"><fmt:message key="filter.find" /></c:set>
+<c:set var="request_filter_name">${sessionScope.ingredients_filter_name}</c:set>
+
 <html>
 <head>
     <title><fmt:message key="admin.ingredients.title"/></title>
+    <link href="../../../css/pages/admin/ingredients/ingredients.css" rel="stylesheet">
 </head>
 <body>
 <jsp:include page="../../shared/header.jsp" />
+<div class="filter-line">
+    <c:url value="/ApiController?command=set_ingredients_filter_parameters" var="ingredients_filter"/>
+    <form action="${ingredients_filter}" method="post">
+        <div class="form-row">
+            <label for="request_filter_name"><fmt:message key="name" /></label>
+            <input type="text" name="request_filter_name" id="request_filter_name"
+                   pattern="^[A-Za-zА-Яа-я]{1}[A-Za-zА-Яа-я\s]{0,30}[A-Za-zА-Яа-я]{1}$"
+                   value="${request_filter_name}" placeholder="${request_filter_name}"/>
+            <c:if test="${sessionScope.invalid_filter_parameters}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.invalid_filter_params"/></p>
+                </div>
+            </c:if>
+        </div>
+        <div id="find-action">
+            <input type="submit" value="${find}"/>
+            <c:if test="${sessionScope.filter_error}">
+                <div class="local-error">
+                    <p><fmt:message key="filter.filter_error"/></p>
+                </div>
+            </c:if>
+        </div>
+    </form>
+</div>
 <div class="workspace-flex-container">
 <c:forEach var="ingredient" items="${sessionScope.ingredients}">
     <div class="flex-block">
@@ -23,43 +51,4 @@
 </div>
 </div>
 </body>
-<style>
-    a {
-        font-size: 15px;
-        text-decoration: none;
-    }
-    .workspace-flex-container {
-        margin-top: 35px;
-        display: flex;
-        flex-flow: row wrap;
-        align-content: space-around;
-    }
-    .flex-block {
-        flex-flow: row nowrap;
-        align-content: space-around;
-        color: white;
-        font-size: 15px;
-        margin: 15px;
-        padding: 9px 25px;
-        width: min-content;
-        border-radius: 5px;
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.15);
-    }
-    .flex-block:hover {
-        -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-        box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.25);
-    }
-    #add-button {
-        background-color: #a15566;
-    }
-    #add-button>a {
-        color: #ffffff;
-    }
-    #add-button:hover {
-        background-color: #804451;
-    }
-</style>
 </html>

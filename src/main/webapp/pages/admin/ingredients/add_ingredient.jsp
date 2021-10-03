@@ -18,7 +18,8 @@
   <h3><fmt:message key="admin.ingredients.add_ingredient.title"/></h3>
   <div class="form-row">
     <label for="name"><fmt:message key="admin.ingredients.add_ingredient.name" /></label>
-    <input type="text" name="name" id="name" value="${name}" pattern="^[A-za-z\\s]{2,20}$"/>
+    <input type="text" name="name" id="name" value="${name}"
+           pattern="^[A-Za-zА-Яа-я]{1}[A-Za-zА-Яа-я\s]{0,30}[A-Za-zА-Яа-я]{1}$"/>
     <c:if test="${sessionScope.invalid_ingredient_name}">
       <div class="local-error">
         <p><fmt:message key="admin.ingredients.add_ingredient.invalid_ingredient_name"/></p>
