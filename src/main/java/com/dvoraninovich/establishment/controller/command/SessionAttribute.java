@@ -120,6 +120,7 @@ public final class SessionAttribute {
     public static final String INVALID_MAX_PRICE = "invalid_max_price";
     public static final String INVALID_FILTER_PARAMETERS = "invalid_filter_parameters";
     public static final String FILTER_ERROR = "filter_error";
+    public static final String USER_ORDER_CREATION_ERROR = "user_order_creation_error";
     public static final String INVALID_USER_ID = "invalid_user_id";
 
     private SessionAttribute() {

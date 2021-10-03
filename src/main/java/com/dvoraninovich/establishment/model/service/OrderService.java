@@ -40,6 +40,15 @@ public interface OrderService {
     boolean insert(Order order) throws ServiceException;
 
     /**
+     * Insert and get id.
+     *
+     * @param order the order
+     * @return the long of id
+     * @throws ServiceException the service exception
+     */
+    long insertAndGetId(Order order) throws ServiceException;
+
+    /**
      * Update.
      *
      * @param order the order
@@ -57,6 +66,16 @@ public interface OrderService {
      * @throws ServiceException the service exception
      */
     Optional<Order> getCustomerBasket(long customerId) throws ServiceException;
+
+
+    /**
+     * Create default order for customer.
+     *
+     * @param customerId the customer id
+     * @return the optional of default customer order
+     * @throws ServiceException the service exception
+     */
+    Optional<Order> createDefaultOrderForCustomer(long customerId) throws ServiceException;
 
     /**
      * Count dishes amount.

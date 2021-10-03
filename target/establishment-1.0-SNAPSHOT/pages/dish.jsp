@@ -146,10 +146,6 @@
     </div>
 </div>
 <script>
-    document.getElementById('placer').onclick = function(){
-        document.getElementById('files').click();
-    }
-
     function handleFileSelect(evt) {
         var files = evt.target.files;
         for (var i = 0, f; f = files[i]; i++) {

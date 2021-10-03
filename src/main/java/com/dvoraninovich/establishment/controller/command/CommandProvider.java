@@ -8,10 +8,7 @@ import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.GoToIngredientsPageCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.ingredient.SetIngredientsFilterParametersCommand;
 import com.dvoraninovich.establishment.controller.command.impl.admin.order.*;
-import com.dvoraninovich.establishment.controller.command.impl.admin.user.ChangeUserBonusesAmount;
-import com.dvoraninovich.establishment.controller.command.impl.admin.user.ChangeUserStatusCommand;
-import com.dvoraninovich.establishment.controller.command.impl.admin.user.GoToUsersPageCommand;
-import com.dvoraninovich.establishment.controller.command.impl.admin.user.SetUsersFilterParametersCommand;
+import com.dvoraninovich.establishment.controller.command.impl.admin.user.*;
 import com.dvoraninovich.establishment.controller.command.impl.customer.*;
 
 import java.util.EnumMap;
@@ -71,6 +68,7 @@ public final class CommandProvider {
         commands.put(ADD_DISH_TO_ORDER, new AddDishToOrderCommand());
         commands.put(CHANGE_USER_BONUSES_AMOUNT, new ChangeUserBonusesAmount());
         commands.put(SET_INGREDIENTS_FILTER_PARAMETERS, new SetIngredientsFilterParametersCommand());
+        commands.put(CREATE_CUSTOMER_ORDER, new CreateCustomerOrderCommand());
     }
 
     public static CommandProvider getInstance() {

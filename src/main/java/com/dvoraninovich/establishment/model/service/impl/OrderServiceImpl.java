@@ -61,6 +61,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public long insertAndGetId(Order order) throws ServiceException {
+        try {
+            return orderDao.insertAndGetId(order);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public boolean update(Order order) throws ServiceException {
         try {
             return orderDao.update(order);
@@ -96,6 +105,32 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException("Impossible to find customer (id = " + customerId + ") basket or create new one", e);
         }
         return order;
+    }
+
+    @Override
+    public Optional<Order> createDefaultOrderForCustomer(long customerId) throws ServiceException {
+        Optional<Order> resultOrder = Optional.empty();
+        LocalDateTime defaultFinishTime = LocalDateTime.of(2038, 1, 19, 3, 14, 7);
+        try {
+            Order order = Order.builder()
+                    .setUserId(customerId)
+                    .setOrderState(OrderState.CREATED)
+                    .setOrderTime(LocalDateTime.now())
+                    .setFinishTime(defaultFinishTime)
+                    .setPaymentType(PaymentType.CASH)
+                    .setBonusesInPayment(new BigDecimal(0))
+                    .setFinalPrice(new BigDecimal("0.00"))
+                    .build();
+            long orderId = orderDao.insertAndGetId(order);
+            if (orderId != 0L){
+                order.setId(orderId);
+                resultOrder = Optional.of(order);
+            }
+            order.setId(orderId);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return resultOrder;
     }
 
     @Override

@@ -6,6 +6,7 @@
 <fmt:setBundle basename="locale" />
 
 <c:set var="edit"><fmt:message key="edit" /></c:set>
+<c:set var="new_order"><fmt:message key="profile.new_order"/></c:set>
 <c:set var="user_profile">${sessionScope.user_profile}</c:set>
 <c:set var="user">${sessionScope.user}</c:set>
 <c:set var="phone_num">${sessionScope.user_profile.phoneNumber}</c:set>
@@ -67,6 +68,25 @@
                 <input type="submit" value="${edit}"/>
             </div>
         </form>
+        </div>
+        <c:url value="/ApiController?command=create_customer_order" var="create_customer_order"/>
+        <div class="block-item">
+            <form action="${create_customer_order}" method="post">
+                <div class="form-row">
+                    <div class="block-item-text">
+                        <fmt:message key="profile.new_order_info"/>
+                    </div>
+                    <input type="hidden" id="user_id" name="user_id" value="${sessionScope.user_profile.id}"/>
+                    <div>
+                        <input type="submit" value="${new_order}"/>
+                    </div>
+                    <c:if test="${sessionScope.user_order_creation_error}">
+                        <div class="local-error">
+                            <p><fmt:message key="profile.user_order_creation_error"/></p>
+                        </div>
+                    </c:if>
+                </div>
+            </form>
         </div>
         </c:if>
         <c:url value="/ApiController?command=upload_user_photo&id=${sessionScope.user_profile.id}" var="edit_user_photo"/>
@@ -293,7 +313,7 @@
                 <div class="block-item-header">
                     <h2><fmt:message key="profile.mail_verification"/></h2>
                 </div>
-                <div class="block-item-text">
+                <div id="mail-verification-info" class="block-item-text">
                     <a><fmt:message key="profile.mail_verification_info"/></a>
                 </div>
                 <div class="block-item-action">
@@ -535,6 +555,9 @@
     #change-password-successful>a {
         color: #7ba05b;
     }
+    #change-password-info {
+        width: 450px;
+    }
     #icon{
         padding: 0px;
     }
@@ -726,6 +749,9 @@
         color: #ffffff;
         border:2px solid #cf361b;
         background-color: #cf361b;
+    }
+    #mail-verification-info {
+        width: 450px;
     }
 </style>
 </html>
