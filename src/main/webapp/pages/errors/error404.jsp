@@ -12,7 +12,7 @@
 </head>
 <body>
 <jsp:include page="../shared/header.jsp" />
-<div class="error-messages" style="margin-top: 50px">
+<div class="error-messages">
     <div class="error-message-title">
         <a><fmt:message key="error404"/></a>
     </div>

@@ -2,10 +2,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="locale" />
 
 <c:set var="find"><fmt:message key="filter.find" /></c:set>
-
 <c:set var="request_filter_login">${sessionScope.users_filter_login}</c:set>
 <c:set var="request_filter_mail">${sessionScope.users_filter_mail}</c:set>
 <c:set var="request_filter_phone_number">${sessionScope.users_filter_phone_number}</c:set>

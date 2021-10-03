@@ -3,10 +3,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctg" uri="establishment-tags" %>
 
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="locale" />
 
 <c:set var="find"><fmt:message key="filter.find" /></c:set>
-
 <c:set var="request_filter_min_price">${sessionScope.orders_filter_min_price}</c:set>
 <c:set var="request_filter_max_price">${sessionScope.orders_filter_max_price}</c:set>
 
