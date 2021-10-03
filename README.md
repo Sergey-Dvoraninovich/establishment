@@ -12,7 +12,7 @@ User status |
 --- |
 In registration |
 Confirmed |
-Deleted |
+Blocked |
 
 ### Guest ###
 * Authenticate in order to get Customer status
@@ -78,7 +78,7 @@ Deleted |
 	* Reset password
 	* Change user status
     * Watch user orders
-    * Change bonuses amount	
+    * Change user bonuses amount	
 * Change application language
 
 ![Database scheme](https://github.com/Sergey-Dvoraninovich/tmp_establishment/blob/master/schema/schema.png)
