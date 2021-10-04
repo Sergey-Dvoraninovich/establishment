@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
         return instance;
     }
 
+    @Override
     public Optional<User> authenticate(String login, String password) throws ServiceException {
         Optional<User> optionalUser = Optional.empty();
         try {
@@ -59,6 +60,7 @@ public class UserServiceImpl implements UserService {
         return optionalUser;
     }
 
+    @Override
     public Optional<User> register(User user, String password) throws ServiceException {
         Optional<User> registeredUser = Optional.empty();
         String code = codeGenerator.getCode(CODE_LENGTH);
@@ -75,7 +77,6 @@ public class UserServiceImpl implements UserService {
                 }
             }
         } catch (DaoException e) {
-            e.printStackTrace();
             logger.warn("User registration with login: " + user.getLogin() + " failed", e);
             throw new ServiceException(e);
         }
