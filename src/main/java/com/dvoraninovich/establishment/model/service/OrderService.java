@@ -88,6 +88,8 @@ public interface OrderService {
 
     /**
      * Count new order price.
+     * In order stored final price with bonuses amount
+     * So changing of bonuses amount affects on final price
      *
      * @param order            the order
      * @param newBonusesAmount the new bonuses amount

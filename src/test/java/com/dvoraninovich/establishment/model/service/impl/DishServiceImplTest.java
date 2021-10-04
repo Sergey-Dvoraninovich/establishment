@@ -11,6 +11,7 @@ import com.dvoraninovich.establishment.model.entity.Ingredient;
 import com.dvoraninovich.establishment.model.service.DishService;
 import org.mockito.Mockito;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -22,9 +23,10 @@ import java.util.stream.Collectors;
 
 public class DishServiceImplTest {
     private DishService service = DishServiceImpl.getInstance();
-    private final List<Ingredient> allIngredients;
+    private List<Ingredient> allIngredients;
 
-    {
+    @BeforeClass
+    public void init() {
         allIngredients = new ArrayList<>(Arrays.asList(
                 Ingredient.builder().setId(1L).setName("Pasta").build(),
                 Ingredient.builder().setId(2L).setName("Tomatoes").build(),
