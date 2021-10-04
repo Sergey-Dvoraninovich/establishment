@@ -74,7 +74,6 @@ public class SetOrdersFilterParametersCommand implements Command {
         }
 
         try {
-            List<Order> orders = new ArrayList<>();
             Long minPos = 1L;
             Long maxPos = ORDERS_PAGE_ITEMS_AMOUNT;
 
@@ -85,7 +84,8 @@ public class SetOrdersFilterParametersCommand implements Command {
 
             HashMap<Order, User> fullInfoHashMap;
             fullInfoHashMap = service.findFilteredOrdersWithUsers(userIdLine, minPriceLine, maxPriceLine, orderStatesLines, paymentTypesLines, minPos, maxPos);
-            orders.addAll(fullInfoHashMap.keySet());
+            List<Order> orders = new ArrayList<>(fullInfoHashMap.keySet());
+            orders.sort((o1, o2) -> o2.getOrderTime().compareTo(o1.getOrderTime()));
 
             session.setAttribute(ORDERS, orders);
             session.setAttribute(ORDERS_USERS_MAP, fullInfoHashMap);

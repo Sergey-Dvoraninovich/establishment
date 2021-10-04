@@ -70,7 +70,8 @@ public class GoToCustomerOrdersCommand implements Command {
 
             HashMap<Order, User> fullInfoHashMap;
             fullInfoHashMap = orderService.findFilteredOrdersWithUsers(userIdLine, minPrice, maxPrice, orderStatesList, paymentTypesList, minPos, maxPos);
-            orders.addAll(fullInfoHashMap.keySet());
+            orders = new ArrayList<>(fullInfoHashMap.keySet());
+            orders.sort((o1, o2) -> o2.getOrderTime().compareTo(o1.getOrderTime()));
 
             session.setAttribute(ORDERS, orders);
             session.setAttribute(USER_PROFILE_ID, Long.valueOf(userIdLine));
