@@ -1,4 +1,6 @@
 /.idea
 /establishmet.iml
 mail.properties
+db.properties
 /folder
+/target
