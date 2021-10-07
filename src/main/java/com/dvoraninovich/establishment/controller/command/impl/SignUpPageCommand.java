@@ -27,6 +27,7 @@ import static com.dvoraninovich.establishment.controller.command.Router.RouterTy
 
 public class SignUpPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SignUpPageCommand.class);
+    private static final String DEFAULT_PHOTO = "default_profile.png";
     private UserService service = UserServiceImpl.getInstance();
     private UserValidator validator = UserValidator.getInstance();
 
@@ -38,12 +39,12 @@ public class SignUpPageCommand implements Command {
 
         String login = request.getParameter(LOGIN);
         String password = request.getParameter(PASSWORD);
-        String repeat_password = request.getParameter(REPEAT_PASSWORD);
+        String repeatPassword = request.getParameter(REPEAT_PASSWORD);
         String mail = request.getParameter(MAIL);
         String phoneNum = request.getParameter(PHONE_NUM);
         String cardNum = request.getParameter(CARD_NUM);
 
-        if (!password.equals(repeat_password)) {
+        if (!password.equals(repeatPassword)) {
             session.setAttribute(DIFFERENT_PASSWORDS, true);
             router = new Router(SIGN_UP_PAGE, REDIRECT);
             return router;
@@ -75,7 +76,7 @@ public class SignUpPageCommand implements Command {
                         .setPhoneNumber(phoneNum)
                         .setRole(Role.CUSTOMER)
                         .setStatus(UserStatus.IN_REGISTRATION)
-                        .setPhoto("default_profile.png")
+                        .setPhoto(DEFAULT_PHOTO)
                         .setBonusesAmount(new BigDecimal(0))
                  .build();
 

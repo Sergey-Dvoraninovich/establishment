@@ -35,20 +35,10 @@ public class CommandAccessFilter implements Filter {
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
-        Role userRole;
-
-        if (user == null) {
-            userRole = GUEST;
-        } else {
-            userRole = user.getRole();
-        }
-
-        Boolean isValidCommand;
+        Role userRole = user == null ? GUEST : user.getRole();
+        
         try {
             CommandType.valueOf(commandName);
-            isValidCommand = true;
-        } catch (NullPointerException e) {
-            isValidCommand = false;
         }
         catch (IllegalArgumentException e) {
             logger.info("Illegal command " + commandName + " from user " + user);
@@ -56,29 +46,27 @@ public class CommandAccessFilter implements Filter {
             return;
         }
 
-        if (isValidCommand) {
-            CommandType command = CommandType.valueOf(commandName);
+        CommandType command = CommandType.valueOf(commandName);
 
-            List<CommandType> guestCommands = RolesCommandTypes.GUEST.getRoleCommandTypesList();
-            if (userRole.equals(GUEST) && !guestCommands.contains(command)) {
-                logger.info("Illegal access to command " + command + " by user " + user);
-                response.sendRedirect(INDEX_PAGE);
-                return;
-            }
+        List<CommandType> guestCommands = RolesCommandTypes.GUEST.getRoleCommandTypesList();
+        if (userRole.equals(GUEST) && !guestCommands.contains(command)) {
+            logger.info("Illegal access to command " + command + " by user " + user);
+            response.sendRedirect(INDEX_PAGE);
+            return;
+        }
 
-            List<CommandType> customerCommands = RolesCommandTypes.CUSTOMER.getRoleCommandTypesList();
-            if (userRole.equals(CUSTOMER) && !customerCommands.contains(command)) {
-                logger.info("Illegal access to command " + command + " by user " + user);
-                response.sendRedirect(INDEX_PAGE);
-                return;
-            }
+        List<CommandType> customerCommands = RolesCommandTypes.CUSTOMER.getRoleCommandTypesList();
+        if (userRole.equals(CUSTOMER) && !customerCommands.contains(command)) {
+            logger.info("Illegal access to command " + command + " by user " + user);
+            response.sendRedirect(INDEX_PAGE);
+            return;
+        }
 
-            List<CommandType> adminCommands = RolesCommandTypes.ADMIN.getRoleCommandTypesList();
-            if (userRole.equals(ADMIN) && !adminCommands.contains(command)) {
-                logger.info("Illegal access to command " + command + " by user " + user);
-                response.sendRedirect(INDEX_PAGE);
-                return;
-            }
+        List<CommandType> adminCommands = RolesCommandTypes.ADMIN.getRoleCommandTypesList();
+        if (userRole.equals(ADMIN) && !adminCommands.contains(command)) {
+            logger.info("Illegal access to command " + command + " by user " + user);
+            response.sendRedirect(INDEX_PAGE);
+            return;
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
