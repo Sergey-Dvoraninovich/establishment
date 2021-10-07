@@ -51,6 +51,14 @@ public interface UserService {
     Optional<User> findById(long userId) throws ServiceException;
 
     /**
+     * Gets admins info.
+     *
+     * @return the admins info
+     * @throws ServiceException the service exception
+     */
+    List<User> getAdminsInfo() throws ServiceException;
+
+    /**
      * Count users long.
      *
      * @param login        the login

@@ -51,6 +51,13 @@ public class UserDaoImpl implements UserDao {
             + "INNER JOIN statuses "
             + "ON users.id_status = statuses.id "
             + "LIMIT ?, ?;";
+    private static final String SELECT_ADMINS_INFO
+            = "SELECT users.login, users.mail, "
+            + "users.phone_number, users.photo "
+            + "FROM users "
+            + "INNER JOIN roles "
+            + "ON users.id_role = roles.id "
+            + "WHERE users.id_role = 1;";
     private static final String FIND_USER_BY_LOGIN
             = "SELECT users.id, users.login, users.mail, "
             + "statuses.status, roles.role, "
@@ -219,6 +226,36 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("Impossible to delete user with id: " + id, e);
         }
         return successfulOperation;
+    }
+
+    @Override
+    public List<User> getAdminsInfo() throws DaoException {
+        List<User> users = new ArrayList<>();
+        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
+        ) {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ADMINS_INFO);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String login = resultSet.getString(USER_LOGIN);
+                String mail = resultSet.getString(USER_MAIL);
+                String phone_number = resultSet.getString(USER_PHONE_NUMBER);
+                String photo = resultSet.getString(USER_PHOTO);
+
+                User user = User.builder()
+                        .setLogin(login)
+                        .setMail(mail)
+                        .setPhoneNumber(phone_number)
+                        .setPhoto(photo)
+                        .build();
+
+                users.add(user);
+            }
+        } catch (DatabaseException | SQLException e) {
+            logger.error("Impossible to select admins info", e);
+            throw new DaoException("Impossible to select admins info", e);
+        }
+        return users;
     }
 
     @Override

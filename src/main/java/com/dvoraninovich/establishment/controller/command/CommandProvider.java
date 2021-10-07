@@ -67,6 +67,7 @@ public final class CommandProvider {
         commands.put(CHANGE_USER_BONUSES_AMOUNT, new ChangeUserBonusesAmount());
         commands.put(SET_INGREDIENTS_FILTER_PARAMETERS, new SetIngredientsFilterParametersCommand());
         commands.put(CREATE_CUSTOMER_ORDER, new CreateCustomerOrderCommand());
+        commands.put(GO_TO_INFO_PAGE, new GoToInfoPage());
     }
 
     public static CommandProvider getInstance() {

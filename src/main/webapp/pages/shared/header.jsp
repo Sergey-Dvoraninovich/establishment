@@ -118,6 +118,14 @@
         </c:choose>
       </div>
     </div>
+
+    <div class="header-block">
+       <c:url value="/ApiController?command=go_to_info_page" var="info_page"/>
+       <a class="header-block-text" href="${info_page}">
+         <fmt:message key="header.info"/>
+       </a>
+    </div>
+
     </div>
   </nav>
 </header>

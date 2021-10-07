@@ -28,6 +28,8 @@ public final class PagePath {
     public static final String ORDER_PAGE = ARTIFACT_PATH + "/pages/order.jsp";
     public static final String ORDERS_PAGE = ARTIFACT_PATH + "/pages/admin/orders/orders.jsp";
 
+    public static final String INFO_PAGE = ARTIFACT_PATH + "/pages/info.jsp";
+
     private PagePath() {
     }
 }

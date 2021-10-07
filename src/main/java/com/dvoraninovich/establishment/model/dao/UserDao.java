@@ -70,6 +70,15 @@ public interface UserDao extends BaseDao<Long, User> {
      */
     boolean delete(Long id) throws DaoException;
 
+
+    /**
+     * Gets admins info.
+     *
+     * @return the admins info
+     * @throws DaoException the dao exception
+     */
+    List<User> getAdminsInfo() throws DaoException;
+
     /**
      * Count users.
      *

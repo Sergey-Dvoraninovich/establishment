@@ -49,7 +49,8 @@ public enum RolesCommandTypes {
             ADD_DISH_TO_ORDER,
             CHANGE_USER_BONUSES_AMOUNT,
             SET_INGREDIENTS_FILTER_PARAMETERS,
-            CREATE_CUSTOMER_ORDER
+            CREATE_CUSTOMER_ORDER,
+            GO_TO_INFO_PAGE,
     }),
     CUSTOMER(new CommandType[]{
             GO_TO_START_PAGE,
@@ -74,6 +75,7 @@ public enum RolesCommandTypes {
             SET_DISHES_FILTER_PARAMETERS,
             CHANGE_USER_PASSWORD,
             SET_LOCALE,
+            GO_TO_INFO_PAGE,
     }),
     GUEST(new CommandType[]{
             GO_TO_START_PAGE,
@@ -86,6 +88,7 @@ public enum RolesCommandTypes {
             GO_TO_DISH_PAGE,
             SET_DISHES_FILTER_PARAMETERS,
             SET_LOCALE,
+            GO_TO_INFO_PAGE,
     });
     private CommandType[] roleCommandTypesArray;
     private RolesCommandTypes(CommandType[] roleCommandTypesArray) {

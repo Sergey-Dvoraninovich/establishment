@@ -101,6 +101,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAdminsInfo() throws ServiceException {
+        try {
+            return userDao.getAdminsInfo();
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public Long countUsers(String login, String mail, String phoneNumber, String cardNumber, String[] userStatuses, String[] userRoles) throws ServiceException {
         try {
             return userDao.countUsers(login, mail, phoneNumber, cardNumber, userStatuses, userRoles);

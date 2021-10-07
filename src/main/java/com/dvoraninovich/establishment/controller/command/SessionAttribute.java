@@ -27,6 +27,7 @@ public final class SessionAttribute {
     public static final String USER_VALIDATION_ERROR = "user_validation_error";
     public static final String IMPOSSIBLE_TO_UPLOAD_USER_PHOTO = "impossible_to_upload_user_photo";
     public static final String USER_PROFILE_ID = "user_profile_id";
+    public static final String ADMINS_INFO = "admins_info";
     public final static String LOCALE = "locale";
     public final static String CHANGE_BONUSES_AMOUNT_ERROR = "change_bonuses_amount_error";
 
