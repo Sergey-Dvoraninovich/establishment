@@ -1,10 +1,12 @@
 package com.dvoraninovich.establishment.controller.command.impl.customer;
 
 import com.dvoraninovich.establishment.controller.command.Command;
+import com.dvoraninovich.establishment.controller.command.RequestParameter;
 import com.dvoraninovich.establishment.controller.command.Router;
 import com.dvoraninovich.establishment.controller.command.validator.UserValidator;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.entity.User;
+import com.dvoraninovich.establishment.model.entity.UserStatus;
 import com.dvoraninovich.establishment.model.service.UserService;
 import com.dvoraninovich.establishment.model.service.impl.UserServiceImpl;
 import org.apache.log4j.LogManager;
@@ -20,6 +22,7 @@ import static com.dvoraninovich.establishment.controller.command.RequestParamete
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.REDIRECT;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.model.entity.Role.ADMIN;
+import static com.dvoraninovich.establishment.model.entity.UserStatus.*;
 
 public class EditUserDataCommand implements Command {
     private static final Logger logger = LogManager.getLogger(EditUserDataCommand.class);
@@ -33,12 +36,15 @@ public class EditUserDataCommand implements Command {
 
         session.setAttribute(INVALID_PHONE_NUM, false);
         session.setAttribute(INVALID_CARD_NUM, false);
+        session.setAttribute(INVALID_MAIL, false);
 
         String idParameter = request.getParameter(ID);
         String phoneNumberLine = request.getParameter(PHONE_NUM);
         phoneNumberLine = phoneNumberLine == null ? "" : phoneNumberLine;
         String cardNumberLine = request.getParameter(CARD_NUM);
         cardNumberLine = cardNumberLine == null ? "" : cardNumberLine;
+        String mailLine = request.getParameter(MAIL);
+        mailLine = mailLine == null ? "" : mailLine;
         Long userId = Long.valueOf(idParameter);
         User user = (User) session.getAttribute(USER);
 
@@ -61,6 +67,13 @@ public class EditUserDataCommand implements Command {
             }
         }
 
+        if (!mailLine.equals("")){
+            if (!userValidator.validateMail(mailLine)) {
+                session.setAttribute(INVALID_MAIL, true);
+                return new Router(USER_PAGE + "?id=" + idParameter + "&edit_form=true", REDIRECT);
+            }
+        }
+
         try {
             Optional<User> optionalProfileUser = userService.findById(userId);
             if (optionalProfileUser.isPresent()) {
@@ -70,6 +83,12 @@ public class EditUserDataCommand implements Command {
                 }
                 if (!cardNumberLine.equals("")) {
                     userProfile.setCardNumber(cardNumberLine);
+                }
+                if (!mailLine.equals("")) {
+                    if (!userProfile.getRole().equals(ADMIN)) {
+                        user.setStatus(IN_REGISTRATION);
+                    }
+                    userProfile.setMail(mailLine);
                 }
                 userService.updateUser(userProfile);
                 session.setAttribute(USER_PROFILE, userProfile);

@@ -36,7 +36,7 @@ public class CommandAccessFilter implements Filter {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
         Role userRole = user == null ? GUEST : user.getRole();
-        
+
         try {
             CommandType.valueOf(commandName);
         }

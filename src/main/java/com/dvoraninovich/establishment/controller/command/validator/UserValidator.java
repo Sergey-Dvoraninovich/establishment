@@ -66,6 +66,12 @@ public class UserValidator {
         return result;
     }
 
+    public boolean validateMail(String mail){
+        boolean result;
+        result = Pattern.matches(MAIL_REGEXP, mail);
+        return result;
+    }
+
     public boolean validateUserStatus(String status) {
         boolean currentResult = false;
         ArrayList<String> userStatusesValues = new ArrayList<>();

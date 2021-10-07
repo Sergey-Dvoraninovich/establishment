@@ -51,24 +51,6 @@ public interface UserService {
     Optional<User> findById(long userId) throws ServiceException;
 
     /**
-     * Gets code for User with specified id.
-     *
-     * @param userId the id of User
-     * @return the code. Empty if there is no such user
-     * @throws ServiceException the service exception
-     */
-    Optional<String> getCode(long userId) throws ServiceException;
-
-    /**
-     * Gets code expiration time for User with specified id.
-     *
-     * @param userId the id of User
-     * @return the code expiration time. Empty if there is no such user
-     * @throws ServiceException the service exception
-     */
-    Optional<LocalDateTime> getCodeExpirationTime(long userId) throws ServiceException;
-
-    /**
      * Count users long.
      *
      * @param login        the login

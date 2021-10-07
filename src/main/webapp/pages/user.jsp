@@ -261,7 +261,8 @@
                 </div>
             </form>
             </c:if>
-            <form>
+            <c:url value="/ApiController?command=edit_user_data&id=${sessionScope.user_profile.id}&edit_form=true" var="edit_user_mail"/>
+            <form action="${edit_user_mail}" method="post">
                 <div class="form-row">
                     <label for="mail"><fmt:message key="registration.mail_placeholder" /></label>
                     <div id="mail-info-text" class="block-item-text">
@@ -272,11 +273,6 @@
                     <c:if test="${sessionScope.invalid_mail}">
                         <div class="local-error">
                             <p><fmt:message key="registration.invalid_mail" /></p>
-                        </div>
-                    </c:if>
-                    <c:if test="${sessionScope.not_unique_mail}">
-                        <div class="local-error">
-                            <p><fmt:message key="registration.not_unique_mail" /></p>
                         </div>
                     </c:if>
                     <div>
@@ -305,24 +301,6 @@
                 <div class="block-item-action">
                     <c:url value="/ApiController?command=go_to_customer_orders&next_min_pos=1&next_max_pos=10&new_total_amount=true&user_id=${sessionScope.user.id}" var="orders_page"/>
                     <a href="${orders_page}"><fmt:message key="profile.orders"/></a>
-                </div>
-            </div>
-        </c:if>
-        <c:if test="${sessionScope.user_profile.status == 'IN_REGISTRATION'}">
-            <div class="block-item">
-                <div class="block-item-header">
-                    <h2><fmt:message key="profile.mail_verification"/></h2>
-                </div>
-                <div id="mail-verification-info" class="block-item-text">
-                    <a><fmt:message key="profile.mail_verification_info"/></a>
-                </div>
-                <div class="block-item-action">
-                    <c:url value="/ApiController?command=go_to_verify_code_page" var="verification_page"/>
-                    <a href="${verification_page}"><fmt:message key="profile.verify_mail"/></a>
-                </div>
-                <div class="block-item-action">
-                    <c:url value="/ApiController?command=send_activation_code" var="send_activation_code"/>
-                    <a href="${send_activation_code}"><fmt:message key="profile.send_verification_code"/></a>
                 </div>
             </div>
         </c:if>

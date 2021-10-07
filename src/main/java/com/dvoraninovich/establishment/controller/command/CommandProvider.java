@@ -39,7 +39,6 @@ public final class CommandProvider {
         commands.put(EDIT_DISH, new EditDishCommand());
         commands.put(ADD_DISH_INGREDIENT, new AddDishIngredientCommand());
         commands.put(REMOVE_DISH_INGREDIENT, new RemoveDishIngredientCommand());
-        commands.put(VERIFY_CODE, new VerifyCodeCommand());
         commands.put(GO_TO_VERIFY_CODE_PAGE, new GoToVerifyCodePageCommand());
         commands.put(GO_TO_USER_PAGE, new GoToUserPageCommand());
         commands.put(GO_TO_ORDERS_PAGE, new GoToOrdersPageCommand());
@@ -63,7 +62,6 @@ public final class CommandProvider {
         commands.put(EDIT_USER_DATA, new EditUserDataCommand());
         commands.put(CHANGE_USER_PASSWORD, new ChangeUserPasswordCommand());
         commands.put(CHANGE_USER_STATUS, new ChangeUserStatusCommand());
-        commands.put(SEND_ACTIVATION_CODE, new SendActivationCodeCommand());
         commands.put(SET_LOCALE, new SetLocaleCommand());
         commands.put(ADD_DISH_TO_ORDER, new AddDishToOrderCommand());
         commands.put(CHANGE_USER_BONUSES_AMOUNT, new ChangeUserBonusesAmount());

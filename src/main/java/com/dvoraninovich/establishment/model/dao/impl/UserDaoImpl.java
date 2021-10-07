@@ -78,10 +78,9 @@ public class UserDaoImpl implements UserDao {
             + "SET password_hash = ? "
             + "WHERE id = ?;";
     private static final String INSERT_USER
-            = "INSERT users(login, mail, password_hash, salt, id_status, id_role, "
-            + "card_number, phone_number, bonuses_amount, photo, code, code_expiration_time) "
-            + "VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, "
-            + "TIMESTAMPADD(MINUTE, 5, CURRENT_TIMESTAMP()));";
+            = "INSERT users(login, mail, password_hash,  salt, id_status, id_role, "
+            + "card_number, phone_number, bonuses_amount, photo) "
+            + "VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?, ? ;";
     private static final String UPDATE_USER
             = "UPDATE users "
             + "SET mail = ?, id_status = ?, id_role = ?, "
@@ -154,7 +153,7 @@ public class UserDaoImpl implements UserDao {
         throw new UnsupportedOperationException();
     }
 
-    public Long insertUser(User user, String passwordHash, String salt, String code) throws DaoException {
+    public Long insertUser(User user, String passwordHash, String salt) throws DaoException {
         Long id = Long.valueOf(0);
         if (Optional.empty().equals(findUserByLogin(user.getLogin()))) {
             try (Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
@@ -170,7 +169,6 @@ public class UserDaoImpl implements UserDao {
                 statement.setString(8, user.getPhoneNumber());
                 statement.setBigDecimal(9, user.getBonusesAmount());
                 statement.setString(10, user.getPhoto());
-                statement.setString(11, code);
                 statement.executeUpdate();
 
                 ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -337,45 +335,6 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("Impossible to find salt of user with id: " + id, e);
         }
         return salt;
-    }
-
-    @Override
-    public Optional<String> getCodeById(Long id) throws DaoException {
-        Optional<String> code = Optional.empty();
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(GET_CODE_BY_ID);
-            statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                code = Optional.of(resultSet.getString(USER_CODE));
-            }
-        } catch (DatabaseException | SQLException e) {
-            logger.error("Impossible to find code of user with id: " + id, e);
-            throw new DaoException("Impossible to find code of user with id: " + id, e);
-        }
-        return code;
-    }
-
-    @Override
-    public Optional<LocalDateTime> getCodeExpirationTimeById(Long id) throws DaoException {
-        Optional<LocalDateTime> codeExpirationTime = Optional.empty();
-        try(Connection connection = DatabaseConnectionPool.getInstance().acquireConnection();
-        ) {
-            PreparedStatement statement = connection.prepareStatement(GET_CODE_EXPIRATION_TIME_BY_ID);
-            statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                Timestamp codeExpirationTimestamp = resultSet.getTimestamp(USER_CODE_EXPIRATION_TIME);
-                codeExpirationTime = Optional.of(codeExpirationTimestamp.toLocalDateTime());
-            }
-        } catch (DatabaseException | SQLException e) {
-            logger.error("Impossible to find codeExpirationTime of user with id: " + id, e);
-            throw new DaoException("Impossible to find codeExpirationTime of user with id: " + id, e);
-        }
-        return codeExpirationTime;
     }
 
     private String addFilterParameters(String requestLine, String login, String mail, String phoneNumber,

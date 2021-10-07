@@ -19,11 +19,10 @@ public interface UserDao extends BaseDao<Long, User> {
      * @param user         the user
      * @param passwordHash the password hash
      * @param salt         the salt
-     * @param code         the code
      * @return the long of User id (0 if inserting failed)
      * @throws DaoException the dao exception
      */
-    Long insertUser(User user, String passwordHash, String salt, String code) throws DaoException;
+    Long insertUser(User user, String passwordHash, String salt) throws DaoException;
 
     /**
      * Find user by login.
@@ -61,24 +60,6 @@ public interface UserDao extends BaseDao<Long, User> {
      * @throws DaoException the dao exception
      */
     Optional<String> getSaltById(Long id) throws DaoException;
-
-    /**
-     * Gets code by id.
-     *
-     * @param id the id
-     * @return the optional code by id
-     * @throws DaoException the dao exception
-     */
-    Optional<String> getCodeById(Long id) throws DaoException;
-
-    /**
-     * Gets code expiration time by id.
-     *
-     * @param id the id
-     * @return the optional code expiration time by id
-     * @throws DaoException the dao exception
-     */
-    Optional<LocalDateTime> getCodeExpirationTimeById(Long id) throws DaoException;
 
     /**
      * Delete boolean.

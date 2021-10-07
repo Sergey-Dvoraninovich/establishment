@@ -9,8 +9,6 @@ import com.dvoraninovich.establishment.model.entity.UserStatus;
 import com.dvoraninovich.establishment.exception.ServiceException;
 import com.dvoraninovich.establishment.model.service.UserService;
 import com.dvoraninovich.establishment.model.service.impl.UserServiceImpl;
-import com.dvoraninovich.establishment.util.CodeGenerator;
-import javafx.util.Pair;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
