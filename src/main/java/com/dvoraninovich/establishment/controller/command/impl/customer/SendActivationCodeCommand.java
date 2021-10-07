@@ -32,6 +32,7 @@ public class SendActivationCodeCommand implements Command {
         User user = (User) session.getAttribute(USER);
 
         try {
+            System.out.println(user);
             if (user != null) {
                 if (user.getStatus().equals(IN_REGISTRATION)) {
                     //TODO generate code
