@@ -29,7 +29,7 @@
   </div>
   <div class="form-row">
     <label for="price"><fmt:message key="admin.dishes.dish_price" /></label>
-    <input type="number" step="0.01" min="0" name="price" id="price" value="${price}"/>
+    <input type="number" step="0.01" min="0" max="9999.99" name="price" id="price" value="${price}"/>
     <c:if test="${sessionScope.invalid_dish_price}">
       <div class="local-error">
         <p><fmt:message key="admin.dishes.invalid_dish_price"/></p>
@@ -38,7 +38,7 @@
   </div>
   <div class="form-row">
     <label for="amount_grams"><fmt:message key="admin.dishes.dish_amount_grams" /></label>
-    <input type="number" step="1" min="0" name="amount_grams" id="amount_grams" value="${amount_grams}"/>
+    <input type="number" step="1" min="0" max="32767" name="amount_grams" id="amount_grams" value="${amount_grams}"/>
     <c:if test="${sessionScope.invalid_dish_amount_grams}">
       <div class="local-error">
         <p><fmt:message key="admin.dishes.invalid_dish_amount_grams"/></p>
@@ -47,7 +47,7 @@
   </div>
   <div class="form-row">
     <label for="calories_amount"><fmt:message key="admin.dishes.dish_calories_amount" /></label>
-    <input type="number" step="1" min="0" name="calories_amount" id="calories_amount" value="${calories_amount}"/>
+    <input type="number" step="1" min="0" max="32767" name="calories_amount" id="calories_amount" value="${calories_amount}"/>
     <c:if test="${sessionScope.invalid_dish_calories_amount}">
       <div class="local-error">
         <p><fmt:message key="admin.dishes.invalid_dish_calories_amount"/></p>

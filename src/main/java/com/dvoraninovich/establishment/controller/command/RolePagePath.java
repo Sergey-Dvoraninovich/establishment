@@ -8,7 +8,7 @@ import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.PagePath.LOGIN_PAGE;
 import static com.dvoraninovich.establishment.controller.command.PagePath.SIGN_UP_PAGE;
 
-public enum RolesPagePath {
+public enum RolePagePath {
     ADMIN(new String[]{
             INDEX_PAGE,
             USER_PAGE,
@@ -48,7 +48,7 @@ public enum RolesPagePath {
             INFO_PAGE,
     });
     private String[] rolePagesArray;
-    private RolesPagePath(String[] rolePagesArray) {
+    private RolePagePath(String[] rolePagesArray) {
         this.rolePagesArray = rolePagesArray;
     }
     public List<String> getRolePagesList() {

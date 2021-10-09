@@ -83,7 +83,8 @@
         </div>
         <div id="phone-num-card" class="form-row">
             <label for="request_filter_phone_number"><fmt:message key="profile.phone_num" /></label>
-            <input type="text" name="request_filter_phone_number" id="request_filter_phone_number" pattern="^[+]{0,1}[\d]{1,12}$"
+            <input type="text" name="request_filter_phone_number" id="request_filter_phone_number"
+                   pattern="^[+]{0,1}[\d]{1,12}$"
                    value="${request_filter_phone_number}" placeholder="${request_filter_phone_number}"/>
             <c:if test="${sessionScope.invalid_phone_number}">
                 <div class="local-error">

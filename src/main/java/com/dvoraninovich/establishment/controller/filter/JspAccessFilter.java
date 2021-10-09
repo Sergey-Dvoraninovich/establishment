@@ -1,6 +1,6 @@
 package com.dvoraninovich.establishment.controller.filter;
 
-import com.dvoraninovich.establishment.controller.command.RolesPagePath;
+import com.dvoraninovich.establishment.controller.command.RolePagePath;
 import com.dvoraninovich.establishment.model.entity.Role;
 import com.dvoraninovich.establishment.model.entity.User;
 import org.apache.log4j.LogManager;
@@ -40,21 +40,21 @@ public class JspAccessFilter implements Filter{
             User user = (User) session.getAttribute(USER);
             Role userRole = user == null ? GUEST : user.getRole();
 
-            List<String> guestPages = RolesPagePath.GUEST.getRolePagesList();
+            List<String> guestPages = RolePagePath.GUEST.getRolePagesList();
             if (userRole.equals(GUEST) && !guestPages.contains(jspName)) {
                 logger.info("Illegal access to jsp " + jspName + " by user " + user);
                 response.sendRedirect(INDEX_PAGE);
                 return;
             }
 
-            List<String> customerPages = RolesPagePath.CUSTOMER.getRolePagesList();
+            List<String> customerPages = RolePagePath.CUSTOMER.getRolePagesList();
             if (userRole.equals(CUSTOMER) && !customerPages.contains(jspName)) {
                 logger.info("Illegal access to jsp " + jspName + " by user " + user);
                 response.sendRedirect(INDEX_PAGE);
                 return;
             }
 
-            List<String> adminPages = RolesPagePath.ADMIN.getRolePagesList();
+            List<String> adminPages = RolePagePath.ADMIN.getRolePagesList();
             if (userRole.equals(ADMIN) && !adminPages.contains(jspName)) {
                 logger.info("Illegal access to jsp " + jspName + " by user " + user);
                 response.sendRedirect(INDEX_PAGE);

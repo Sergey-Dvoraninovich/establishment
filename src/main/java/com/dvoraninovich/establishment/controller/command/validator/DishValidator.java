@@ -16,14 +16,17 @@ public class DishValidator {
     public static final String DISH_AVAILABLE = "AVAILABLE";
     public static final String DISH_DISABLED = "DISABLED";
 
-    private static final String DISH_ID_REGEXP = "^[0-9]+$";
+    private static final String DISH_ID_REGEXP = "^[0-9]{1,19}$";
     private static final String NAME_REGEXP = "^[A-Za-zА-Яа-я]{1}[A-Za-zА-Яа-я\\s]{0,68}[A-Za-zА-Яа-я]{1}$";
-    private static final String PRICE_REGEXP = "^[+-]?([0-9]+([.][0-9]{0,2})?|[.][0-9]{1,2})$";
-    private static final String AMOUNT_GRAMS_REGEXP = "^[0-9]+$";
-    private static final String CALORIES_AMOUNT_REGEXP = "^[0-9]+$";
+    private static final String PRICE_REGEXP = "^[+-]?([0-9]{1,4}([.][0-9]{0,2})?|[.][0-9]{1,2})$";
+    private static final String AMOUNT_GRAMS_REGEXP = "^[0-9]{1,5}$";
+    private static final String CALORIES_AMOUNT_REGEXP = "^[0-9]{1,5}$";
     private static final BigDecimal MIN_PRICE = new BigDecimal("0.00");
     private static final Integer MIN_AMOUNT_GRAMS = 0;
     private static final Integer MIN_CALORIES_AMOUNT = 0;
+    private static final BigDecimal MAX_PRICE = new BigDecimal("9999.99");
+    private static final Integer MAX_AMOUNT_GRAMS = 32_767;
+    private static final Integer MAX_CALORIES_AMOUNT = 32_767;
 
     private DishValidator() {
     }
@@ -56,6 +59,7 @@ public class DishValidator {
             if (currentResult) {
                 BigDecimal price = new BigDecimal(priceLine);
                 currentResult = price.compareTo(MIN_PRICE) >= 0;
+                currentResult &= price.compareTo(MAX_PRICE) <= 0;
             }
             validationMessages.put(INVALID_DISH_PRICE, !currentResult);
 
@@ -63,6 +67,7 @@ public class DishValidator {
             if (currentResult) {
                 Integer amountGrams = new Integer(amountGramsLine);
                 currentResult = amountGrams > MIN_AMOUNT_GRAMS;
+                currentResult &= amountGrams < MAX_AMOUNT_GRAMS;
             }
             validationMessages.put(INVALID_DISH_AMOUNT_GRAMS, !currentResult);
 
@@ -70,6 +75,7 @@ public class DishValidator {
             if (currentResult) {
                 Integer caloriesAmount = new Integer(caloriesAmountLine);
                 currentResult = caloriesAmount > MIN_CALORIES_AMOUNT;
+                currentResult &= caloriesAmount < MAX_CALORIES_AMOUNT;
             }
             validationMessages.put(INVALID_DISH_CALORIES_AMOUNT, !currentResult);
 
@@ -101,6 +107,7 @@ public class DishValidator {
                 if (currentResult) {
                     BigDecimal minPrice = new BigDecimal(minPriceLine);
                     currentResult = minPrice.compareTo(MIN_PRICE) >= 0;
+                    currentResult &= minPrice.compareTo(MAX_PRICE) <= 0;
                 }
                 validationMessages.put(INVALID_MIN_PRICE, !currentResult);
             }
@@ -110,6 +117,7 @@ public class DishValidator {
                 if (currentResult) {
                     BigDecimal maxPrice = new BigDecimal(maxPriceLine);
                     currentResult = maxPrice.compareTo(MIN_PRICE) >= 0;
+                    currentResult &= maxPrice.compareTo(MAX_PRICE) <= 0;
                 }
                 validationMessages.put(INVALID_MAX_PRICE, !currentResult);
             }
@@ -128,6 +136,7 @@ public class DishValidator {
                 if (currentResult) {
                     Integer minCaloriesAmount = Integer.valueOf(minCaloriesAmountLine);
                     currentResult = minCaloriesAmount.compareTo(MIN_CALORIES_AMOUNT) >= 0;
+                    currentResult &= minCaloriesAmount.compareTo(MAX_CALORIES_AMOUNT) <= 0;
                 }
                 validationMessages.put(INVALID_MIN_CALORIES_AMOUNT, !currentResult);
             }
@@ -137,6 +146,7 @@ public class DishValidator {
                 if (currentResult) {
                     Integer maxCaloriesAmount = Integer.valueOf(maxCaloriesAmountLine);
                     currentResult = maxCaloriesAmount.compareTo(MIN_CALORIES_AMOUNT) >= 0;
+                    currentResult &= maxCaloriesAmount.compareTo(MAX_CALORIES_AMOUNT) <= 0;
                 }
                 validationMessages.put(INVALID_MAX_CALORIES_AMOUNT, !currentResult);
             }
@@ -155,6 +165,7 @@ public class DishValidator {
                 if (currentResult) {
                     Integer minAmountGrams = Integer.valueOf(minAmountGramsLine);
                     currentResult = minAmountGrams.compareTo(MIN_AMOUNT_GRAMS) >= 0;
+                    currentResult &= minAmountGrams.compareTo(MAX_AMOUNT_GRAMS) <= 0;
                 }
                 validationMessages.put(INVALID_MIN_AMOUNT_GRAMS, !currentResult);
             }
@@ -164,6 +175,7 @@ public class DishValidator {
                 if (currentResult) {
                     Integer maxAmountGrams = Integer.valueOf(maxAmountGramsLine);
                     currentResult = maxAmountGrams.compareTo(MIN_AMOUNT_GRAMS) >= 0;
+                    currentResult &= maxAmountGrams.compareTo(MAX_AMOUNT_GRAMS) <= 0;
                 }
                 validationMessages.put(INVALID_MAX_AMOUNT_GRAMS, !currentResult);
             }

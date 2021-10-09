@@ -1,7 +1,7 @@
 package com.dvoraninovich.establishment.controller.filter;
 
 import com.dvoraninovich.establishment.controller.command.CommandType;
-import com.dvoraninovich.establishment.controller.command.RolesCommandType;
+import com.dvoraninovich.establishment.controller.command.RoleCommandType;
 import com.dvoraninovich.establishment.model.entity.Role;
 import com.dvoraninovich.establishment.model.entity.User;
 import org.apache.log4j.LogManager;
@@ -48,21 +48,21 @@ public class CommandAccessFilter implements Filter {
 
         CommandType command = CommandType.valueOf(commandName);
 
-        List<CommandType> guestCommands = RolesCommandType.GUEST.getRoleCommandTypesList();
+        List<CommandType> guestCommands = RoleCommandType.GUEST.getRoleCommandTypesList();
         if (userRole.equals(GUEST) && !guestCommands.contains(command)) {
             logger.info("Illegal access to command " + command + " by user " + user);
             response.sendRedirect(INDEX_PAGE);
             return;
         }
 
-        List<CommandType> customerCommands = RolesCommandType.CUSTOMER.getRoleCommandTypesList();
+        List<CommandType> customerCommands = RoleCommandType.CUSTOMER.getRoleCommandTypesList();
         if (userRole.equals(CUSTOMER) && !customerCommands.contains(command)) {
             logger.info("Illegal access to command " + command + " by user " + user);
             response.sendRedirect(INDEX_PAGE);
             return;
         }
 
-        List<CommandType> adminCommands = RolesCommandType.ADMIN.getRoleCommandTypesList();
+        List<CommandType> adminCommands = RoleCommandType.ADMIN.getRoleCommandTypesList();
         if (userRole.equals(ADMIN) && !adminCommands.contains(command)) {
             logger.info("Illegal access to command " + command + " by user " + user);
             response.sendRedirect(INDEX_PAGE);

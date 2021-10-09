@@ -9,7 +9,7 @@
 
 <html>
 <head>
-    <title><fmt:message key="admin.ingredients.add_ingredient.title"/></title>
+  <title><fmt:message key="admin.ingredients.add_ingredient.title"/></title>
   <script src="../../../js/common.js"></script>
 </head>
 <body>

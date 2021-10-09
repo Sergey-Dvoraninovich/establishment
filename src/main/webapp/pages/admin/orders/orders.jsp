@@ -71,7 +71,7 @@
         <div id="min-price" class="form-row">
             <label for="request_filter_min_price"><fmt:message key="filter.min_price" /></label>
             <input type="number" name="request_filter_min_price" id="request_filter_min_price"
-                   step="0.01" min="0" value="${request_filter_min_price}" placeholder="${request_filter_min_price}"/>
+                   step="0.01" min="0" max="9999.99" value="${request_filter_min_price}" placeholder="${request_filter_min_price}"/>
             <c:if test="${sessionScope.invalid_min_price}">
                 <div class="local-error">
                     <p><fmt:message key="filter.invalid_filter_params"/></p>
@@ -81,7 +81,7 @@
         <div id="max-price" class="form-row">
             <label for="request_filter_max_price"><fmt:message key="filter.max_price" /></label>
             <input type="number" name="request_filter_max_price" id="request_filter_max_price"
-                   step="0.01" min="0" value="${request_filter_max_price}" placeholder="${request_filter_max_price}"/>
+                   step="0.01" min="0" max="9999.99" value="${request_filter_max_price}" placeholder="${request_filter_max_price}"/>
             <c:if test="${sessionScope.invalid_max_price}">
                 <div class="local-error">
                     <p><fmt:message key="filter.invalid_filter_params"/></p>

@@ -16,9 +16,10 @@ public class OrderValidator {
     private static final Logger logger = LogManager.getLogger(OrderValidator.class);
     private static OrderValidator instance;
 
-    private static final String USER_ID_REGEXP = "^\\d+$";
-    private static final String PRICE_REGEXP = "^[+-]?([0-9]+([.][0-9]{0,2})?|[.][0-9]{1,2})$";
+    private static final String USER_ID_REGEXP = "^\\d{1,19}$";
+    private static final String PRICE_REGEXP = "^[+-]?([0-9]{1,4}([.][0-9]{0,2})?|[.][0-9]{1,2})$";
     private static final BigDecimal MIN_PRICE = new BigDecimal("0.00");
+    private static final BigDecimal MAX_PRICE = new BigDecimal("9999.99");
 
     private OrderValidator() {
     }
@@ -80,6 +81,7 @@ public class OrderValidator {
                 if (currentResult) {
                     BigDecimal minPrice = new BigDecimal(minPriceLine);
                     currentResult = minPrice.compareTo(MIN_PRICE) >= 0;
+                    currentResult &= minPrice.compareTo(MAX_PRICE) <= 0;
                 }
                 validationMessages.put(INVALID_MIN_PRICE, !currentResult);
             }
@@ -89,6 +91,7 @@ public class OrderValidator {
                 if (currentResult) {
                     BigDecimal maxPrice = new BigDecimal(maxPriceLine);
                     currentResult = maxPrice.compareTo(MIN_PRICE) >= 0;
+                    currentResult &= maxPrice.compareTo(MAX_PRICE) <= 0;
                 }
                 validationMessages.put(INVALID_MAX_PRICE, !currentResult);
             }

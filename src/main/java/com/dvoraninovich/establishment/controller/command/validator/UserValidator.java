@@ -24,8 +24,7 @@ public class UserValidator {
     private static final String MAIL_REGEXP = "^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}$";
     private static final String PHONE_NUM_REGEXP = "^\\+\\d{12}$";
     private static final String CARD_NUM_REGEXP = "^\\d{16}$";
-    private static final String BONUSES_AMOUNT_REGEXP = "^\\d+$";
-    private static final String CODE_REGEXP = "^[a-zA-Z0-9]{16}$";
+    private static final String BONUSES_AMOUNT_REGEXP = "^\\d{1,7}$";
 
     private static final String FILTER_LOGIN_REGEXP = "^[A-Za-z_]{1,25}$";
     private static final String FILTER_MAIL_REGEXP = "^[a-z0-9_.@-]+$";
