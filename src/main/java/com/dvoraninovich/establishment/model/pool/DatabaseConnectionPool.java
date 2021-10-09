@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Deque;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -34,7 +35,7 @@ public class DatabaseConnectionPool {
     private int poolMaxSize;
 
     private BlockingDeque<Connection> availableConnections;
-    private Deque<Pair<Connection, Instant>> busyConnections;
+    private Deque<Connection> busyConnections;
 
     private DatabaseConnectionPool() {
         ClassLoader classLoader = getClass().getClassLoader();
@@ -101,8 +102,7 @@ public class DatabaseConnectionPool {
                     ? ConnectionFactory.createConnection()
                     : availableConnections.take();
 
-            Instant usageStart = Instant.now();
-            busyConnections.add(Pair.of(connection, usageStart));
+            busyConnections.add(connection);
         } catch (InterruptedException e) {
             logger.error("Caught an exception", e);
             Thread.currentThread().interrupt();
@@ -113,7 +113,7 @@ public class DatabaseConnectionPool {
     public void releaseConnection(Connection connection) {
         if ((connection != null)
                 && (connection.getClass() == ProxyConnection.class)) {
-            busyConnections.removeIf(pair -> pair.getLeft().equals(connection));
+            busyConnections.remove(connection);
 
             try {
                 availableConnections.put(connection);
