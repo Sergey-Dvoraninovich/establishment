@@ -15,7 +15,7 @@ import java.util.Optional;
 public class IngredientServiceImpl implements IngredientService {
     private static final Logger logger = LogManager.getLogger(IngredientServiceImpl.class);
     private static IngredientServiceImpl instance;
-    private IngredientDao ingredientDao = IngredientDaoImpl.getInstance();
+    private IngredientDao ingredientDao;
 
     private IngredientServiceImpl() {
     }
@@ -23,7 +23,16 @@ public class IngredientServiceImpl implements IngredientService {
     public static IngredientServiceImpl getInstance() {
         if (instance == null) {
             instance = new IngredientServiceImpl();
+            instance.ingredientDao = IngredientDaoImpl.getInstance();
         }
+        return instance;
+    }
+
+    public static IngredientServiceImpl getInstance(IngredientDao ingredientDao) {
+        if (instance == null) {
+            instance = new IngredientServiceImpl();
+        }
+        instance.ingredientDao = ingredientDao;
         return instance;
     }
 

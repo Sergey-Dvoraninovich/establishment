@@ -139,6 +139,7 @@
 </div>
 <div class="workspace-flex-container">
     <c:forEach var="user" items="${sessionScope.users}">
+        <c:if test="${user.role != 'ADMIN'}">
         <div class="container-line">
             <c:if test="${user.status == 'IN_REGISTRATION'}">
                 <div id="base-state" class="line-item">
@@ -197,10 +198,12 @@
                 <div><fmt:message key="profile.phone_num"/></div>
                 <div>${user.phoneNumber}</div>
             </div>
+            <c:if test="${user.role == 'CUSTOMER'}">
             <div id="card-number-info" class="line-item">
                 <div><fmt:message key="profile.card_num"/></div>
                 <div>${user.cardNumber}</div>
             </div>
+            </c:if>
             <div class="line-item">
                 <div class="block-item-action">
                     <c:url value="/ApiController?command=go_to_user_page&id=${user.id}" var="user_page"/>
@@ -208,6 +211,7 @@
                 </div>
             </div>
         </div>
+        </c:if>
     </c:forEach>
     <div class="pagination">
         <c:if test="${sessionScope.min_pos != 1}">

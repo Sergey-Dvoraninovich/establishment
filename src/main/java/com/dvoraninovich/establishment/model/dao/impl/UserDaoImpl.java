@@ -399,13 +399,7 @@ public class UserDaoImpl implements UserDao {
         if (userRoles.length != 0){
             filterString.append(makeFilterGroup(USER_ROLE, userRoles)).append(" AND ");
         }
-        if (!filterString.toString().equals(" WHERE ")) {
-            Integer lastAndPos = filterString.lastIndexOf(" AND ");
-            filterString.replace(lastAndPos, lastAndPos + 5, "");
-        }
-        else {
-            filterString.replace(0, filterString.length(), "");
-        }
+        filterString.append(USER_ROLE).append(" != 'ADMIN' ");
 
         String lineToFind = !requestLine.contains(LIMIT_LINE) ? ";" : LIMIT_LINE;
         Integer wherePos = requestLine.indexOf(lineToFind);

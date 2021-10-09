@@ -18,8 +18,8 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private static final Integer SALT_LENGTH = 16;
     private static UserServiceImpl instance;
-    private UserDao userDao = UserDaoImpl.getInstance();
-    private SaltGenerator saltGenerator = SaltGenerator.getInstance();
+    private UserDao userDao;
+    private SaltGenerator saltGenerator;
 
     private UserServiceImpl() {
     }
@@ -27,7 +27,18 @@ public class UserServiceImpl implements UserService {
     public static UserServiceImpl getInstance() {
         if (instance == null) {
             instance = new UserServiceImpl();
+            instance.userDao = UserDaoImpl.getInstance();
+            instance.saltGenerator = SaltGenerator.getInstance();
         }
+        return instance;
+    }
+
+    public static UserServiceImpl getInstance(UserDao userDao, SaltGenerator saltGenerator) {
+        if (instance == null) {
+            instance = new UserServiceImpl();
+        }
+        instance.userDao = userDao;
+        instance.saltGenerator = saltGenerator;
         return instance;
     }
 

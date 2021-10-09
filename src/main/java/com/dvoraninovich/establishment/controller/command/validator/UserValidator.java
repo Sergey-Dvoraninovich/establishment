@@ -16,8 +16,8 @@ import static com.dvoraninovich.establishment.controller.command.SessionAttribut
 
 public class UserValidator {
     private static final Logger logger = LogManager.getLogger(UserValidator.class);
-    private UserService service = UserServiceImpl.getInstance();
     private static UserValidator instance;
+    private UserService service;
 
     private static final String LOGIN_REGEXP = "^[A-Za-z_]{3,25}$";
     private static final String PASSWORD_REGEXP = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$";
@@ -38,7 +38,16 @@ public class UserValidator {
     public static UserValidator getInstance() {
         if (instance == null) {
             instance = new UserValidator();
+            instance.service = UserServiceImpl.getInstance();
         }
+        return instance;
+    }
+
+    public static UserValidator getInstance(UserService service) {
+        if (instance == null) {
+            instance = new UserValidator();
+        }
+        instance.service = service;
         return instance;
     }
 

@@ -16,7 +16,7 @@ import static com.dvoraninovich.establishment.model.entity.UserStatus.*;
 
 public class UserValidatorTest {
 
-    private UserValidator validator = UserValidator.getInstance();
+    private UserValidator validator;
 
     @BeforeClass
     public void init() {
@@ -24,14 +24,7 @@ public class UserValidatorTest {
         validatorService = Mockito.mock(UserService.class);
         Mockito.when(validatorService.isLoginUnique(Mockito.anyString()))
                 .thenReturn(true);
-        try {
-            Class validatorClass = UserValidator.class;
-            Field field = validatorClass.getDeclaredField("service");
-            field.setAccessible(true);
-            field.set(validator, validatorService);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            Assert.fail("Impossible to setup mocks");
-        }
+        validator = UserValidator.getInstance(validatorService);
     }
 
     @DataProvider(name = "validLogins")

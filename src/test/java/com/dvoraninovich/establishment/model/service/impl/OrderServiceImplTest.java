@@ -21,7 +21,7 @@ import static com.dvoraninovich.establishment.model.entity.OrderState.IN_CREATIO
 import static com.dvoraninovich.establishment.model.entity.PaymentType.CASH;
 
 public class OrderServiceImplTest {
-    private OrderService service = OrderServiceImpl.getInstance();
+    private OrderService service;
     private Order defaultOrder;
 
     @BeforeClass
@@ -36,6 +36,27 @@ public class OrderServiceImplTest {
                 .setBonusesInPayment(new BigDecimal("0"))
                 .setFinalPrice(new BigDecimal("0.00"))
                 .build();
+    }
+
+    @DataProvider(name = "countBonusesInPaymentData")
+    public static Object[][] countBonusesInPaymentData() {
+        return new Object[][] {{Order.builder().setFinalPrice(new BigDecimal("9.99")).setBonusesInPayment(new BigDecimal("0")).build(),
+                new BigDecimal("500"), new BigDecimal("4.99")},
+                {Order.builder().setFinalPrice(new BigDecimal("24.99")).setBonusesInPayment(new BigDecimal("400")).build(),
+                        new BigDecimal("1299"), new BigDecimal("16.00")},
+                {Order.builder().setFinalPrice(new BigDecimal("24.99")).setBonusesInPayment(new BigDecimal("400")).build(),
+                        new BigDecimal("0"), new BigDecimal("28.99")}};
+    }
+    @Test(dataProvider = "countBonusesInPaymentData")
+    public void countBonusesInPaymentTest(Order order, BigDecimal newBonusesAmount, BigDecimal expectedPrice) {
+        try {
+            service = OrderServiceImpl.getInstance();
+            BigDecimal resultPrice = service.countNewOrderPrice(order, newBonusesAmount);
+            Assert.assertEquals(resultPrice, expectedPrice);
+        } catch (ServiceException e) {
+            Assert.fail("Service caused exception");
+        }
+
     }
     
     @DataProvider(name = "getCustomerBasketNewTest")
@@ -52,11 +73,8 @@ public class OrderServiceImplTest {
             defaultOrder.setUserId(customerId);
             Mockito.when(serviceDao.insertAndGetId(defaultOrder))
                     .thenReturn(orderId);
-            Class serviceClass = OrderServiceImpl.class;
-            Field dishDaoField = serviceClass.getDeclaredField("orderDao");
-            dishDaoField.setAccessible(true);
-            dishDaoField.set(service, serviceDao);
-        } catch (NoSuchFieldException | IllegalAccessException | DaoException e) {
+            service = OrderServiceImpl.getInstance(serviceDao);
+        } catch (DaoException e) {
             Assert.fail("Impossible to setup mocks");
         }
         Optional<Order> order = Optional.empty();
@@ -87,11 +105,8 @@ public class OrderServiceImplTest {
             defaultOrder.setUserId(customerId);
             Mockito.when(serviceDao.insertAndGetId(storedBasket.get()))
                     .thenReturn(storedBasket.get().getId());
-            Class serviceClass = OrderServiceImpl.class;
-            Field dishDaoField = serviceClass.getDeclaredField("orderDao");
-            dishDaoField.setAccessible(true);
-            dishDaoField.set(service, serviceDao);
-        } catch (NoSuchFieldException | IllegalAccessException | DaoException e) {
+            service = OrderServiceImpl.getInstance(serviceDao);
+        } catch (DaoException e) {
             Assert.fail("Impossible to setup mocks");
         }
         Optional<Order> order = Optional.empty();
@@ -105,25 +120,5 @@ public class OrderServiceImplTest {
             result = order.get().getId() == storedBasket.get().getId();
         }
         Assert.assertTrue(result);
-    }
-
-    @DataProvider(name = "countBonusesInPaymentData")
-    public static Object[][] countBonusesInPaymentData() {
-        return new Object[][] {{Order.builder().setFinalPrice(new BigDecimal("9.99")).setBonusesInPayment(new BigDecimal("0")).build(),
-                    new BigDecimal("500"), new BigDecimal("4.99")},
-                {Order.builder().setFinalPrice(new BigDecimal("24.99")).setBonusesInPayment(new BigDecimal("400")).build(),
-                        new BigDecimal("1299"), new BigDecimal("16.00")},
-                {Order.builder().setFinalPrice(new BigDecimal("24.99")).setBonusesInPayment(new BigDecimal("400")).build(),
-                        new BigDecimal("0"), new BigDecimal("28.99")}};
-    }
-    @Test(dataProvider = "countBonusesInPaymentData")
-    public void countBonusesInPaymentTest(Order order, BigDecimal newBonusesAmount, BigDecimal expectedPrice) {
-        try {
-            BigDecimal resultPrice = service.countNewOrderPrice(order, newBonusesAmount);
-            Assert.assertEquals(resultPrice, expectedPrice);
-        } catch (ServiceException e) {
-            Assert.fail("Service caused exception");
-        }
-
     }
 }

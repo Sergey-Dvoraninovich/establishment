@@ -20,8 +20,8 @@ import static com.dvoraninovich.establishment.model.entity.PaymentType.CASH;
 
 public class OrderServiceImpl implements OrderService {
     private static final Logger logger = LogManager.getLogger(OrderServiceImpl.class);
-    private OrderDao orderDao = OrderDaoImpl.getInstance();
     private static OrderServiceImpl instance;
+    private OrderDao orderDao;
 
     private OrderServiceImpl() {
     }
@@ -29,7 +29,16 @@ public class OrderServiceImpl implements OrderService {
     public static OrderServiceImpl getInstance() {
         if (instance == null) {
             instance = new OrderServiceImpl();
+            instance.orderDao = OrderDaoImpl.getInstance();
         }
+        return instance;
+    }
+
+    public static OrderServiceImpl getInstance(OrderDao orderDao) {
+        if (instance == null) {
+            instance = new OrderServiceImpl();
+        }
+        instance.orderDao = orderDao;
         return instance;
     }
 

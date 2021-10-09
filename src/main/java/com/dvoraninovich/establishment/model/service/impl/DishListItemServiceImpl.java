@@ -19,8 +19,8 @@ import java.util.Optional;
 
 public class DishListItemServiceImpl implements DishListItemService {
     private static final Logger logger = LogManager.getLogger(DishServiceImpl.class);
-    private DishListItemDao dishListItemDao = DishListItemDaoImpl.getInstance();
     private static DishListItemServiceImpl instance;
+    private DishListItemDao dishListItemDao = DishListItemDaoImpl.getInstance();
 
     private DishListItemServiceImpl() {
     }
@@ -28,7 +28,16 @@ public class DishListItemServiceImpl implements DishListItemService {
     public static DishListItemServiceImpl getInstance() {
         if (instance == null) {
             instance = new DishListItemServiceImpl();
+            instance.dishListItemDao = DishListItemDaoImpl.getInstance();
         }
+        return instance;
+    }
+
+    public static DishListItemServiceImpl getInstance(DishListItemDao dishListItemDao) {
+        if (instance == null) {
+            instance = new DishListItemServiceImpl();
+        }
+        instance.dishListItemDao = dishListItemDao;
         return instance;
     }
 

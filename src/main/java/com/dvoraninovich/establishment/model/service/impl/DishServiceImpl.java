@@ -23,9 +23,9 @@ public class DishServiceImpl implements DishService {
     private static final Logger logger = LogManager.getLogger(DishServiceImpl.class);
     private static final String DISH_AVAILABLE = "AVAILABLE";
     private static final String DISH_DISABLED = "DISABLED";
+    private static DishServiceImpl instance;
     private DishDao dishDao = DishDaoImpl.getInstance();
     private IngredientDao ingredientDao = IngredientDaoImpl.getInstance();
-    private static DishServiceImpl instance;
 
     private DishServiceImpl() {
     }
@@ -33,7 +33,18 @@ public class DishServiceImpl implements DishService {
     public static DishServiceImpl getInstance() {
         if (instance == null) {
             instance = new DishServiceImpl();
+            instance.dishDao = DishDaoImpl.getInstance();
+            instance.ingredientDao = IngredientDaoImpl.getInstance();
         }
+        return instance;
+    }
+
+    public static DishServiceImpl getInstance(DishDao dishDao, IngredientDao ingredientDao) {
+        if (instance == null) {
+            instance = new DishServiceImpl();
+        }
+        instance.dishDao = dishDao;
+        instance.ingredientDao = ingredientDao;
         return instance;
     }
 

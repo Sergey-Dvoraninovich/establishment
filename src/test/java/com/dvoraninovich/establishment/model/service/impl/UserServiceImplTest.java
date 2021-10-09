@@ -6,16 +6,16 @@ import com.dvoraninovich.establishment.model.dao.UserDao;
 import com.dvoraninovich.establishment.model.dao.impl.UserDaoImpl;
 import com.dvoraninovich.establishment.model.entity.User;
 import com.dvoraninovich.establishment.model.service.UserService;
+import com.dvoraninovich.establishment.util.SaltGenerator;
 import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 public class UserServiceImplTest {
-    private UserService service = UserServiceImpl.getInstance();
+    private UserService service;
 
     @DataProvider(name = "validLoginData")
     public static Object[][] validLoginData() {
@@ -35,11 +35,8 @@ public class UserServiceImplTest {
                     .thenReturn(Optional.of(salt));
             Mockito.when(serviceDao.getPasswordById(user.getId()))
                     .thenReturn(Optional.of(passwordHash));
-            Class serviceClass = UserServiceImpl.class;
-            Field field = serviceClass.getDeclaredField("userDao");
-            field.setAccessible(true);
-            field.set(service, serviceDao);
-        } catch (NoSuchFieldException | IllegalAccessException | DaoException e) {
+            service = UserServiceImpl.getInstance(serviceDao, SaltGenerator.getInstance());
+        } catch (DaoException e) {
             Assert.fail("Impossible to setup mocks");
         }
         Optional<User> resultUser = Optional.empty();
@@ -69,11 +66,8 @@ public class UserServiceImplTest {
                     .thenReturn(Optional.of(salt));
             Mockito.when(serviceDao.getPasswordById(user.getId()))
                     .thenReturn(Optional.of(passwordHash));
-            Class serviceClass = UserServiceImpl.class;
-            Field field = serviceClass.getDeclaredField("userDao");
-            field.setAccessible(true);
-            field.set(service, serviceDao);
-        } catch (NoSuchFieldException | IllegalAccessException | DaoException e) {
+            service = UserServiceImpl.getInstance(serviceDao, SaltGenerator.getInstance());
+        } catch (DaoException e) {
             Assert.fail("Impossible to setup mocks");
         }
         Optional<User> resultUser = Optional.empty();

@@ -10,8 +10,8 @@
 <c:set var="user_profile">${sessionScope.user_profile}</c:set>
 <c:set var="user">${sessionScope.user}</c:set>
 <c:set var="phone_num">${sessionScope.user_profile.phoneNumber}</c:set>
-<c:set var="card_num">${sessionScope.user.cardNumber}</c:set>
-<c:set var="mail">${sessionScope.user.mail}</c:set>
+<c:set var="card_num">${sessionScope.user_profile.cardNumber}</c:set>
+<c:set var="mail">${sessionScope.user_profile.mail}</c:set>
 <c:set var="isEditPage">${sessionScope.is_editing_page}</c:set>
 
 <html>
@@ -313,8 +313,8 @@
                     <a><fmt:message key="profile.show_change_password_form" /></a>
                 </div>
             </div>
-            <c:url value="/ApiController?command=change_user_password&id=${sessionScope.user_profile.id}&change_password_form=true" var="edit_user_card_num"/>
-            <form action="${edit_user_card_num}" method="post" id="change-password-form">
+            <c:url value="/ApiController?command=change_user_password&id=${sessionScope.user_profile.id}&change_password_form=true" var="edit_password_form"/>
+            <form action="${edit_password_form}" method="post" id="change-password-form">
                 <c:if test="${sessionScope.user.role == 'CUSTOMER'}">
                     <div class="form-row">
                         <label for="current_password"><fmt:message key="profile.current_password" /></label>

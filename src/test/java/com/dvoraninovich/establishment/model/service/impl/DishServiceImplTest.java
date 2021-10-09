@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DishServiceImplTest {
-    private DishService service = DishServiceImpl.getInstance();
+    private DishService service;
     private List<Ingredient> allIngredients;
 
     @BeforeClass
@@ -53,17 +53,10 @@ public class DishServiceImplTest {
         try {
             Mockito.when(dishDao.findDishIngredients(dish.getId()))
                     .thenReturn(ingredientsList);
-            Class serviceClass = DishServiceImpl.class;
-            Field dishDaoField = serviceClass.getDeclaredField("dishDao");
-            dishDaoField.setAccessible(true);
-            dishDaoField.set(service, dishDao);
-
             Mockito.when(ingredientDao.findAll())
                     .thenReturn(allIngredients.stream().collect(Collectors.toList()));
-            Field ingredientDaoField = serviceClass.getDeclaredField("ingredientDao");
-            ingredientDaoField.setAccessible(true);
-            ingredientDaoField.set(service, ingredientDao);
-        } catch (NoSuchFieldException | IllegalAccessException | DaoException e) {
+            service = DishServiceImpl.getInstance(dishDao, ingredientDao);
+        } catch (DaoException e) {
             Assert.fail("Impossible to setup mocks");
         }
         List<Ingredient> unusedIngredients = new ArrayList<>();
