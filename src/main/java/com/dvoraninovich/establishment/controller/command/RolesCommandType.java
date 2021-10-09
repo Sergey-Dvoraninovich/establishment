@@ -6,7 +6,7 @@ import java.util.List;
 
 import static com.dvoraninovich.establishment.controller.command.CommandType.*;
 
-public enum RolesCommandTypes {
+public enum RolesCommandType {
     ADMIN(new CommandType[]{
             GO_TO_START_PAGE,
             GO_TO_USERS_PAGE,
@@ -83,7 +83,6 @@ public enum RolesCommandTypes {
             GO_TO_SIGN_UP_PAGE,
             DEFAULT,
             LOGIN_PAGE,
-            SIGN_UP_PAGE,
             GO_TO_DISHES_PAGE,
             GO_TO_DISH_PAGE,
             SET_DISHES_FILTER_PARAMETERS,
@@ -91,7 +90,7 @@ public enum RolesCommandTypes {
             GO_TO_INFO_PAGE,
     });
     private CommandType[] roleCommandTypesArray;
-    private RolesCommandTypes(CommandType[] roleCommandTypesArray) {
+    private RolesCommandType(CommandType[] roleCommandTypesArray) {
         this.roleCommandTypesArray = roleCommandTypesArray;
     }
     public List<CommandType> getRoleCommandTypesList() {

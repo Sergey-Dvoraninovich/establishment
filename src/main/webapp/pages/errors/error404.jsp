@@ -8,6 +8,7 @@
 <html>
 <head>
     <title><fmt:message key="error404"/></title>
+    <script src="../../js/common.js"></script>
     <link href="../../css/pages/errors/error404.css" rel="stylesheet">
 </head>
 <body>

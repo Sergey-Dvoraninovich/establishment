@@ -8,6 +8,7 @@
 <html>
 <head>
     <link href = "../../css/style.css" rel = "style" type = "text/css" />
+    <script src="../../js/common.js"></script>
     <title><fmt:message key="profile"/></title>
 </head>
 <body>

@@ -24,6 +24,7 @@
 <html>
 <head>
     <title><fmt:message key="admin.dishes.title" /></title>
+    <script src="../js/common.js"></script>
     <link href="../css/pages/dishes.css" rel = "stylesheet">
 </head>
 <body>

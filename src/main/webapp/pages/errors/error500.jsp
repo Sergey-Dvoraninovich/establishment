@@ -8,6 +8,7 @@
 <html>
 <head>
     <title><fmt:message key="error500"/></title>
+    <script src="../../js/common.js"></script>
     <link href="../../css/pages/errors/error500.css" rel="stylesheet">
 </head>
 <body>

@@ -16,6 +16,7 @@
 <html>
 <head>
     <title><fmt:message key="header.users"/></title>
+    <script src="../../../js/common.js"></script>
 </head>
 <body>
 <jsp:include page="../../shared/header.jsp" />
@@ -61,36 +62,7 @@
                 </c:if>
             </div>
         </div>
-        <div id="user-roles" class="form-row">
-            <div class="checkbox-container">
-                <div><fmt:message key="filter.user_roles"/></div>
-                <div>
-                    <div class="form-checkbox-btn">
-                        <c:if test="${user_roles.contains('ADMIN')}">
-                            <input id="check-admin" type="checkbox" name="request_filter_user_roles" value="ADMIN" checked>
-                        </c:if>
-                        <c:if test="${not user_roles.contains('ADMIN')}">
-                            <input id="check-admin" type="checkbox" name="request_filter_user_roles" value="ADMIN">
-                        </c:if>
-                        <label for="check-admin"><fmt:message key="user_roles.admin"/></label>
-                    </div>
-                    <div class="form-checkbox-btn">
-                        <c:if test="${user_roles.contains('CUSTOMER')}">
-                            <input id="check-customer" type="checkbox" name="request_filter_user_roles" value="CUSTOMER" checked>
-                        </c:if>
-                        <c:if test="${not user_roles.contains('CUSTOMER')}">
-                            <input id="check-customer" type="checkbox" name="request_filter_user_roles" value="CUSTOMER">
-                        </c:if>
-                        <label for="check-customer"><fmt:message key="user_roles.customer"/></label>
-                    </div>
-                </div>
-                <c:if test="${sessionScope.invalid_user_role}">
-                    <div class="local-error">
-                        <p><fmt:message key="filter.invalid_user_role"/></p>
-                    </div>
-                </c:if>
-            </div>
-        </div>
+        <input id="check-customer" type="checkbox" name="request_filter_user_roles" value="CUSTOMER" checked>
         <div id="login-mail" class="form-row">
             <label for="request_filter_login"><fmt:message key="profile.login" /></label>
             <input type="text" name="request_filter_login" id="request_filter_login" pattern="^[A-za-z_]{1,25}$"
@@ -437,7 +409,9 @@
         background-color: #cf361b;
     }
 
-
+    #check-customer {
+        display: none;
+    }
     .checkbox-container {
         display: flex;
         flex-direction: column;

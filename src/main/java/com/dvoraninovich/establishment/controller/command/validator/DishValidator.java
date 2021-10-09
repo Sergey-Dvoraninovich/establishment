@@ -17,7 +17,7 @@ public class DishValidator {
     public static final String DISH_DISABLED = "DISABLED";
 
     private static final String DISH_ID_REGEXP = "^[0-9]+$";
-    private static final String NAME_REGEXP = "^[A-za-z\\s]{1,50}$";
+    private static final String NAME_REGEXP = "^[A-Za-zА-Яа-я]{1}[A-Za-zА-Яа-я\\s]{0,68}[A-Za-zА-Яа-я]{1}$";
     private static final String PRICE_REGEXP = "^[+-]?([0-9]+([.][0-9]{0,2})?|[.][0-9]{1,2})$";
     private static final String AMOUNT_GRAMS_REGEXP = "^[0-9]+$";
     private static final String CALORIES_AMOUNT_REGEXP = "^[0-9]+$";

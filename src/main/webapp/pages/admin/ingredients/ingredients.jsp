@@ -11,6 +11,7 @@
 <html>
 <head>
     <title><fmt:message key="admin.ingredients.title"/></title>
+    <script src="../../../js/common.js"></script>
     <link href="../../../css/pages/admin/ingredients/ingredients.css" rel="stylesheet">
 </head>
 <body>

@@ -16,6 +16,7 @@
 <html>
 <head>
     <title><fmt:message key="header.users"/></title>
+    <script src="../js/common.js"></script>
 </head>
 <body>
 <jsp:include page="shared/header.jsp" />

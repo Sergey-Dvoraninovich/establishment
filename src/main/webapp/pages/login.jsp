@@ -10,6 +10,7 @@
 <html>
 <head>
     <title><fmt:message key="login.login"/></title>
+    <script src="../js/common.js"></script>
     <link href="../css/pages/login.css" rel = "style" type = "text/css">
 </head>
 <body>

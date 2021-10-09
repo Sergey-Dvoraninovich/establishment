@@ -10,6 +10,7 @@
 <html>
 <head>
     <title><fmt:message key="admin.ingredients.add_ingredient.title"/></title>
+  <script src="../../../js/common.js"></script>
 </head>
 <body>
 <jsp:include page="../../shared/header.jsp" />
@@ -19,7 +20,7 @@
   <div class="form-row">
     <label for="name"><fmt:message key="admin.ingredients.add_ingredient.name" /></label>
     <input type="text" name="name" id="name" value="${name}"
-           pattern="^[A-Za-zА-Яа-я]{1}[A-Za-zА-Яа-я\s]{0,30}[A-Za-zА-Яа-я]{1}$"/>
+           pattern="^[A-Za-zА-Яа-я]{1}[A-Za-zА-Яа-я\s]{0,33}[A-Za-zА-Яа-я]{1}$"/>
     <c:if test="${sessionScope.invalid_ingredient_name}">
       <div class="local-error">
         <p><fmt:message key="admin.ingredients.add_ingredient.invalid_ingredient_name"/></p>

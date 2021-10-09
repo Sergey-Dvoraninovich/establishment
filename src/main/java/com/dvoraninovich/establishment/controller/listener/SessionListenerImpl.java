@@ -1,16 +1,11 @@
 package com.dvoraninovich.establishment.controller.listener;
 
-import com.dvoraninovich.establishment.controller.command.CommandType;
-import com.dvoraninovich.establishment.controller.command.RolesCommandTypes;
 import com.dvoraninovich.establishment.model.entity.User;
-import com.dvoraninovich.establishment.model.entity.UserStatus;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-
-import java.util.Arrays;
 
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.LOCALE;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.USER;

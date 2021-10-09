@@ -13,6 +13,7 @@
 <html>
 <head>
     <title><fmt:message key="profile.orders_title"/></title>
+    <script src="../../../js/common.js"></script>
 </head>
 <body>
 <jsp:include page="../../shared/header.jsp" />

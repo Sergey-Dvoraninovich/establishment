@@ -18,6 +18,7 @@
 <html>
 <head>
     <title><fmt:message key="admin.dishes.edit_dish_title"/> ${sessionScope.dish.name}</title>
+    <script src="../../../js/common.js"></script>
 </head>
 <body>
 <jsp:include page="../../shared/header.jsp" />
@@ -28,7 +29,8 @@
     <div class="form-row">
         <label for="name"><fmt:message key="admin.dishes.dish_name" /></label>
         <input type="text" name="name" id="name" value="${name}"
-               pattern="^[A-za-z\\s]{2,50}$" placeholder="${sessionScope.dish.name}"/>
+               pattern="^[A-Za-zА-Яа-я]{1}[A-Za-zА-Яа-я\s]{0,68}[A-Za-zА-Яа-я]{1}$"
+               placeholder="${sessionScope.dish.name}"/>
         <c:if test="${sessionScope.invalid_dish_name}">
             <div class="local-error">
                 <p><fmt:message key="admin.dishes.invalid_dish_name"/></p>

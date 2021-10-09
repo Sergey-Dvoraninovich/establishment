@@ -19,14 +19,23 @@
         <url-pattern>/ApiController</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>JspAccessFilter</filter-name>
+        <filter-class>com.dvoraninovich.establishment.controller.filter.JspAccessFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>JspAccessFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-<!--    <error-page>-->
-<!--        <error-code>500</error-code>-->
-<!--        <location>/pages/errors/error500.jsp</location>-->
-<!--    </error-page>-->
 
-<!--    <error-page>-->
-<!--        <error-code>404</error-code>-->
-<!--        <location>/pages/errors/error404.jsp</location>-->
-<!--    </error-page>-->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/pages/errors/error500.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/pages/errors/error404.jsp</location>
+    </error-page>
 </web-app>

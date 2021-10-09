@@ -16,6 +16,7 @@
 <html>
 <head>
     <title><fmt:message key="orders.order_title"/></title>
+    <script src="../js/common.js"></script>
     <link href="../css/pages/order.css" rel="stylesheet">
 </head>
 <body>

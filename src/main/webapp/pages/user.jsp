@@ -265,9 +265,6 @@
             <form action="${edit_user_mail}" method="post">
                 <div class="form-row">
                     <label for="mail"><fmt:message key="registration.mail_placeholder" /></label>
-                    <div id="mail-info-text" class="block-item-text">
-                        <a><fmt:message key="profile.change_mail_info"/></a>
-                    </div>
                     <input type="text" name="mail" pattern = ^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$
                            id="mail" value="${mail}" placeholder="${mail}"/>
                     <c:if test="${sessionScope.invalid_mail}">

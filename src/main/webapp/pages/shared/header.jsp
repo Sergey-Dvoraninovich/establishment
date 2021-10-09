@@ -71,7 +71,7 @@
       </div>
     </c:if>
 
-    <c:if test="${!sessionScope.is_authenticated}">
+    <c:if test="${sessionScope.user.role == 'GUEST'}">
        <div class="header-block">
          <c:url value="/ApiController?command=go_to_login_page" var="login_page"/>
          <a class="header-block-text" href="${login_page}">

@@ -8,6 +8,7 @@
 <html>
 <head>
     <title><fmt:message key="login.password_placeholder" /></title>
+    <script src="../js/common.js"></script>
     <link href="../css/pages/sign_up.css" rel="stylesheet">
 </head>
 <body>

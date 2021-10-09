@@ -16,6 +16,7 @@
 <html>
 <head>
     <title>${sessionScope.dish.name}</title>
+    <script src="../js/common.js"></script>
     <link href="../css/pages/dish.css" rel="stylesheet">
 </head>
 <body>

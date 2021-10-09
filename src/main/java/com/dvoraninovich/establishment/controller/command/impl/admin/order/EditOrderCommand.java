@@ -48,6 +48,7 @@ public class EditOrderCommand implements Command {
         String orderStateLine = request.getParameter(ORDER_STATE);
         String paymentTypeLine = request.getParameter(PAYMENT_TYPE);
         String newBonusesAmountLine = request.getParameter(BONUSES_IN_PAYMENT);
+        newBonusesAmountLine = newBonusesAmountLine.equals("") ? "0" : newBonusesAmountLine;
         BigDecimal newBonusesAmount = new BigDecimal(newBonusesAmountLine);
 
         if (orderStateLine != null) {
