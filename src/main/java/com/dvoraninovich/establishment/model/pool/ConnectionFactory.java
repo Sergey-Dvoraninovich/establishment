@@ -58,7 +58,7 @@ class ConnectionFactory {
             Connection connection = DriverManager.getConnection(dbUrl, dbProperties);
             return new ProxyConnection(connection);
         } catch (SQLException e) {
-            //TODO write logs
+            logger.error("Impossible to establish connection", e);
             throw new DatabaseException("Impossible to establish connection", e);
         }
     }
