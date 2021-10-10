@@ -87,7 +87,7 @@ public class UserDaoImpl implements UserDao {
     private static final String INSERT_USER
             = "INSERT users(login, mail, password_hash,  salt, id_status, id_role, "
             + "card_number, phone_number, bonuses_amount, photo) "
-            + "VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?, ? ;";
+            + "VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?, ? );";
     private static final String UPDATE_USER
             = "UPDATE users "
             + "SET mail = ?, id_status = ?, id_role = ?, "

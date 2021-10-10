@@ -92,7 +92,6 @@
     <c:if test="${sessionScope.user_already_authenticated}">
         <div class="global-error">
             <p><fmt:message key="registration.user_already_authenticated"/></p>
-            <a>${sessionScope.user}</a>
         </div>
     </c:if>
 </form>

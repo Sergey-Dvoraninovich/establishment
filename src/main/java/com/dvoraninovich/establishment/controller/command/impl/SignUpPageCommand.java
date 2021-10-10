@@ -16,11 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static com.dvoraninovich.establishment.controller.command.PagePath.*;
 import static com.dvoraninovich.establishment.controller.command.RequestParameter.*;
 import static com.dvoraninovich.establishment.controller.command.SessionAttribute.*;
 import static com.dvoraninovich.establishment.controller.command.Router.RouterType.*;
+import static com.dvoraninovich.establishment.model.entity.Role.GUEST;
 
 public class SignUpPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SignUpPageCommand.class);
@@ -33,6 +35,15 @@ public class SignUpPageCommand implements Command {
         Router router;
         HttpSession session = request.getSession();
         User sessionUser = (User) session.getAttribute(USER);
+
+        session.setAttribute(NOT_UNIQUE_LOGIN, false);
+        session.setAttribute(INVALID_LOGIN, false);
+        session.setAttribute(DIFFERENT_PASSWORDS, false);
+        session.setAttribute(INVALID_PASSWORD, false);
+        session.setAttribute(INVALID_MAIL, false);
+        session.setAttribute(INVALID_PHONE_NUM, false);
+        session.setAttribute(INVALID_CARD_NUM, false);
+        session.setAttribute(USER_VALIDATION_ERROR, false);
 
         String login = request.getParameter(LOGIN);
         String password = request.getParameter(PASSWORD);
@@ -60,7 +71,7 @@ public class SignUpPageCommand implements Command {
             return router;
         }
 
-        if (sessionUser != null) {
+        if (sessionUser.getRole() != GUEST) {
             session.setAttribute(USER_ALREADY_AUTHENTICATED, true);
             router = new Router(SIGN_UP_PAGE, REDIRECT);
             return router;
@@ -86,7 +97,7 @@ public class SignUpPageCommand implements Command {
                 session.setAttribute(USER, optionalUser.get());
                 session.setAttribute(IS_AUTHENTICATED, true);
 
-                router = new Router(VERIFICATION_PAGE, REDIRECT);
+                router = new Router(INDEX_PAGE, REDIRECT);
             }
             else {
                 session.setAttribute(REGISTRATION_ERROR, true);

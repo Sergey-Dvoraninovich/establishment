@@ -83,6 +83,7 @@ public enum RoleCommandType {
             GO_TO_SIGN_UP_PAGE,
             DEFAULT,
             LOGIN_PAGE,
+            SIGN_UP_PAGE,
             GO_TO_DISHES_PAGE,
             GO_TO_DISH_PAGE,
             SET_DISHES_FILTER_PARAMETERS,

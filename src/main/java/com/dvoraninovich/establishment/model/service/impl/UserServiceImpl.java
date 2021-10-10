@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
         boolean isSuccessful = false;
         try {
             Optional<User> optionalUser = userDao.findUserByLogin(login);
-            isSuccessful = optionalUser.isPresent();
+            isSuccessful = !optionalUser.isPresent();
         } catch (DaoException e) {
             logger.error("Impossible to find out uniqueness of login " + login, e);
         }
